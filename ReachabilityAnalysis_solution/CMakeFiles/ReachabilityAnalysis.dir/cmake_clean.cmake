@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/ReachabilityAnalysis.dir/reachabilityAnalysis.cpp.o"
-  "bin/Release/ReachabilityAnalysis.pdb"
-  "bin/Release/ReachabilityAnalysis"
+  "bin/ReachabilityAnalysis.pdb"
+  "bin/ReachabilityAnalysis"
 )
 
 # Per-language clean rules from dependency scanning.

@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/martin/Desktop/Mega/Mega/Current/RoVi_Project/ReachabilityAnalysis_solution
+CMAKE_SOURCE_DIR = /home/martin/RoVi1/ReachabilityAnalysis_solution
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/martin/Desktop/Mega/Mega/Current/RoVi_Project/ReachabilityAnalysis_solution
+CMAKE_BINARY_DIR = /home/martin/RoVi1/ReachabilityAnalysis_solution
 
 # Include any dependencies generated for this target.
 include CMakeFiles/ReachabilityAnalysis.dir/depend.make
@@ -59,16 +59,16 @@ include CMakeFiles/ReachabilityAnalysis.dir/flags.make
 
 CMakeFiles/ReachabilityAnalysis.dir/reachabilityAnalysis.cpp.o: CMakeFiles/ReachabilityAnalysis.dir/flags.make
 CMakeFiles/ReachabilityAnalysis.dir/reachabilityAnalysis.cpp.o: reachabilityAnalysis.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/martin/Desktop/Mega/Mega/Current/RoVi_Project/ReachabilityAnalysis_solution/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/ReachabilityAnalysis.dir/reachabilityAnalysis.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ReachabilityAnalysis.dir/reachabilityAnalysis.cpp.o -c /home/martin/Desktop/Mega/Mega/Current/RoVi_Project/ReachabilityAnalysis_solution/reachabilityAnalysis.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/martin/RoVi1/ReachabilityAnalysis_solution/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/ReachabilityAnalysis.dir/reachabilityAnalysis.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/ReachabilityAnalysis.dir/reachabilityAnalysis.cpp.o -c /home/martin/RoVi1/ReachabilityAnalysis_solution/reachabilityAnalysis.cpp
 
 CMakeFiles/ReachabilityAnalysis.dir/reachabilityAnalysis.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/ReachabilityAnalysis.dir/reachabilityAnalysis.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/martin/Desktop/Mega/Mega/Current/RoVi_Project/ReachabilityAnalysis_solution/reachabilityAnalysis.cpp > CMakeFiles/ReachabilityAnalysis.dir/reachabilityAnalysis.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/martin/RoVi1/ReachabilityAnalysis_solution/reachabilityAnalysis.cpp > CMakeFiles/ReachabilityAnalysis.dir/reachabilityAnalysis.cpp.i
 
 CMakeFiles/ReachabilityAnalysis.dir/reachabilityAnalysis.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/ReachabilityAnalysis.dir/reachabilityAnalysis.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/martin/Desktop/Mega/Mega/Current/RoVi_Project/ReachabilityAnalysis_solution/reachabilityAnalysis.cpp -o CMakeFiles/ReachabilityAnalysis.dir/reachabilityAnalysis.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/martin/RoVi1/ReachabilityAnalysis_solution/reachabilityAnalysis.cpp -o CMakeFiles/ReachabilityAnalysis.dir/reachabilityAnalysis.cpp.s
 
 CMakeFiles/ReachabilityAnalysis.dir/reachabilityAnalysis.cpp.o.requires:
 
@@ -88,60 +88,60 @@ ReachabilityAnalysis_OBJECTS = \
 # External object files for target ReachabilityAnalysis
 ReachabilityAnalysis_EXTERNAL_OBJECTS =
 
-bin/Release/ReachabilityAnalysis: CMakeFiles/ReachabilityAnalysis.dir/reachabilityAnalysis.cpp.o
-bin/Release/ReachabilityAnalysis: CMakeFiles/ReachabilityAnalysis.dir/build.make
-bin/Release/ReachabilityAnalysis: /home/martin/RobWork/RobWork/libs/release/librw_lua_s.a
-bin/Release/ReachabilityAnalysis: /home/martin/RobWork/RobWork/libs/release/librw_assembly_lua_s.a
-bin/Release/ReachabilityAnalysis: /home/martin/RobWork/RobWork/libs/release/librw_control_lua_s.a
-bin/Release/ReachabilityAnalysis: /home/martin/RobWork/RobWork/libs/release/librw_pathoptimization_lua_s.a
-bin/Release/ReachabilityAnalysis: /home/martin/RobWork/RobWork/libs/release/librw_pathplanners_lua_s.a
-bin/Release/ReachabilityAnalysis: /home/martin/RobWork/RobWork/libs/release/librw_proximitystrategies_lua_s.a
-bin/Release/ReachabilityAnalysis: /home/martin/RobWork/RobWork/libs/release/librw_simulation_lua_s.a
-bin/Release/ReachabilityAnalysis: /home/martin/RobWork/RobWork/libs/release/librw_task_lua_s.a
-bin/Release/ReachabilityAnalysis: /usr/lib/x86_64-linux-gnu/liblua5.3.so
-bin/Release/ReachabilityAnalysis: /usr/lib/x86_64-linux-gnu/libm.so
-bin/Release/ReachabilityAnalysis: /home/martin/RobWork/RobWork/cmake/../libs/release/librw_algorithms.so
-bin/Release/ReachabilityAnalysis: /home/martin/RobWork/RobWork/cmake/../libs/release/librw_pathplanners.so
-bin/Release/ReachabilityAnalysis: /home/martin/RobWork/RobWork/cmake/../libs/release/librw_pathoptimization.so
-bin/Release/ReachabilityAnalysis: /home/martin/RobWork/RobWork/cmake/../libs/release/librw_simulation.so
-bin/Release/ReachabilityAnalysis: /home/martin/RobWork/RobWork/cmake/../libs/release/librw_opengl.so
-bin/Release/ReachabilityAnalysis: /home/martin/RobWork/RobWork/cmake/../libs/release/librw_assembly.so
-bin/Release/ReachabilityAnalysis: /home/martin/RobWork/RobWork/cmake/../libs/release/librw_task.so
-bin/Release/ReachabilityAnalysis: /home/martin/RobWork/RobWork/cmake/../libs/release/librw_calibration.so
-bin/Release/ReachabilityAnalysis: /home/martin/RobWork/RobWork/cmake/../libs/release/librw_csg.so
-bin/Release/ReachabilityAnalysis: /home/martin/RobWork/RobWork/cmake/../libs/release/librw_control.so
-bin/Release/ReachabilityAnalysis: /home/martin/RobWork/RobWork/cmake/../libs/release/librw_proximitystrategies.so
-bin/Release/ReachabilityAnalysis: /home/martin/RobWork/RobWork/cmake/../libs/release/libyaobi.so
-bin/Release/ReachabilityAnalysis: /home/martin/RobWork/RobWork/cmake/../libs/release/libpqp.so
-bin/Release/ReachabilityAnalysis: /home/martin/RobWork/RobWork/cmake/../libs/release/libfcl.so
-bin/Release/ReachabilityAnalysis: /home/martin/RobWork/RobWork/cmake/../libs/release/librw.so
-bin/Release/ReachabilityAnalysis: /usr/lib/x86_64-linux-gnu/libGL.so
-bin/Release/ReachabilityAnalysis: /usr/lib/x86_64-linux-gnu/libGLU.so
-bin/Release/ReachabilityAnalysis: /usr/lib/x86_64-linux-gnu/libxerces-c.so
-bin/Release/ReachabilityAnalysis: /home/martin/RobWork/RobWork/cmake/../libs/release/librw_assimp.so
-bin/Release/ReachabilityAnalysis: /usr/lib/x86_64-linux-gnu/libboost_filesystem.so
-bin/Release/ReachabilityAnalysis: /usr/lib/x86_64-linux-gnu/libboost_regex.so
-bin/Release/ReachabilityAnalysis: /usr/lib/x86_64-linux-gnu/libboost_serialization.so
-bin/Release/ReachabilityAnalysis: /usr/lib/x86_64-linux-gnu/libboost_system.so
-bin/Release/ReachabilityAnalysis: /usr/lib/x86_64-linux-gnu/libboost_thread.so
-bin/Release/ReachabilityAnalysis: /usr/lib/x86_64-linux-gnu/libboost_program_options.so
-bin/Release/ReachabilityAnalysis: /usr/lib/x86_64-linux-gnu/libboost_chrono.so
-bin/Release/ReachabilityAnalysis: /usr/lib/x86_64-linux-gnu/libboost_date_time.so
-bin/Release/ReachabilityAnalysis: /usr/lib/x86_64-linux-gnu/libboost_atomic.so
-bin/Release/ReachabilityAnalysis: /usr/lib/x86_64-linux-gnu/libpthread.so
-bin/Release/ReachabilityAnalysis: /usr/lib/x86_64-linux-gnu/libboost_test_exec_monitor.a
-bin/Release/ReachabilityAnalysis: /usr/lib/x86_64-linux-gnu/libboost_unit_test_framework.so
-bin/Release/ReachabilityAnalysis: /home/martin/RobWork/RobWork/cmake/../libs/release/librw_qhull.a
-bin/Release/ReachabilityAnalysis: /home/martin/RobWork/RobWork/cmake/../libs/release/librw_csgjs.a
-bin/Release/ReachabilityAnalysis: /home/martin/RobWork/RobWork/cmake/../libs/release/librw_unzip.a
-bin/Release/ReachabilityAnalysis: /usr/lib/x86_64-linux-gnu/libz.so
-bin/Release/ReachabilityAnalysis: /usr/lib/x86_64-linux-gnu/libdl.so
-bin/Release/ReachabilityAnalysis: CMakeFiles/ReachabilityAnalysis.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/martin/Desktop/Mega/Mega/Current/RoVi_Project/ReachabilityAnalysis_solution/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable bin/Release/ReachabilityAnalysis"
+bin/ReachabilityAnalysis: CMakeFiles/ReachabilityAnalysis.dir/reachabilityAnalysis.cpp.o
+bin/ReachabilityAnalysis: CMakeFiles/ReachabilityAnalysis.dir/build.make
+bin/ReachabilityAnalysis: /home/martin/RobWork/RobWork/libs/release/librw_lua_s.a
+bin/ReachabilityAnalysis: /home/martin/RobWork/RobWork/libs/release/librw_assembly_lua_s.a
+bin/ReachabilityAnalysis: /home/martin/RobWork/RobWork/libs/release/librw_control_lua_s.a
+bin/ReachabilityAnalysis: /home/martin/RobWork/RobWork/libs/release/librw_pathoptimization_lua_s.a
+bin/ReachabilityAnalysis: /home/martin/RobWork/RobWork/libs/release/librw_pathplanners_lua_s.a
+bin/ReachabilityAnalysis: /home/martin/RobWork/RobWork/libs/release/librw_proximitystrategies_lua_s.a
+bin/ReachabilityAnalysis: /home/martin/RobWork/RobWork/libs/release/librw_simulation_lua_s.a
+bin/ReachabilityAnalysis: /home/martin/RobWork/RobWork/libs/release/librw_task_lua_s.a
+bin/ReachabilityAnalysis: /usr/lib/x86_64-linux-gnu/liblua5.3.so
+bin/ReachabilityAnalysis: /usr/lib/x86_64-linux-gnu/libm.so
+bin/ReachabilityAnalysis: /home/martin/RobWork/RobWork/cmake/../libs/release/librw_algorithms.so
+bin/ReachabilityAnalysis: /home/martin/RobWork/RobWork/cmake/../libs/release/librw_pathplanners.so
+bin/ReachabilityAnalysis: /home/martin/RobWork/RobWork/cmake/../libs/release/librw_pathoptimization.so
+bin/ReachabilityAnalysis: /home/martin/RobWork/RobWork/cmake/../libs/release/librw_simulation.so
+bin/ReachabilityAnalysis: /home/martin/RobWork/RobWork/cmake/../libs/release/librw_opengl.so
+bin/ReachabilityAnalysis: /home/martin/RobWork/RobWork/cmake/../libs/release/librw_assembly.so
+bin/ReachabilityAnalysis: /home/martin/RobWork/RobWork/cmake/../libs/release/librw_task.so
+bin/ReachabilityAnalysis: /home/martin/RobWork/RobWork/cmake/../libs/release/librw_calibration.so
+bin/ReachabilityAnalysis: /home/martin/RobWork/RobWork/cmake/../libs/release/librw_csg.so
+bin/ReachabilityAnalysis: /home/martin/RobWork/RobWork/cmake/../libs/release/librw_control.so
+bin/ReachabilityAnalysis: /home/martin/RobWork/RobWork/cmake/../libs/release/librw_proximitystrategies.so
+bin/ReachabilityAnalysis: /home/martin/RobWork/RobWork/cmake/../libs/release/libyaobi.so
+bin/ReachabilityAnalysis: /home/martin/RobWork/RobWork/cmake/../libs/release/libpqp.so
+bin/ReachabilityAnalysis: /home/martin/RobWork/RobWork/cmake/../libs/release/libfcl.so
+bin/ReachabilityAnalysis: /home/martin/RobWork/RobWork/cmake/../libs/release/librw.so
+bin/ReachabilityAnalysis: /usr/lib/x86_64-linux-gnu/libGL.so
+bin/ReachabilityAnalysis: /usr/lib/x86_64-linux-gnu/libGLU.so
+bin/ReachabilityAnalysis: /usr/lib/x86_64-linux-gnu/libxerces-c.so
+bin/ReachabilityAnalysis: /home/martin/RobWork/RobWork/cmake/../libs/release/librw_assimp.so
+bin/ReachabilityAnalysis: /usr/lib/x86_64-linux-gnu/libboost_filesystem.so
+bin/ReachabilityAnalysis: /usr/lib/x86_64-linux-gnu/libboost_regex.so
+bin/ReachabilityAnalysis: /usr/lib/x86_64-linux-gnu/libboost_serialization.so
+bin/ReachabilityAnalysis: /usr/lib/x86_64-linux-gnu/libboost_system.so
+bin/ReachabilityAnalysis: /usr/lib/x86_64-linux-gnu/libboost_thread.so
+bin/ReachabilityAnalysis: /usr/lib/x86_64-linux-gnu/libboost_program_options.so
+bin/ReachabilityAnalysis: /usr/lib/x86_64-linux-gnu/libboost_chrono.so
+bin/ReachabilityAnalysis: /usr/lib/x86_64-linux-gnu/libboost_date_time.so
+bin/ReachabilityAnalysis: /usr/lib/x86_64-linux-gnu/libboost_atomic.so
+bin/ReachabilityAnalysis: /usr/lib/x86_64-linux-gnu/libpthread.so
+bin/ReachabilityAnalysis: /usr/lib/x86_64-linux-gnu/libboost_test_exec_monitor.a
+bin/ReachabilityAnalysis: /usr/lib/x86_64-linux-gnu/libboost_unit_test_framework.so
+bin/ReachabilityAnalysis: /home/martin/RobWork/RobWork/cmake/../libs/release/librw_qhull.a
+bin/ReachabilityAnalysis: /home/martin/RobWork/RobWork/cmake/../libs/release/librw_csgjs.a
+bin/ReachabilityAnalysis: /home/martin/RobWork/RobWork/cmake/../libs/release/librw_unzip.a
+bin/ReachabilityAnalysis: /usr/lib/x86_64-linux-gnu/libz.so
+bin/ReachabilityAnalysis: /usr/lib/x86_64-linux-gnu/libdl.so
+bin/ReachabilityAnalysis: CMakeFiles/ReachabilityAnalysis.dir/link.txt
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/martin/RoVi1/ReachabilityAnalysis_solution/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable bin/ReachabilityAnalysis"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/ReachabilityAnalysis.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
-CMakeFiles/ReachabilityAnalysis.dir/build: bin/Release/ReachabilityAnalysis
+CMakeFiles/ReachabilityAnalysis.dir/build: bin/ReachabilityAnalysis
 
 .PHONY : CMakeFiles/ReachabilityAnalysis.dir/build
 
@@ -154,6 +154,6 @@ CMakeFiles/ReachabilityAnalysis.dir/clean:
 .PHONY : CMakeFiles/ReachabilityAnalysis.dir/clean
 
 CMakeFiles/ReachabilityAnalysis.dir/depend:
-	cd /home/martin/Desktop/Mega/Mega/Current/RoVi_Project/ReachabilityAnalysis_solution && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/martin/Desktop/Mega/Mega/Current/RoVi_Project/ReachabilityAnalysis_solution /home/martin/Desktop/Mega/Mega/Current/RoVi_Project/ReachabilityAnalysis_solution /home/martin/Desktop/Mega/Mega/Current/RoVi_Project/ReachabilityAnalysis_solution /home/martin/Desktop/Mega/Mega/Current/RoVi_Project/ReachabilityAnalysis_solution /home/martin/Desktop/Mega/Mega/Current/RoVi_Project/ReachabilityAnalysis_solution/CMakeFiles/ReachabilityAnalysis.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/martin/RoVi1/ReachabilityAnalysis_solution && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/martin/RoVi1/ReachabilityAnalysis_solution /home/martin/RoVi1/ReachabilityAnalysis_solution /home/martin/RoVi1/ReachabilityAnalysis_solution /home/martin/RoVi1/ReachabilityAnalysis_solution /home/martin/RoVi1/ReachabilityAnalysis_solution/CMakeFiles/ReachabilityAnalysis.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/ReachabilityAnalysis.dir/depend
 

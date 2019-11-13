@@ -3,7 +3,6 @@
 #include <rw/invkin.hpp>
 #include <rwlibs/proximitystrategies/ProximityStrategyFactory.hpp>
 
-
 #include <iostream>
 #include <string>
 
@@ -50,7 +49,7 @@ std::vector<rw::math::Q> getConfigurations(const std::string nameGoal, const std
 int main(int argc, char** argv)
 {
 	//load workcell
-	rw::models::WorkCell::Ptr wc = rw::loaders::WorkCellLoader::Factory::load("../scene/Scene.wc.xml");
+        rw::models::WorkCell::Ptr wc = rw::loaders::WorkCellLoader::Factory::load("../scene/Scene.wc.xml");
 	if(NULL==wc){
 		RW_THROW("COULD NOT LOAD scene... check path!");
 		return -1;
