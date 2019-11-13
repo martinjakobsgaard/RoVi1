@@ -1,0 +1,206 @@
+/*
+ * PickAndPlaceSimulator.cpp
+ *
+ *  Created on: Nov 1, 2017
+ *      Author: Simon Mathiesen
+ */
+
+#include "../include/pickAndPlaceSimulator.hpp"
+#include <rwlibs/opengl/Drawable.hpp>
+
+PickAndPlaceSimulator::PickAndPlaceSimulator(
+		rw::common::Ptr<DynamicWorkCell> dwc,
+		const std::string &engineID,
+		double dt,
+		bool debug):
+	_dwc(dwc),
+	_engineID(engineID),
+	_dt(dt),
+	_debug(debug)
+{
+	_maxSimTime=0;
+	_pe = PhysicsEngine::Factory::makePhysicsEngine(_engineID,_dwc);
+	if(_pe==NULL)
+		RW_THROW("pe=null");
+	_simulator = ownedPtr(new DynamicSimulator(_dwc,_pe));
+
+
+	State defaultState = _dwc->getWorkcell()->getDefaultState();
+
+	_simulator->init( defaultState );
+
+	_progress=0;
+}
+
+PickAndPlaceSimulator::~PickAndPlaceSimulator(){
+//	clean simulator memory
+//	_pe->exitPhysics();
+	_simulator->exitPhysics(); // the only thing this method does is call the one above, but it is probably intended that this one is called
+}
+
+// call first to let everything settle
+void PickAndPlaceSimulator::initialise(State& state, TimedStatePath& tStatePath, double runTime) {
+	_maxSimTime=runTime;
+	if(_pe==NULL)
+		RW_THROW("_pe=null");
+
+	if(_simulator==NULL)
+		RW_THROW("_simulator=null");
+
+	try {
+		_simulator->reset( state );
+	} catch(...){
+		RW_THROW("could not initialize simulator!\n");
+	}
+
+
+	rwsim::control::PDController::Ptr controller = _dwc->findController<rwsim::control::PDController>("GraspController");
+	controller->setTargetPos(Q(1,-0.605));
+
+//	rwsim::control::PDController::Ptr controllerRobot = _dwc->findController<rwsim::control::PDController>("UR5Controller");
+	DynamicDevice::Ptr robotDevice = _dwc->findDevice("UR5");
+//	robotDevice->setJointVelocities(Q(6,0,0,0,0,0,0),_simulator->getState());
+
+//	Q f(6,-0.643, -1.333, -2.269, -1.110, 1.435, 1.112);
+//	controllerRobot->setTargetPos(f);
+
+
+
+	double simTime=0;
+	TimedState simState(simTime,state);
+	tStatePath.push_back(simState);
+	while( simTime < _maxSimTime ){
+		boost::this_thread::interruption_point();
+		setSimProgress(simTime);
+
+		// attempt to step the simulation
+		try {
+			_simulator->step(_dt);
+		} catch (Exception& e) {
+			cout << "error in stepping" << e.what() << endl;
+			break;
+		}
+		state=_simulator->getState();
+		simTime=_simulator->getTime();
+
+		TimedState simState(_simulator->getTime(),state);
+		tStatePath.push_back(simState);
+	}
+}
+
+void PickAndPlaceSimulator::simulateGripper(State& state, TimedStatePath& tStatePath, Q targetQ, double maxGraspTime){
+	_maxSimTime=maxGraspTime;
+	if(_pe==NULL)
+		RW_THROW("_pe=null");
+
+	if(_simulator==NULL)
+		RW_THROW("_simulator=null");
+
+	try {
+		_simulator->reset( state );
+	} catch(...){
+		RW_THROW("could not initialize simulator!\n");
+	}
+	double simTime=0;
+	TimedState simState(simTime,state);
+	tStatePath.push_back(simState);
+
+	rwsim::control::PDController::Ptr controller = _dwc->findController<rwsim::control::PDController>("GraspController");
+	controller->setTargetPos(targetQ);
+
+//	rwsim::control::PDController::Ptr controllerRobot = _dwc->findController<rwsim::control::PDController>("UR5Controller");
+	DynamicDevice::Ptr robotDevice = _dwc->findDevice("UR5");
+	robotDevice->setJointVelocities(Q(6,0,0,0,0,0,0),_simulator->getState());
+
+//	Q q(6,-0.726,-1.882,-1.728,-2.680,-2.297,-1.571);
+//	controllerRobot->setTargetPos(q);
+
+	while( simTime < _maxSimTime ){
+		boost::this_thread::interruption_point();
+		setSimProgress(simTime);
+
+		// attempt to step the simulation
+		try {
+			_simulator->step(_dt);
+		} catch (Exception& e) {
+			cout << "error in stepping" << e.what() << endl;
+			break;
+		}
+
+		state=_simulator->getState();
+		simTime=_simulator->getTime();
+
+		TimedState simState(_simulator->getTime(),state);
+		tStatePath.push_back(simState);
+		rw::loaders::PathLoader::storeTimedStatePath(*_dwc->getWorkcell(), tStatePath, "/home/simon/gripper.rwplay");
+
+	}
+}
+
+void PickAndPlaceSimulator::simulateTrajectory(State& state, TimedStatePath& tStatePath, Q gripperQ, rw::trajectory::BlendedTrajectory<rw::math::Q> trajectory, double epsilon, rws::RobWorkStudio* rws){
+	if(_pe==NULL)
+		RW_THROW("_pe=null");
+
+	if(_simulator==NULL)
+		RW_THROW("_simulator=null");
+
+	try {
+		_simulator->reset( state );
+	} catch(...){
+		RW_THROW("could not initialize simulator!\n");
+	}
+	double simTime=0;
+	TimedState simState(simTime,state);
+	tStatePath.push_back(simState);
+
+	rwsim::control::PDController::Ptr controller = _dwc->findController<rwsim::control::PDController>("GraspController");
+	controller->setTargetPos(gripperQ);
+
+//	Body::Ptr gripperBase = _dwc->findBody("Robotiq.Base");
+
+//	rwsim::control::PDController::Ptr controllerRobot = _dwc->findController<rwsim::control::PDController>("UR5Controller");
+	DynamicDevice::Ptr robotDevice = _dwc->findDevice("UR5");
+//	robotDevice->getLinks().back()
+//	rw::common::Ptr<rwsim::drawable::SimulatorDebugRender> _debugRender;
+//	_debugRender = _simulator->createDebugRender();
+//	if( _debugRender == NULL ){
+//		Log::errorLog() << "The current simulator does not support debug rendering!" << std::endl;
+//		return;
+//	}
+//	_debugRender->setDrawMask( 15 );
+//	rwlibs::opengl::Drawable *_debugDrawable = new Drawable( _debugRender, "DebugRender" );
+//	rws->getWorkCellScene()->addDrawable(_debugDrawable, _dwc->getWorkcell()->getWorldFrame());
+
+	robotDevice->setJointVelocities(Q(6,0,0,0,0,0,0),_simulator->getState());
+
+	double gripperCloseTime=0.2;
+	while( simTime < trajectory.duration()+gripperCloseTime ){
+		boost::this_thread::interruption_point();
+		setSimProgress(simTime);
+		if(simTime>gripperCloseTime)
+			robotDevice->setJointVelocities(trajectory.dx(simTime-gripperCloseTime),_simulator->getState());
+//		controllerRobot->setTargetPos(trajectory.x(simTime));
+
+		// attempt to step the simulation
+		try {
+			_simulator->step(_dt);
+		} catch (Exception& e) {
+			cout << robotDevice->getQ(state);
+			cout << "error in stepping" << e.what() << endl;
+			break;
+		}
+
+		state=_simulator->getState();
+		simTime=_simulator->getTime();
+
+		TimedState simState(_simulator->getTime(),state);
+		tStatePath.push_back(simState);
+//		rw::loaders::PathLoader::storeTimedStatePath(*_dwc->getWorkcell(), tStatePath, "/home/simon/test.rwplay");
+	}
+	robotDevice->setJointVelocities(Q(6,0,0,0,0,0,0),_simulator->getState());
+	try {
+		_simulator->step(_dt);
+	} catch (Exception& e) {
+		cout << "error in stepping" << e.what() << endl;
+	}
+}
