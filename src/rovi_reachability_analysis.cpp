@@ -40,6 +40,12 @@ std::vector<rw::math::Q> getConfigurations(const std::string nameGoal, const std
     return closedFormSovler->solve(targetAt, state);
 }
 
+void moveRobotBaseFrame(rw::math::Vector3D<> pos, rw::math::RPY<> rpy, rw::kinematics::State state, rw::kinematics::MovableFrame::Ptr robotBaseFrame)
+{
+    rw::math::Transform3D<> newRobotBaseFrame = robotBaseFrame->getTransform(state) * rw::math::Transform3D<>(pos, rpy);
+    robotBaseFrame->moveTo(newRobotBaseFrame,state);
+}
+
 int main(int argc, char** argv)
 {
 	//load workcell
@@ -62,8 +68,6 @@ int main(int argc, char** argv)
 		return -1;
 	}
 
-        rw::proximity::CollisionDetector::Ptr detector = rw::common::ownedPtr(new rw::proximity::CollisionDetector(wc, rwlibs::proximitystrategies::ProximityStrategyFactory::makeDefaultCollisionStrategy()));
-
         rw::kinematics::MovableFrame::Ptr robotBaseFrame = wc->findFrame<rw::kinematics::MovableFrame>("URReference");
         if(NULL==robotBaseFrame)
         {
@@ -71,9 +75,13 @@ int main(int argc, char** argv)
             return -1;
         }
 
+        rw::proximity::CollisionDetector::Ptr detector = rw::common::ownedPtr(new rw::proximity::CollisionDetector(wc, rwlibs::proximitystrategies::ProximityStrategyFactory::makeDefaultCollisionStrategy()));
+
 	// get the default state
 	State state = wc->getDefaultState();
 	std::vector<rw::math::Q> collisionFreeSolutions;
+
+        moveRobotBaseFrame(rw::math::Vector3D<>(0, 0.2, -0.11), rw::math::RPY<>(0, 0, 0), state, robotBaseFrame);
 
         for(double rollAngle=0; rollAngle<360.0; rollAngle+=1.0){ // for every degree around the roll axis
 
@@ -107,7 +115,7 @@ int main(int argc, char** argv)
                 time+=0.01;
 	}
 
-        rw::loaders::PathLoader::storeTimedStatePath(*wc, tStatePath, "../Project_WorkCell/visu.rwplay1");
+        rw::loaders::PathLoader::storeTimedStatePath(*wc, tStatePath, "../Project_WorkCell/visu1.rwplay");
 
         /*//Move base
         rw::math::Transform3D<> newRobotBaseFrame = robotBaseFrame->getTransform(state) * rw::math::Transform3D<>(rw::math::Vector3D<>(1,0,0),
@@ -149,7 +157,7 @@ int main(int argc, char** argv)
                 time+=0.01;
         }
 
-         rw::loaders::PathLoader::storeTimedStatePath(*wc, tStatePath2, "../Project_WorkCell/visu.rwplay2");*/
+         rw::loaders::PathLoader::storeTimedStatePath(*wc, tStatePath2, "../Project_WorkCell/visu2.rwplay");*/
 
 	return 0;
 }

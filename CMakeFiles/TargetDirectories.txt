@@ -1,3 +1,0 @@
-/home/martin/RoVi1/CMakeFiles/rebuild_cache.dir
-/home/martin/RoVi1/CMakeFiles/rovi_reachability_analysis.dir
-/home/martin/RoVi1/CMakeFiles/edit_cache.dir
