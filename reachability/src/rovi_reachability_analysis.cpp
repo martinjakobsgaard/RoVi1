@@ -166,34 +166,3 @@ int main(int argc, char** argv)
     rw::loaders::PathLoader::storeTimedStatePath(*wc, tStatePath, "reachability.rwplay");
     return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-rw::math::Transform3D<> newRobotBaseFrame2 = robotBaseFrame->getTransform(state) * rw::math::Transform3D<>(rw::math::Vector3D<>(-1.8, 0, 0), rw::math::RPY<>(0,0,0));
-robotBaseFrame->moveTo(newRobotBaseFrame2, state);
-checkPlacement(bestSolutions, collisionFreeSolutions, cylinderFrame, detector, wc, state, robotUR5);
-
-rw::math::Transform3D<> newRobotBaseFrame3 = robotBaseFrame->getTransform(state) * rw::math::Transform3D<>(rw::math::Vector3D<>(0.1, 0, 0), rw::math::RPY<>(0,0,0));
-robotBaseFrame->moveTo(newRobotBaseFrame3, state);
-checkPlacement(bestSolutions, collisionFreeSolutions, cylinderFrame, detector, wc, state, robotUR5);
-
-rw::math::Transform3D<> newRobotBaseFrame4 = robotBaseFrame->getTransform(state) * rw::math::Transform3D<>(rw::math::Vector3D<>(-0.3, 0.1, 0), rw::math::RPY<>(0,0,0));
-robotBaseFrame->moveTo(newRobotBaseFrame4, state);
-checkPlacement(bestSolutions, collisionFreeSolutions, cylinderFrame, detector, wc, state, robotUR5);
-
-rw::math::Transform3D<> newRobotBaseFrame5 = robotBaseFrame->getTransform(state) * rw::math::Transform3D<>(rw::math::Vector3D<>(0.1, 1, 0), rw::math::RPY<>(0,0,0));
-robotBaseFrame->moveTo(newRobotBaseFrame5, state);
-checkPlacement(bestSolutions, collisionFreeSolutions, cylinderFrame, detector, wc, state, robotUR5);
-*/
