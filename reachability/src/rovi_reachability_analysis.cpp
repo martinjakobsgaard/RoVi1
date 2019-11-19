@@ -52,11 +52,9 @@ void addToPath(State state,  TimedStatePath& tStatePath, std::vector<rw::math::Q
 }
 
 void checkPlacement(rw::kinematics::MovableFrame::Ptr cylinderFrame, rw::proximity::CollisionDetector::Ptr detector, rw::models::WorkCell::Ptr wc,
-                    State state, rw::models::SerialDevice::Ptr robotUR5, TimedStatePath& tStatePath, int& curr_best)
+                    State state, rw::models::SerialDevice::Ptr robotUR5, State& state_save, std::vector<rw::math::Q>& collisionFreeSolutions)
 {
-    State state_save1 = wc->getDefaultState(); State state_save2 = wc->getDefaultState(); State state_save3 = wc->getDefaultState(); State state_save4 = wc->getDefaultState(); State state_save5 = wc->getDefaultState();
-    State state_save6 = wc->getDefaultState();
-    std::vector<rw::math::Q> collisionFreeSolutions;
+    collisionFreeSolutions.clear();
     for(double rollAngle=0; rollAngle<360.0; rollAngle+=1.0)
     {
         cylinderFrame->moveTo(rw::math::Transform3D<>(
@@ -71,151 +69,17 @@ void checkPlacement(rw::kinematics::MovableFrame::Ptr cylinderFrame, rw::proximi
             robotUR5->setQ(solutions[i], state);
             if( !detector->inCollision(state,NULL,true) )
             {
-                state_save1 = state;
+                state_save = state;
                 collisionFreeSolutions.push_back(solutions[i]);
                 break; // we only need one
             }
         }
     }
-
-    std::vector<rw::math::Q> collisionFreeSolutions_place;
-    cylinderFrame->moveTo(rw::math::Transform3D<>(rw::math::Vector3D<>(0.3, -0.5, 0.21), rw::math::RPY<>(0,0,0)), state);
-    for(double rollAngle=0; rollAngle<360.0; rollAngle+=1.0)
-    {
-        cylinderFrame->moveTo(rw::math::Transform3D<>(
-                                        rw::math::Vector3D<>(cylinderFrame->getTransform(state).P()),
-                                        rw::math::RPY<>(rollAngle*rw::math::Deg2Rad,0,1.57)), state);
-
-        std::vector<rw::math::Q> solutions_place = getConfigurations("GraspTarget", "GraspTCP", robotUR5, wc, state);
-
-        for(unsigned int i=0; i<solutions_place.size(); i++)
-        {
-            // set the robot in that configuration and check if it is in collision
-            robotUR5->setQ(solutions_place[i], state);
-            if( !detector->inCollision(state,NULL,true) )
-            {
-                state_save2 = state;
-                collisionFreeSolutions_place.push_back(solutions_place[i]);
-                break; // we only need one
-            }
-        }
-    }
-
-    std::vector<rw::math::Q> collisionFreeSolutions_pick1;
-    cylinderFrame->moveTo(rw::math::Transform3D<>(rw::math::Vector3D<>(-0.3, 0.5, 0.21), rw::math::RPY<>(0,0,0)), state);
-    for(double rollAngle=0; rollAngle<360.0; rollAngle+=1.0)
-    {
-        cylinderFrame->moveTo(rw::math::Transform3D<>(
-                                        rw::math::Vector3D<>(cylinderFrame->getTransform(state).P()),
-                                        rw::math::RPY<>(rollAngle*rw::math::Deg2Rad,0,1.57)), state);
-
-        std::vector<rw::math::Q> solutions_pick1 = getConfigurations("GraspTarget", "GraspTCP", robotUR5, wc, state);
-
-        for(unsigned int i=0; i<solutions_pick1.size(); i++)
-        {
-            // set the robot in that configuration and check if it is in collision
-            robotUR5->setQ(solutions_pick1[i], state);
-            if( !detector->inCollision(state,NULL,true) )
-            {
-                state_save3 = state;
-                collisionFreeSolutions_pick1.push_back(solutions_pick1[i]);
-                break; // we only need one
-            }
-        }
-    }
-
-    std::vector<rw::math::Q> collisionFreeSolutions_pick2;
-    cylinderFrame->moveTo(rw::math::Transform3D<>(rw::math::Vector3D<>(0.3, 0.5, 0.21), rw::math::RPY<>(0,0,0)), state);
-    for(double rollAngle=0; rollAngle<360.0; rollAngle+=1.0)
-    {
-        cylinderFrame->moveTo(rw::math::Transform3D<>(
-                                        rw::math::Vector3D<>(cylinderFrame->getTransform(state).P()),
-                                        rw::math::RPY<>(rollAngle*rw::math::Deg2Rad,0,1.57)), state);
-
-        std::vector<rw::math::Q> solutions_pick2 = getConfigurations("GraspTarget", "GraspTCP", robotUR5, wc, state);
-
-        for(unsigned int i=0; i<solutions_pick2.size(); i++)
-        {
-            // set the robot in that configuration and check if it is in collision
-            robotUR5->setQ(solutions_pick2[i], state);
-            if( !detector->inCollision(state,NULL,true) )
-            {
-                state_save4 = state;
-                collisionFreeSolutions_pick2.push_back(solutions_pick2[i]);
-                break; // we only need one
-            }
-        }
-    }
-
-    std::vector<rw::math::Q> collisionFreeSolutions_pick3;
-    cylinderFrame->moveTo(rw::math::Transform3D<>(rw::math::Vector3D<>(0.3, 0.4, 0.21), rw::math::RPY<>(0,0,0)), state);
-    for(double rollAngle=0; rollAngle<360.0; rollAngle+=1.0)
-    {
-        cylinderFrame->moveTo(rw::math::Transform3D<>(
-                                        rw::math::Vector3D<>(cylinderFrame->getTransform(state).P()),
-                                        rw::math::RPY<>(rollAngle*rw::math::Deg2Rad,0,1.57)), state);
-
-        std::vector<rw::math::Q> solutions_pick3 = getConfigurations("GraspTarget", "GraspTCP", robotUR5, wc, state);
-
-        for(unsigned int i=0; i<solutions_pick3.size(); i++)
-        {
-            // set the robot in that configuration and check if it is in collision
-            robotUR5->setQ(solutions_pick3[i], state);
-            if( !detector->inCollision(state,NULL,true) )
-            {
-                state_save5 = state;
-                collisionFreeSolutions_pick3.push_back(solutions_pick3[i]);
-                break; // we only need one
-            }
-        }
-    }
-
-    std::vector<rw::math::Q> collisionFreeSolutions_pick4;
-    cylinderFrame->moveTo(rw::math::Transform3D<>(rw::math::Vector3D<>(-0.3, 0.4, 0.21), rw::math::RPY<>(0,0,0)), state);
-    for(double rollAngle=0; rollAngle<360.0; rollAngle+=1.0)
-    {
-        cylinderFrame->moveTo(rw::math::Transform3D<>(
-                                        rw::math::Vector3D<>(cylinderFrame->getTransform(state).P()),
-                                        rw::math::RPY<>(rollAngle*rw::math::Deg2Rad,0,1.57)), state);
-
-        std::vector<rw::math::Q> solutions_pick4 = getConfigurations("GraspTarget", "GraspTCP", robotUR5, wc, state);
-
-        for(unsigned int i=0; i<solutions_pick4.size(); i++)
-        {
-            // set the robot in that configuration and check if it is in collision
-            robotUR5->setQ(solutions_pick4[i], state);
-            if( !detector->inCollision(state,NULL,true) )
-            {
-                state_save6 = state;
-                collisionFreeSolutions_pick4.push_back(solutions_pick4[i]);
-                break; // we only need one
-            }
-        }
-    }
-
-    int solutions_found_pick = collisionFreeSolutions.size() + collisionFreeSolutions_pick1.size() +
-            collisionFreeSolutions_pick2.size() + collisionFreeSolutions_pick3.size() + collisionFreeSolutions_pick4.size();
-    int solutions_found_place = collisionFreeSolutions_place.size();
-    int solutions_found = solutions_found_pick/5 + solutions_found_place;
-    std::cout << "Collision free solutions: " << solutions_found << std::endl;
-
-    if (solutions_found > curr_best)
-    {
-        curr_best = collisionFreeSolutions.size() + collisionFreeSolutions_place.size();
-        //std::cout << "Collision free solutions: " << curr_best << std::endl;
-        tStatePath.clear();
-        addToPath(state_save1, tStatePath, collisionFreeSolutions, robotUR5);
-        addToPath(state_save2, tStatePath, collisionFreeSolutions_place, robotUR5);
-        addToPath(state_save3, tStatePath, collisionFreeSolutions_pick1, robotUR5);
-        addToPath(state_save4, tStatePath, collisionFreeSolutions_pick2, robotUR5);
-        addToPath(state_save5, tStatePath, collisionFreeSolutions_pick3, robotUR5);
-        addToPath(state_save6, tStatePath, collisionFreeSolutions_pick4, robotUR5);
-    }
 }
 
 int main(int argc, char** argv)
 {
-    double resolution = 0.1;
+    double resolution = 0.05;
     TimedStatePath tStatePath;
     int curr_best = 0;
 
@@ -251,7 +115,12 @@ int main(int argc, char** argv)
     // get the default state
     State state = wc->getDefaultState();
 
-    rw::math::Transform3D<> bestRobotBaseFrame;
+    State state1 = wc->getDefaultState(); std::vector<rw::math::Q> collisionFreeSolutions1;
+    State state2 = wc->getDefaultState(); std::vector<rw::math::Q> collisionFreeSolutions2;
+    State state3 = wc->getDefaultState(); std::vector<rw::math::Q> collisionFreeSolutions3;
+    State state4 = wc->getDefaultState(); std::vector<rw::math::Q> collisionFreeSolutions4;
+    State state5 = wc->getDefaultState(); std::vector<rw::math::Q> collisionFreeSolutions5;
+    State state6 = wc->getDefaultState(); std::vector<rw::math::Q> collisionFreeSolutions6;
 
     for (size_t k = 0; k < 0.6/resolution; k++)
     {
@@ -260,15 +129,41 @@ int main(int argc, char** argv)
             double dx = -0.3+(resolution*k);
             double dy = -0.3+(resolution*j);
             std::cout << "Checked position: " << dx << "   " << dy << std::endl;
+            cylinderFrame->moveTo(rw::math::Transform3D<>(rw::math::Vector3D<>(0, 0.474, 0.21), rw::math::RPY<>(0,0,0)), state);
             robotBaseFrame->moveTo(rw::math::Transform3D<>(rw::math::Vector3D<>(dx, dy, 0.01), rw::math::RPY<>(0,0,0)), state);
-            checkPlacement(cylinderFrame, detector, wc, state, robotUR5, tStatePath, curr_best);
+            checkPlacement(cylinderFrame, detector, wc, state, robotUR5, state1, collisionFreeSolutions1);
+            cylinderFrame->moveTo(rw::math::Transform3D<>(rw::math::Vector3D<>(0.3, -0.5, 0.21), rw::math::RPY<>(0,0,0)), state);
+            checkPlacement(cylinderFrame, detector, wc, state, robotUR5, state2, collisionFreeSolutions2);
+            cylinderFrame->moveTo(rw::math::Transform3D<>(rw::math::Vector3D<>(-0.3, 0.5, 0.21), rw::math::RPY<>(0,0,0)), state);
+            checkPlacement(cylinderFrame, detector, wc, state, robotUR5, state3, collisionFreeSolutions3);
+            cylinderFrame->moveTo(rw::math::Transform3D<>(rw::math::Vector3D<>(-0.3, 0.4, 0.21), rw::math::RPY<>(0,0,0)), state);
+            checkPlacement(cylinderFrame, detector, wc, state, robotUR5, state4, collisionFreeSolutions4);
+            cylinderFrame->moveTo(rw::math::Transform3D<>(rw::math::Vector3D<>(0.3, 0.5, 0.21), rw::math::RPY<>(0,0,0)), state);
+            checkPlacement(cylinderFrame, detector, wc, state, robotUR5, state5, collisionFreeSolutions5);
+            cylinderFrame->moveTo(rw::math::Transform3D<>(rw::math::Vector3D<>(0.3, 0.4, 0.21), rw::math::RPY<>(0,0,0)), state);
+            checkPlacement(cylinderFrame, detector, wc, state, robotUR5, state6, collisionFreeSolutions6);
+
+            int solution_pick = collisionFreeSolutions1.size() + collisionFreeSolutions3.size() + collisionFreeSolutions4.size() + collisionFreeSolutions5.size() + collisionFreeSolutions6.size();
+            int solution_place = collisionFreeSolutions2.size();
+
+            std::cout << "Solutions pick: " << solution_pick << " Solutions place: " << solution_place << std::endl;
+
+            int solution_found = (solution_pick/5) + solution_place;
+
+            if (solution_found > curr_best)
+            {
+                curr_best = solution_found;
+                tStatePath.clear();
+                addToPath(state1, tStatePath, collisionFreeSolutions1, robotUR5);
+                addToPath(state2, tStatePath, collisionFreeSolutions2, robotUR5);
+                addToPath(state3, tStatePath, collisionFreeSolutions3, robotUR5);
+                addToPath(state4, tStatePath, collisionFreeSolutions4, robotUR5);
+                addToPath(state5, tStatePath, collisionFreeSolutions5, robotUR5);
+                addToPath(state6, tStatePath, collisionFreeSolutions6, robotUR5);
+            }
         }
     }
-
-    robotBaseFrame->moveTo(bestRobotBaseFrame, state);
-
     rw::loaders::PathLoader::storeTimedStatePath(*wc, tStatePath, "reachability.rwplay");
-
     return 0;
 }
 
