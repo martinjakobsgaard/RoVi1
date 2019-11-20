@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <string>
+#include <fstream>
 
 USE_ROBWORK_NAMESPACE
 using namespace robwork;
@@ -208,9 +209,23 @@ int main(int argc, char** argv)
             if (collisionFreeSolutions12.size() < worst_pos)
                 worst_pos = collisionFreeSolutions12.size();
 
-            int solution_found = worst_pos;
-            std::cout << "The worst position has: " << solution_found << " positions." << std::endl;
+            int total_pos = collisionFreeSolutions1.size() + collisionFreeSolutions2.size() + collisionFreeSolutions3.size() + collisionFreeSolutions4.size() +
+                    collisionFreeSolutions5.size() + collisionFreeSolutions6.size() + collisionFreeSolutions7.size() + collisionFreeSolutions8.size() +
+                    collisionFreeSolutions9.size() + collisionFreeSolutions10.size() + collisionFreeSolutions11.size() + collisionFreeSolutions12.size();
 
+            std::ofstream dataout;
+            dataout.open ("reachability.csv", std::fstream::app);
+            dataout << dx;
+            dataout << ",";
+            dataout << dx;
+            dataout << ",";
+            dataout << worst_pos;
+            dataout << ",";
+            dataout << total_pos;
+            dataout << "\n";
+            dataout.close();
+
+            int solution_found = worst_pos;
             if (solution_found > curr_best)
             {
                 curr_best = solution_found;
