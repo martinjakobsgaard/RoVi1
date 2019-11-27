@@ -38,7 +38,7 @@
 	</Frame>
 
 	<Frame name="Square" refframe="Table"  type="Movable" daf="true" >
-		<RPY> -90 0 90 </RPY> <Pos> 0 0.2 0.15</Pos>
+		<RPY> -90 0 90 </RPY> <Pos> 0.05 0.2 0.15</Pos>
 		<Drawable name="Square" refframe="Square">
 			<Polytope file="parts/square_big" />
 		</Drawable>

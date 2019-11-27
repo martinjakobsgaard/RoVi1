@@ -107,7 +107,7 @@ void checkPlacementTop(rw::kinematics::MovableFrame::Ptr cylinderFrame, rw::prox
 int main(int argc, char** argv)
 {
     int worst_pos = 360;
-    double resolution = 0.1;
+    double resolution = 0.05;
     TimedStatePath tStatePath;
     int curr_best = 0;
 
@@ -213,15 +213,19 @@ int main(int argc, char** argv)
                     collisionFreeSolutions5.size() + collisionFreeSolutions6.size() + collisionFreeSolutions7.size() + collisionFreeSolutions8.size() +
                     collisionFreeSolutions9.size() + collisionFreeSolutions10.size() + collisionFreeSolutions11.size() + collisionFreeSolutions12.size();
 
+            int total_pick = collisionFreeSolutions1.size() + collisionFreeSolutions3.size() + collisionFreeSolutions4.size() + collisionFreeSolutions5.size() + collisionFreeSolutions6.size();
+
             std::ofstream dataout;
             dataout.open ("reachability.csv", std::fstream::app);
             dataout << dx;
             dataout << ",";
-            dataout << dx;
+            dataout << dy;
             dataout << ",";
             dataout << worst_pos;
             dataout << ",";
             dataout << total_pos;
+            dataout << ",";
+            dataout << total_pick;
             dataout << "\n";
             dataout.close();
 
