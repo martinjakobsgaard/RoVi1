@@ -1,3 +1,0 @@
-/home/martin/RoVi1/rrt/CMakeFiles/rebuild_cache.dir
-/home/martin/RoVi1/rrt/CMakeFiles/rovi_rrt.dir
-/home/martin/RoVi1/rrt/CMakeFiles/edit_cache.dir
