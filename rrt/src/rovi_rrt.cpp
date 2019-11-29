@@ -43,8 +43,6 @@ bool checkCollisions(Device::Ptr device, const State &state, const CollisionDete
 
 int main(int argc, char** argv)
 {
-    TimedStatePath tStatePath;
-
     ofstream mydata;
     mydata.open("ROBDATA.dat");
     mydata << "time\tdistance\teps\tsteps" << "\n";
@@ -52,13 +50,13 @@ int main(int argc, char** argv)
 
     mydata.open("ROBDATA.dat", std::ios_base::app);
 
-    for (double extend = 0.02; extend <= 1.0; extend+=0.05)
+    for (double extend = 0.02; extend <= 0.1; extend+=0.02)
     {
         for(int trial = 0; trial < 5; trial++)
         {
             const string wcFile = "../../Project_WorkCell/Scene.wc.xml";
             const string deviceName = "UR-6-85-5-A";
-            //cout << "Trying to use workcell " << wcFile << " and device " << deviceName << endl;
+
             rw::math::Math::seed();
 
             WorkCell::Ptr wc = WorkCellLoader::Factory::load(wcFile);
@@ -66,24 +64,25 @@ int main(int argc, char** argv)
             Frame *bottle_frame = wc->findFrame("Bottle");
 
             Device::Ptr device = wc->findDevice(deviceName);        //process finished with exit code 139 (interrupted by signal 11: SIGSEGV)
-            if (device == NULL) {
+            if (device == NULL)
+            {
                 cerr << "Device: " << deviceName << " not found!" << endl;
                 return 0;
             }
 
             State state = wc->getDefaultState();
 
-            Q from(6, -1.427, -0.547, 0.848, -0.301, -2.596, 0.001);
-            Q to(6,-0.984, -1.719, -2.362, -2.201, -2.363, 0.001);
+            Q from(6, 1.607, -1.903, -2.101, -2.277, -2.529, 0.001);
+            Q to(6,-1.316, -2.316, -1.387, -2.582, 2.524, -0.001);
 
             device->setQ(from,state);
 
             Kinematics::gripFrame(bottle_frame, tool_frame, state);
 
             CollisionDetector detector(wc, ProximityStrategyFactory::makeDefaultCollisionStrategy());
-            PlannerConstraint constraint = PlannerConstraint::make(&detector,device,state);
+            PlannerConstraint constraint = PlannerConstraint::make(&detector, device, state);
 
-            QSampler::Ptr sampler = QSampler::makeConstrained(QSampler::makeUniform(device),constraint.getQConstraintPtr());
+            QSampler::Ptr sampler = QSampler::makeConstrained(QSampler::makeUniform(device), constraint.getQConstraintPtr());
             QMetric::Ptr metric = MetricFactory::makeEuclidean<Q>();
             QToQPlanner::Ptr planner = RRTPlanner::makeQToQPlanner(constraint, sampler, metric, extend, RRTPlanner::RRTConnect);
 
@@ -92,11 +91,12 @@ int main(int argc, char** argv)
             if (!checkCollisions(device, state, detector, to))
                 return 0;
 
+
             //cout << "Planning from " << from << " to " << to << endl;
             QPath path;
             Timer t;
             t.resetAndResume();
-            planner->query(from,to,path,MAXTIME);
+            planner->query(from, to, path, MAXTIME);
             t.pause();
             double distance = 0;
 
@@ -105,16 +105,30 @@ int main(int argc, char** argv)
                 cout << "Notice: max time of " << MAXTIME << " seconds reached." << endl;
             }
 
+            TimedStatePath tStatePath;
+            double time = 0;
             for (unsigned int i = 0; i< path.size(); i++)
             {
-                if(i >= 1)
+                if (i >= 1)
+                {
                     distance += sqrt(pow((path.at(i)(0)-path.at(i-1)(0)),2)+pow((path.at(i)(1)-path.at(i-1)(1)),2)+pow((path.at(i)(2)-path.at(i-1)(2)),2)+pow((path.at(i)(3)-path.at(i-1)(3)),2)+pow((path.at(i)(4)-path.at(i-1)(4)),2)+pow((path.at(i)(5)-path.at(i-1)(5)),2));
+                }
+
+                //std::cout << path.at(i)(0) << ", " << path.at(i)(1) << ", " << path.at(i)(2) << ", " << path.at(i)(3) << ", " << path.at(i)(4) << ", " << path.at(i)(5) << std::endl;
+
+                device->setQ(path[i], state);
+                tStatePath.push_back(TimedState(time, state));
+                time += 0.01;
             }
+            rw::loaders::PathLoader::storeTimedStatePath(*wc, tStatePath, "rrt.rwplay");
+
             mydata << t.getTime() << "\t" << distance << "\t\t" << extend << "\t" << path.size() << "\n";
 
             cout << trial << endl;
         }
     }
+
+    //rw::loaders::PathLoader::storeTimedStatePath(*wc1, tStatePath, "rrt.rwplay");
 
     mydata.close();
     return 0;

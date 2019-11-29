@@ -6,7 +6,7 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.6.0)
 # The name of the project.
 PROJECT(RRT_P2P)
 
-add_compile_options(-std=c++11)
+add_compile_options(-std=c++11 -g)
 
 # Used to resolve absolute path names
 SET(ROOT ${CMAKE_CURRENT_SOURCE_DIR})
