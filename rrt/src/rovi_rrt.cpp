@@ -114,6 +114,8 @@ int main(int argc, char** argv)
                 return 0;
             if (!checkCollisions(device, state, detector, from2))
                 return 0;
+            if (!checkCollisions(device, state, detector, from3))
+                return 0;
 
             TimedStatePath tStatePath;
             double distance = 0;
