@@ -43,12 +43,24 @@ bool checkCollisions(Device::Ptr device, const State &state, const CollisionDete
 
 int main(int argc, char** argv)
 {
-    ofstream mydata;
-    mydata.open("ROBDATA.dat");
-    mydata << "time\tdistance\teps\tsteps" << "\n";
-    mydata.close();
+    ofstream mydata1;
+    mydata1.open("ROBDATA1.dat");
+    mydata1 << "time\tdistance\teps\tsteps" << "\n";
+    mydata1.close();
 
-    mydata.open("ROBDATA.dat", std::ios_base::app);
+    ofstream mydata2;
+    mydata2.open("ROBDATA2.dat");
+    mydata2 << "time\tdistance\teps\tsteps" << "\n";
+    mydata2.close();
+
+    ofstream mydata3;
+    mydata3.open("ROBDATA3.dat");
+    mydata3 << "time\tdistance\teps\tsteps" << "\n";
+    mydata3.close();
+
+    mydata1.open("ROBDATA1.dat", std::ios_base::app);
+    mydata2.open("ROBDATA2.dat", std::ios_base::app);
+    mydata3.open("ROBDATA3.dat", std::ios_base::app);
 
     for (double extend = 0.02; extend <= 0.1; extend+=0.02)
     {
@@ -70,12 +82,22 @@ int main(int argc, char** argv)
                 return 0;
             }
 
+            // find relevant frames
+            rw::kinematics::MovableFrame::Ptr cylinderFrame = wc->findFrame<rw::kinematics::MovableFrame>("Bottle");
+            if(NULL==cylinderFrame){
+                    RW_THROW("COULD not find movable frame Cylinder ... check model");
+                    return -1;
+            }
+
             State state = wc->getDefaultState();
 
-            Q from(6, 1.607, -1.903, -2.101, -2.277, -2.529, 0.001);
+            Q from1(6, 1.607, -1.903, -2.101, -2.277, -2.529, 0.001);
             Q to(6,-1.316, -2.316, -1.387, -2.582, 2.524, -0.001);
 
-            device->setQ(from,state);
+            Q from2(6, 2.842, -2.826, -0.893, 0.576, -0.922, -3.141);
+            Q from3(6, 1.537, -1.931, -2.057, -2.294, -1.025, 0.000);
+
+            device->setQ(from1,state);
 
             Kinematics::gripFrame(bottle_frame, tool_frame, state);
 
@@ -86,27 +108,30 @@ int main(int argc, char** argv)
             QMetric::Ptr metric = MetricFactory::makeEuclidean<Q>();
             QToQPlanner::Ptr planner = RRTPlanner::makeQToQPlanner(constraint, sampler, metric, extend, RRTPlanner::RRTConnect);
 
-            if (!checkCollisions(device, state, detector, from))
+            if (!checkCollisions(device, state, detector, from1))
                 return 0;
             if (!checkCollisions(device, state, detector, to))
                 return 0;
+            if (!checkCollisions(device, state, detector, from2))
+                return 0;
 
+            TimedStatePath tStatePath;
+            double distance = 0;
+            double time = 0;
 
             //cout << "Planning from " << from << " to " << to << endl;
             QPath path;
             Timer t;
             t.resetAndResume();
-            planner->query(from, to, path, MAXTIME);
+            planner->query(from1, to, path, MAXTIME);
             t.pause();
-            double distance = 0;
 
-            //cout << "Path of length " << path.size() << " found in " << t.getTime() << " seconds." << endl;
             if (t.getTime() >= MAXTIME) {
                 cout << "Notice: max time of " << MAXTIME << " seconds reached." << endl;
             }
 
-            TimedStatePath tStatePath;
-            double time = 0;
+            time = 0;
+            std::cout << "Pick orientation 1" << std::endl;
             for (unsigned int i = 0; i< path.size(); i++)
             {
                 if (i >= 1)
@@ -114,22 +139,78 @@ int main(int argc, char** argv)
                     distance += sqrt(pow((path.at(i)(0)-path.at(i-1)(0)),2)+pow((path.at(i)(1)-path.at(i-1)(1)),2)+pow((path.at(i)(2)-path.at(i-1)(2)),2)+pow((path.at(i)(3)-path.at(i-1)(3)),2)+pow((path.at(i)(4)-path.at(i-1)(4)),2)+pow((path.at(i)(5)-path.at(i-1)(5)),2));
                 }
 
-                //std::cout << path.at(i)(0) << ", " << path.at(i)(1) << ", " << path.at(i)(2) << ", " << path.at(i)(3) << ", " << path.at(i)(4) << ", " << path.at(i)(5) << std::endl;
-
                 device->setQ(path[i], state);
                 tStatePath.push_back(TimedState(time, state));
                 time += 0.01;
             }
+
+            mydata1 << t.getTime() << "\t" << distance << "\t\t" << extend << "\t" << path.size() << "\n";
+
+            distance = 0;
+            QPath path2;
+            t.resetAndResume();
+            planner->query(from2, to, path2, MAXTIME);
+            t.pause();
+
+            if (t.getTime() >= MAXTIME) {
+                cout << "Notice: max time of " << MAXTIME << " seconds reached." << endl;
+            }
+
+            device->setQ(from2,state);
+
+            time = 0;
+            std::cout << "Pick orientation 2" << std::endl;
+            for (unsigned int i = 0; i< path2.size(); i++)
+            {
+                if (i >= 1)
+                {
+                    distance += sqrt(pow((path2.at(i)(0)-path2.at(i-1)(0)),2)+pow((path2.at(i)(1)-path2.at(i-1)(1)),2)+pow((path2.at(i)(2)-path2.at(i-1)(2)),2)+pow((path2.at(i)(3)-path2.at(i-1)(3)),2)+pow((path2.at(i)(4)-path2.at(i-1)(4)),2)+pow((path2.at(i)(5)-path2.at(i-1)(5)),2));
+                }
+
+                device->setQ(path2[i], state);
+                tStatePath.push_back(TimedState(time, state));
+                time += 0.01;
+            }
+
+            mydata2 << t.getTime() << "\t" << distance << "\t\t" << extend << "\t" << path2.size() << "\n";
+
+
+            distance = 0;
+            QPath path3;
+            t.resetAndResume();
+            planner->query(from3, to, path3, MAXTIME);
+            t.pause();
+
+            if (t.getTime() >= MAXTIME) {
+                cout << "Notice: max time of " << MAXTIME << " seconds reached." << endl;
+            }
+
+            device->setQ(from3,state);
+
+            time = 0;
+            std::cout << "Pick orientation 3" << std::endl;
+            for (unsigned int i = 0; i< path3.size(); i++)
+            {
+                if (i >= 1)
+                {
+                    distance += sqrt(pow((path3.at(i)(0)-path3.at(i-1)(0)),2)+pow((path3.at(i)(1)-path3.at(i-1)(1)),2)+pow((path3.at(i)(2)-path3.at(i-1)(2)),2)+pow((path3.at(i)(3)-path3.at(i-1)(3)),2)+pow((path3.at(i)(4)-path3.at(i-1)(4)),2)+pow((path3.at(i)(5)-path3.at(i-1)(5)),2));
+                }
+
+                device->setQ(path3[i], state);
+                tStatePath.push_back(TimedState(time, state));
+                time += 0.01;
+            }
+
             rw::loaders::PathLoader::storeTimedStatePath(*wc, tStatePath, "rrt.rwplay");
 
-            mydata << t.getTime() << "\t" << distance << "\t\t" << extend << "\t" << path.size() << "\n";
+            mydata3 << t.getTime() << "\t" << distance << "\t\t" << extend << "\t" << path3.size() << "\n";
 
             cout << trial << endl;
         }
     }
 
-    //rw::loaders::PathLoader::storeTimedStatePath(*wc1, tStatePath, "rrt.rwplay");
-
-    mydata.close();
+    mydata1.close();
+    mydata2.close();
+    mydata3.close();
     return 0;
 }
