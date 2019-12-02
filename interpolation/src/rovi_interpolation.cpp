@@ -1,132 +1,140 @@
-#include <iostream>
-#include <fstream>
-#include <cstdio>
-#include <cstdlib>
 #include <rw/rw.hpp>
-#include <rwlibs/pathplanners/rrt/RRTPlanner.hpp>
-#include <rwlibs/pathplanners/rrt/RRTQToQPlanner.hpp>
+#include <rw/invkin.hpp>
 #include <rwlibs/proximitystrategies/ProximityStrategyFactory.hpp>
 
-using namespace std;
-using namespace rw::common;
-using namespace rw::math;
-using namespace rw::kinematics;
-using namespace rw::loaders;
-using namespace rw::models;
-using namespace rw::pathplanning;
-using namespace rw::proximity;
-using namespace rw::trajectory;
-using namespace rwlibs::pathplanners;
-using namespace rwlibs::proximitystrategies;
+#include <iostream>
+#include <string>
 
-#define MAXTIME 60.
-
-bool checkCollisions(Device::Ptr device, const State &state, const CollisionDetector &detector, const Q &q) {
-        State testState;
-        CollisionDetector::QueryResult data;
-        bool colFrom;
-
-        testState = state;
-        device->setQ(q,testState);
-        colFrom = detector.inCollision(testState,&data);
-        if (colFrom) {
-                cerr << "Configuration in collision: " << q << endl;
-                cerr << "Colliding frames: " << endl;
-                FramePairSet fps = data.collidingFrames;
-                for (FramePairSet::iterator it = fps.begin(); it != fps.end(); it++) {
-                        cerr << (*it).first->getName() << " " << (*it).second->getName() << endl;
-                }
-                return false;
-        }
-    return true;
-}
+USE_ROBWORK_NAMESPACE
+using namespace robwork;
 
 int main(int argc, char** argv)
 {
-    ofstream mydata1;
-    mydata1.open("ROBDATA1.dat");
-    mydata1 << "time\tdistance\teps\tsteps" << "\n";
-    mydata1.close();
-
-    mydata1.open("ROBDATA1.dat", std::ios_base::app);
-
-    const string wcFile = "../../Project_WorkCell/Scene.wc.xml";
-    const string deviceName = "UR-6-85-5-A";
-
-    rw::math::Math::seed();
-
-    WorkCell::Ptr wc = WorkCellLoader::Factory::load(wcFile);
-    Frame *tool_frame = wc->findFrame("GraspTCP");
-    Frame *bottle_frame = wc->findFrame("Bottle");
-
-    Device::Ptr device = wc->findDevice(deviceName);        //process finished with exit code 139 (interrupted by signal 11: SIGSEGV)
-    if (device == NULL)
+    // Load needed objects
+    rw::models::WorkCell::Ptr workcell                  = rw::loaders::WorkCellLoader::Factory::load("../../Project_WorkCell/Scene.wc.xml");
+    rw::models::SerialDevice::Ptr robot                 = workcell->findDevice<rw::models::SerialDevice>("UR-6-85-5-A");
+    rw::kinematics::MovableFrame::Ptr frameRobotBase    = workcell->findFrame<rw::kinematics::MovableFrame>("URReference");
+    rw::kinematics::MovableFrame::Ptr frameBottle       = workcell->findFrame<rw::kinematics::MovableFrame>("Bottle");
+    rw::kinematics::Frame* frameTCP                     = workcell->findFrame("GraspTCP");
+    if(workcell==NULL || robot==NULL || frameRobotBase==NULL || frameBottle==NULL || frameTCP==NULL)
     {
-        cerr << "Device: " << deviceName << " not found!" << endl;
-        return 0;
+        RW_THROW("Could not find one or more devices...");
+        return -1;
     }
 
-    // find relevant frames
-    rw::kinematics::MovableFrame::Ptr cylinderFrame = wc->findFrame<rw::kinematics::MovableFrame>("Bottle");
-    if(NULL==cylinderFrame){
-            RW_THROW("COULD not find movable frame Cylinder ... check model");
-            return -1;
-    }
+    // Create WorkCell collision detector
+    //rw::proximity::CollisionDetector::Ptr detector =
+    //rw::common::ownedPtr( new rw::proximity::CollisionDetector(workcell,
+     //   rwlibs::proximitystrategies::ProximityStrategyFactory::makeDefaultCollisionStrategy()));
 
-    State state = wc->getDefaultState();
+    // get the default state
+    State state = workcell->getDefaultState();
 
-    Q from1(6, 1.607, -1.903, -2.101, -2.277, -2.529, 0.001);
-    Q to(6,-1.316, -2.316, -1.387, -2.582, 2.524, -0.001);
+    // Attach bottle to grasp
+    frameBottle->attachTo(frameTCP, state);
+    frameBottle->setTransform(
+            rw::math::Transform3D<>(
+                rw::math::Vector3D<>(0, 0, 0),
+                rw::math::RPY<>(0, 0, 0*rw::math::Deg2Rad)),
+            state
+            );
 
-    device->setQ(from1,state);
+    // The configurations to interpolate between
+    std::vector<rw::math::Q> qs;
+    qs.resize(6);
+    qs.at(0) = Q(6,  1.607, -1.903, -2.101, -2.277, -2.529, 0.001);
+    qs.at(1) = Q(6,  1.368, -1.554, -1.590, -2.062,  -1.869, -0.059);
+    qs.at(2) = Q(6,  0.868, -1.927, -1.814, -2.297,  -1.205, -0.101);
+    qs.at(3) = Q(6, -0.030, -2.066, -1.494, -2.368, 0.312, -0.017);
+    qs.at(4) = Q(6, -0.778, -2.228, -1.209, -2.381, 1.731, 0.020);
+    qs.at(5) = Q(6, -1.308, -2.315, -1.389, -2.581, 2.511, -0.001);
 
-    Kinematics::gripFrame(bottle_frame, tool_frame, state);
+    double t = 1; //Seconds between configurations
+    unsigned int t_res = 100; //Resolution between every configuration
 
-    CollisionDetector detector(wc, ProximityStrategyFactory::makeDefaultCollisionStrategy());
-    PlannerConstraint constraint = PlannerConstraint::make(&detector, device, state);
+    //Blend time
+    double t_b = 0.2;
 
-    QSampler::Ptr sampler = QSampler::makeConstrained(QSampler::makeUniform(device), constraint.getQConstraintPtr());
-    QMetric::Ptr metric = MetricFactory::makeEuclidean<Q>();
-    QToQPlanner::Ptr planner = RRTPlanner::makeQToQPlanner(constraint, sampler, metric, 0.02, RRTPlanner::RRTConnect);
+    //Linear Interpolators (no blend)
+    std::vector<rw::trajectory::LinearInterpolator<rw::math::Q>> ls;
 
-    if (!checkCollisions(device, state, detector, from1))
-        return 0;
-    if (!checkCollisions(device, state, detector, to))
-        return 0;
+    //Linear Interpolators (with parabolic blend)
+    std::vector<rw::trajectory::ParabolicBlend<rw::math::Q>> ps;
 
-    TimedStatePath tStatePath;
-    double distance = 0;
-    double time = 0;
-
-    //cout << "Planning from " << from << " to " << to << endl;
-    QPath path;
-    Timer t;
-    t.resetAndResume();
-    planner->query(from1, to, path, MAXTIME);
-    t.pause();
-
-    if (t.getTime() >= MAXTIME) {
-        cout << "Notice: max time of " << MAXTIME << " seconds reached." << endl;
-    }
-
-    time = 0;
-    std::cout << "Pick orientation 1" << std::endl;
-    for (unsigned int i = 0; i< path.size(); i++)
+    for (unsigned int i = 0; i < qs.size()-1; i++)
     {
-        if (i >= 1)
+        ls.emplace_back(qs.at(i), qs.at(i+1), t);
+    }
+
+    for (unsigned int i = 0; i < ls.size()-1; i++)
+    {
+        ps.emplace_back(&ls.at(i), &ls.at(i+1), t_b);
+    }
+
+    TimedStatePath path; //Without blend
+
+    for (unsigned int i = 0; i < ls.size(); i++)
+    {
+        for (unsigned int j = 0; j < t_res; j++)
         {
-            distance += sqrt(pow((path.at(i)(0)-path.at(i-1)(0)),2)+pow((path.at(i)(1)-path.at(i-1)(1)),2)+pow((path.at(i)(2)-path.at(i-1)(2)),2)+pow((path.at(i)(3)-path.at(i-1)(3)),2)+pow((path.at(i)(4)-path.at(i-1)(4)),2)+pow((path.at(i)(5)-path.at(i-1)(5)),2));
+            robot->setQ(ls.at(i).x(t*j/t_res), state);
+            path.push_back(TimedState(t*i+t*j/t_res, state));
         }
-
-        device->setQ(path[i], state);
-        tStatePath.push_back(TimedState(time, state));
-        time += 0.01;
     }
 
-    mydata1 << t.getTime() << "\t" << distance << "\t\t" << path.size() << "\n";
+    TimedStatePath path_b; //With blend
 
-    rw::loaders::PathLoader::storeTimedStatePath(*wc, tStatePath, "rrt.rwplay");
+    for (unsigned int i = 0; i < ps.size()+1; i++)
+    {
+        for (unsigned int j = 0; j < t_res; j++)
+        {
+            if (i == 0)
+            {
+                if (t*j/t_res > ls.at(i).duration() - ps.at(i).tau1())
+                {
+                    robot->setQ(ps.at(i).x(t*j/t_res - (ls.at(i).duration() - ps.at(i).tau1())), state);
+                }
+                else
+                {
+                    robot->setQ(ls.at(i).x(t*j/t_res), state);
+                }
+            }
+            else if (i == ps.size())
+            {
+                if (t*j/t_res < ps.at(i-1).tau2())
+                {
+                    robot->setQ(ps.at(i-1).x(ps.at(i-1).tau1() + t*j/t_res), state);
+                }
+                else
+                {
+                    robot->setQ(ls.at(i).x(t*j/t_res), state);
+                }
+            }
+            else
+            {
+                if (t*j/t_res < ps.at(i-1).tau2())
+                {
+                    robot->setQ(ps.at(i-1).x(ps.at(i-1).tau1() + t*j/t_res), state);
+                }
+                else if (t*j/t_res > ls.at(i).duration() - ps.at(i).tau1())
+                {
+                    robot->setQ(ps.at(i).x(t*j/t_res - (ls.at(i).duration() - ps.at(i).tau1())), state);
+                }
+                else
+                {
+                    robot->setQ(ls.at(i).x(t*j/t_res), state);
+                }
+            }
 
-    mydata1.close();
+        path_b.push_back(TimedState(t*i+t*j/t_res, state));
+        }
+    }
+
+    rw::loaders::PathLoader::storeTimedStatePath(*workcell, path, "./interpolaton.rwplay");
+    rw::loaders::PathLoader::storeTimedStatePath(*workcell, path_b, "./interpolaton_b.rwplay");
+
     return 0;
 }
+
+
+
