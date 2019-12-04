@@ -8,38 +8,52 @@
 USE_ROBWORK_NAMESPACE
 using namespace robwork;
 
+bool checkCollisions(Device::Ptr device, const State &state, const CollisionDetector &detector, const Q &q)
+{
+    State testState;
+    CollisionDetector::QueryResult data;
+    bool colFrom;
+
+    testState = state;
+    device->setQ(q,testState);
+    colFrom = detector.inCollision(testState,&data);
+    if (colFrom)
+    {
+        std::cout << "Configuration in collision: " << q << std::endl;
+        std::cout << "Colliding frames: " << std::endl;
+        FramePairSet fps = data.collidingFrames;
+        for (FramePairSet::iterator it = fps.begin(); it != fps.end(); it++)
+        {
+            std::cout << (*it).first->getName() << " " << (*it).second->getName() << std::endl;
+        }
+        return false;
+        }
+    return true;
+}
+
 int main(int argc, char** argv)
 {
     // Load needed objects
-    rw::models::WorkCell::Ptr workcell                  = rw::loaders::WorkCellLoader::Factory::load("../../Project_WorkCell/Scene.wc.xml");
-    rw::models::SerialDevice::Ptr robot                 = workcell->findDevice<rw::models::SerialDevice>("UR-6-85-5-A");
-    rw::kinematics::MovableFrame::Ptr frameRobotBase    = workcell->findFrame<rw::kinematics::MovableFrame>("URReference");
-    rw::kinematics::MovableFrame::Ptr frameBottle       = workcell->findFrame<rw::kinematics::MovableFrame>("Bottle");
-    rw::kinematics::Frame* frameTCP                     = workcell->findFrame("GraspTCP");
-    if(workcell==NULL || robot==NULL || frameRobotBase==NULL || frameBottle==NULL || frameTCP==NULL)
+    rw::models::WorkCell::Ptr wc                  = rw::loaders::WorkCellLoader::Factory::load("../../Project_WorkCell/Scene.wc.xml");
+    rw::models::SerialDevice::Ptr robot                 = wc->findDevice<rw::models::SerialDevice>("UR-6-85-5-A");
+    rw::kinematics::MovableFrame::Ptr frameRobotBase    = wc->findFrame<rw::kinematics::MovableFrame>("URReference");
+    rw::kinematics::MovableFrame::Ptr frameBottle       = wc->findFrame<rw::kinematics::MovableFrame>("Bottle");
+    rw::kinematics::Frame* frameTCP                     = wc->findFrame("GraspTCP");
+    if(wc==NULL || robot==NULL || frameRobotBase==NULL || frameBottle==NULL || frameTCP==NULL)
     {
         RW_THROW("Could not find one or more devices...");
         return -1;
     }
 
-    // Create WorkCell collision detector
-    //rw::proximity::CollisionDetector::Ptr detector =
-    //rw::common::ownedPtr( new rw::proximity::CollisionDetector(workcell,
-     //   rwlibs::proximitystrategies::ProximityStrategyFactory::makeDefaultCollisionStrategy()));
+    State state = wc->getDefaultState();
 
-    // get the default state
-    State state = workcell->getDefaultState();
+    CollisionDetector detector(wc, ProximityStrategyFactory::makeDefaultCollisionStrategy());
 
-    // Attach bottle to grasp
     frameBottle->attachTo(frameTCP, state);
-    frameBottle->setTransform(
-            rw::math::Transform3D<>(
-                rw::math::Vector3D<>(0, 0, 0),
-                rw::math::RPY<>(0, 0, 0*rw::math::Deg2Rad)),
-            state
-            );
+    frameBottle->setTransform(rw::math::Transform3D<>(
+                rw::math::Vector3D<>(0, 0, 0), rw::math::RPY<>(0, 0, 0*rw::math::Deg2Rad)),
+            state);
 
-    // The configurations to interpolate between
     std::vector<rw::math::Q> qs;
     qs.resize(6);
     qs.at(0) = Q(6,  1.607, -1.903, -2.101, -2.277, -2.529, 0.001);
@@ -49,16 +63,19 @@ int main(int argc, char** argv)
     qs.at(4) = Q(6, -0.778, -2.228, -1.209, -2.381, 1.731, 0.020);
     qs.at(5) = Q(6, -1.308, -2.315, -1.389, -2.581, 2.511, -0.001);
 
-    double t = 1; //Seconds between configurations
-    unsigned int t_res = 100; //Resolution between every configuration
+    for (int i = 0; i < qs.size(); i++)
+    {
+        if (!checkCollisions(robot, state, detector, qs.at(i)))
+            return 0;
+    }
 
-    //Blend time
+    double t = 1;
+    unsigned int t_res = 100;
+
     double t_b = 0.2;
 
-    //Linear Interpolators (no blend)
     std::vector<rw::trajectory::LinearInterpolator<rw::math::Q>> ls;
 
-    //Linear Interpolators (with parabolic blend)
     std::vector<rw::trajectory::ParabolicBlend<rw::math::Q>> ps;
 
     for (unsigned int i = 0; i < qs.size()-1; i++)
@@ -71,7 +88,7 @@ int main(int argc, char** argv)
         ps.emplace_back(&ls.at(i), &ls.at(i+1), t_b);
     }
 
-    TimedStatePath path; //Without blend
+    TimedStatePath path;
 
     for (unsigned int i = 0; i < ls.size(); i++)
     {
@@ -82,7 +99,7 @@ int main(int argc, char** argv)
         }
     }
 
-    TimedStatePath path_b; //With blend
+    TimedStatePath path_b;
 
     for (unsigned int i = 0; i < ps.size()+1; i++)
     {
@@ -130,8 +147,8 @@ int main(int argc, char** argv)
         }
     }
 
-    rw::loaders::PathLoader::storeTimedStatePath(*workcell, path, "./interpolaton.rwplay");
-    rw::loaders::PathLoader::storeTimedStatePath(*workcell, path_b, "./interpolaton_b.rwplay");
+    rw::loaders::PathLoader::storeTimedStatePath(*wc, path, "./interpolaton.rwplay");
+    rw::loaders::PathLoader::storeTimedStatePath(*wc, path_b, "./interpolaton_blend.rwplay");
 
     return 0;
 }
