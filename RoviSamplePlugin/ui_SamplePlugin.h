@@ -36,6 +36,8 @@ public:
     QPushButton *_btn1;
     QSpinBox *_spinBox;
     QSlider *_slider;
+    QPushButton *_btn_home;
+    QPushButton *_btn_place;
     QLabel *_label;
 
     void setupUi(QDockWidget *SamplePlugin)
@@ -80,6 +82,16 @@ public:
 
         verticalLayout->addWidget(_slider);
 
+        _btn_home = new QPushButton(dockWidgetContents);
+        _btn_home->setObjectName(QStringLiteral("_btn_home"));
+
+        verticalLayout->addWidget(_btn_home);
+
+        _btn_place = new QPushButton(dockWidgetContents);
+        _btn_place->setObjectName(QStringLiteral("_btn_place"));
+
+        verticalLayout->addWidget(_btn_place);
+
         _label = new QLabel(dockWidgetContents);
         _label->setObjectName(QStringLiteral("_label"));
 
@@ -97,11 +109,13 @@ public:
 
     void retranslateUi(QDockWidget *SamplePlugin)
     {
-        SamplePlugin->setWindowTitle(QApplication::translate("SamplePlugin", "DockWidget", Q_NULLPTR));
+        SamplePlugin->setWindowTitle(QApplication::translate("SamplePlugin", "Doc&kWidget", Q_NULLPTR));
         _btn_im->setText(QApplication::translate("SamplePlugin", "Get Image", Q_NULLPTR));
         _btn_scan->setText(QApplication::translate("SamplePlugin", "Get Scan", Q_NULLPTR));
         _btn0->setText(QApplication::translate("SamplePlugin", "Calculate Path", Q_NULLPTR));
         _btn1->setText(QApplication::translate("SamplePlugin", "Run Path", Q_NULLPTR));
+        _btn_home->setText(QApplication::translate("SamplePlugin", "Home Position", Q_NULLPTR));
+        _btn_place->setText(QApplication::translate("SamplePlugin", "Place Bottle", Q_NULLPTR));
         _label->setText(QApplication::translate("SamplePlugin", "Label", Q_NULLPTR));
     } // retranslateUi
 

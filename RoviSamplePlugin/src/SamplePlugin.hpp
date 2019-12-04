@@ -61,7 +61,6 @@ using namespace cv;
 
 using namespace std::placeholders;
 
-
 class SamplePlugin: public rws::RobWorkStudioPlugin, private Ui::SamplePlugin
 {
 Q_OBJECT
@@ -82,6 +81,8 @@ private slots:
     void timer();
     void getImage();
     void get25DImage();
+    void homePosition();
+    void placeBottle();
   
     void stateChangedListener(const rw::kinematics::State& state);
 
@@ -102,9 +103,9 @@ private:
     std::vector<std::string> _cameras;
     std::vector<std::string> _cameras25D;
     Device::Ptr _device;
+    MovableFrame::Ptr _bottle;
     QPath _path;
     int _step;
-
 };
 
 #endif /*RINGONHOOKPLUGIN_HPP_*/

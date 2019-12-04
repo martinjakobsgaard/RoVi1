@@ -1,5 +1,6 @@
 #include "SamplePlugin.hpp"
 
+#include <random>
 
 SamplePlugin::SamplePlugin():
     RobWorkStudioPlugin("SamplePluginUI", QIcon(":/pa_icon.png"))
@@ -14,7 +15,9 @@ SamplePlugin::SamplePlugin():
 	connect(_btn_scan    ,SIGNAL(pressed()), this, SLOT(btnPressed()) );
 	connect(_btn0    ,SIGNAL(pressed()), this, SLOT(btnPressed()) );
 	connect(_btn1    ,SIGNAL(pressed()), this, SLOT(btnPressed()) );
+        connect(_btn_home, SIGNAL(pressed()), this, SLOT(btnPressed()) );
 	connect(_spinBox  ,SIGNAL(valueChanged(int)), this, SLOT(btnPressed()) );
+        connect(_btn_place    ,SIGNAL(pressed()), this, SLOT(btnPressed()) );
 
 	_framegrabber = NULL;
 	
@@ -28,15 +31,15 @@ SamplePlugin::~SamplePlugin()
     delete _bgRender;
 }
 
-void SamplePlugin::initialize() {
-	log().info() << "INITALIZE" << "\n";
+void SamplePlugin::initialize()
+{
+    log().info() << "INITALIZE" << "\n";
 
     getRobWorkStudio()->stateChangedEvent().add(std::bind(&SamplePlugin::stateChangedListener, this, std::placeholders::_1), this);
 
 	// Auto load workcell
-    WorkCell::Ptr wc = WorkCellLoader::Factory::load("/home/martin/Desktop/Mega/Mega/Current/RoVi_Project/Project_WorkCell_Cam/Project_WorkCell/Scene.wc.xml");
+    WorkCell::Ptr wc = WorkCellLoader::Factory::load("/home/martin/RoVi1/Project_WorkCell/Scene.wc.xml");
 	getRobWorkStudio()->setWorkCell(wc);
-
 }
 
 void SamplePlugin::open(WorkCell* workcell)
@@ -93,6 +96,7 @@ void SamplePlugin::open(WorkCell* workcell)
 	}
 
     _device = _wc->findDevice("UR-6-85-5-A");
+    _bottle = _wc->findFrame<rw::kinematics::MovableFrame>("Bottle");
     _step = -1;
 	
     }
@@ -131,45 +135,78 @@ Mat SamplePlugin::toOpenCVImage(const Image& img) {
 
 void SamplePlugin::btnPressed() {
     QObject *obj = sender();
-	if(obj==_btn0){
+    if(obj==_btn0){
 //		log().info() << "Button 0\n";
 //		// Toggle the timer on and off
 //		if (!_timer25D->isActive())
 //		    _timer25D->start(100); // run 10 Hz
 //		else
 //			_timer25D->stop();
-        _timer->stop();
-        rw::math::Math::seed();
-        double extend = 0.05;
-        double maxTime = 60;
-        Q from(6, 1.571, -1.572, -1.572, -1.572, 1.571, 0);
-        Q to(6, 1.847, -2.465, -1.602, -0.647, 1.571, 0); //From pose estimation
-        createPathRRTConnect(from, to, extend, maxTime);
+    _timer->stop();
+    rw::math::Math::seed();
+    double extend = 0.05;
+    double maxTime = 60;
+    Q from(6, 1.571, -1.572, -1.572, -1.572, 1.571, 0);
+    Q to(6, 1.847, -2.465, -1.602, -0.647, 1.571, 0); //From pose estimation
+    createPathRRTConnect(from, to, extend, maxTime);
 
+    } else if(obj==_btn1){
+    log().info() << "Button 1\n";
+    // Toggle the timer on and off
+    if (!_timer->isActive()){
+        _timer->start(100); // run 10 Hz
+        _step = 0;
+    }
+    else
+        _step = 0;
 
-	} else if(obj==_btn1){
-        log().info() << "Button 1\n";
-        // Toggle the timer on and off
-        if (!_timer->isActive()){
-            _timer->start(100); // run 10 Hz
-            _step = 0;
-        }
-        else
-            _step = 0;
-
-	} else if(obj==_spinBox){
-		log().info() << "spin value:" << _spinBox->value() << "\n";
-	}
-	else if( obj==_btn_im ){
-		getImage();
-	}
-	else if( obj==_btn_scan ){
-		get25DImage();
-	}
-	
-	
+    } else if(obj==_spinBox){
+            log().info() << "spin value:" << _spinBox->value() << "\n";
+    }
+    else if( obj==_btn_im ){
+            getImage();
+    }
+    else if( obj==_btn_scan ){
+            get25DImage();
+    }
+    else if (obj == _btn_home)
+    {
+        homePosition();
+    }
+    else if (obj == _btn_place)
+    {
+        placeBottle();
+    }
 }
 
+void SamplePlugin::placeBottle()
+{
+    std::random_device rd;
+    std::mt19937 eng(rd());
+    std::uniform_int_distribution<> x_rand(-350, 350);
+    std::uniform_int_distribution<> y_rand(350, 550);
+
+    double x_val = x_rand(eng) / 1000;
+    double y_val = y_rand(eng) / 1000;
+
+    _bottle->moveTo(rw::math::Transform3D<>(rw::math::Vector3D<>(x_val, y_val+0.474, 0.21), rw::math::RPY<>(-90,0,90)), _state);
+    getRobWorkStudio()->setState(_state);
+}
+
+void SamplePlugin::homePosition()
+{
+    rw::math::Q qHome = Q(6,  1.202, -1.770, -1.396, -0.972, 1.296, 0);
+    rw::math::Q qs = _device->getQ(_state);
+    createPathRRTConnect(qs, qHome, 0.05, 60);
+
+    // Toggle the timer on and off
+    if (!_timer->isActive()){
+        _timer->start(100); // run 10 Hz
+        _step = 0;
+    }
+    else
+        _step = 0;
+}
 
 void SamplePlugin::get25DImage() {
 	if (_framegrabber25D != NULL) {

@@ -22,8 +22,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_SamplePlugin_t {
-    QByteArrayData data[22];
-    char stringdata0[217];
+    QByteArrayData data[24];
+    char stringdata0[242];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -38,30 +38,33 @@ QT_MOC_LITERAL(2, 24, 0), // ""
 QT_MOC_LITERAL(3, 25, 5), // "timer"
 QT_MOC_LITERAL(4, 31, 8), // "getImage"
 QT_MOC_LITERAL(5, 40, 11), // "get25DImage"
-QT_MOC_LITERAL(6, 52, 20), // "stateChangedListener"
-QT_MOC_LITERAL(7, 73, 21), // "rw::kinematics::State"
-QT_MOC_LITERAL(8, 95, 5), // "state"
-QT_MOC_LITERAL(9, 101, 15), // "checkCollisions"
-QT_MOC_LITERAL(10, 117, 11), // "Device::Ptr"
-QT_MOC_LITERAL(11, 129, 6), // "device"
-QT_MOC_LITERAL(12, 136, 5), // "State"
-QT_MOC_LITERAL(13, 142, 17), // "CollisionDetector"
-QT_MOC_LITERAL(14, 160, 8), // "detector"
-QT_MOC_LITERAL(15, 169, 1), // "Q"
-QT_MOC_LITERAL(16, 171, 1), // "q"
-QT_MOC_LITERAL(17, 173, 20), // "createPathRRTConnect"
-QT_MOC_LITERAL(18, 194, 4), // "from"
-QT_MOC_LITERAL(19, 199, 2), // "to"
-QT_MOC_LITERAL(20, 202, 6), // "extend"
-QT_MOC_LITERAL(21, 209, 7) // "maxTime"
+QT_MOC_LITERAL(6, 52, 12), // "homePosition"
+QT_MOC_LITERAL(7, 65, 11), // "placeBottle"
+QT_MOC_LITERAL(8, 77, 20), // "stateChangedListener"
+QT_MOC_LITERAL(9, 98, 21), // "rw::kinematics::State"
+QT_MOC_LITERAL(10, 120, 5), // "state"
+QT_MOC_LITERAL(11, 126, 15), // "checkCollisions"
+QT_MOC_LITERAL(12, 142, 11), // "Device::Ptr"
+QT_MOC_LITERAL(13, 154, 6), // "device"
+QT_MOC_LITERAL(14, 161, 5), // "State"
+QT_MOC_LITERAL(15, 167, 17), // "CollisionDetector"
+QT_MOC_LITERAL(16, 185, 8), // "detector"
+QT_MOC_LITERAL(17, 194, 1), // "Q"
+QT_MOC_LITERAL(18, 196, 1), // "q"
+QT_MOC_LITERAL(19, 198, 20), // "createPathRRTConnect"
+QT_MOC_LITERAL(20, 219, 4), // "from"
+QT_MOC_LITERAL(21, 224, 2), // "to"
+QT_MOC_LITERAL(22, 227, 6), // "extend"
+QT_MOC_LITERAL(23, 234, 7) // "maxTime"
 
     },
     "SamplePlugin\0btnPressed\0\0timer\0getImage\0"
-    "get25DImage\0stateChangedListener\0"
-    "rw::kinematics::State\0state\0checkCollisions\0"
-    "Device::Ptr\0device\0State\0CollisionDetector\0"
-    "detector\0Q\0q\0createPathRRTConnect\0"
-    "from\0to\0extend\0maxTime"
+    "get25DImage\0homePosition\0placeBottle\0"
+    "stateChangedListener\0rw::kinematics::State\0"
+    "state\0checkCollisions\0Device::Ptr\0"
+    "device\0State\0CollisionDetector\0detector\0"
+    "Q\0q\0createPathRRTConnect\0from\0to\0"
+    "extend\0maxTime"
 };
 #undef QT_MOC_LITERAL
 
@@ -71,7 +74,7 @@ static const uint qt_meta_data_SamplePlugin[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       7,   14, // methods
+       9,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -79,22 +82,26 @@ static const uint qt_meta_data_SamplePlugin[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    0,   49,    2, 0x08 /* Private */,
-       3,    0,   50,    2, 0x08 /* Private */,
-       4,    0,   51,    2, 0x08 /* Private */,
-       5,    0,   52,    2, 0x08 /* Private */,
-       6,    1,   53,    2, 0x08 /* Private */,
-       9,    4,   56,    2, 0x08 /* Private */,
-      17,    4,   65,    2, 0x08 /* Private */,
+       1,    0,   59,    2, 0x08 /* Private */,
+       3,    0,   60,    2, 0x08 /* Private */,
+       4,    0,   61,    2, 0x08 /* Private */,
+       5,    0,   62,    2, 0x08 /* Private */,
+       6,    0,   63,    2, 0x08 /* Private */,
+       7,    0,   64,    2, 0x08 /* Private */,
+       8,    1,   65,    2, 0x08 /* Private */,
+      11,    4,   68,    2, 0x08 /* Private */,
+      19,    4,   77,    2, 0x08 /* Private */,
 
  // slots: parameters
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Void, 0x80000000 | 7,    8,
-    QMetaType::Bool, 0x80000000 | 10, 0x80000000 | 12, 0x80000000 | 13, 0x80000000 | 15,   11,    8,   14,   16,
-    QMetaType::Void, 0x80000000 | 15, 0x80000000 | 15, QMetaType::Double, QMetaType::Double,   18,   19,   20,   21,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void, 0x80000000 | 9,   10,
+    QMetaType::Bool, 0x80000000 | 12, 0x80000000 | 14, 0x80000000 | 15, 0x80000000 | 17,   13,   10,   16,   18,
+    QMetaType::Void, 0x80000000 | 17, 0x80000000 | 17, QMetaType::Double, QMetaType::Double,   20,   21,   22,   23,
 
        0        // eod
 };
@@ -109,10 +116,12 @@ void SamplePlugin::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
         case 1: _t->timer(); break;
         case 2: _t->getImage(); break;
         case 3: _t->get25DImage(); break;
-        case 4: _t->stateChangedListener((*reinterpret_cast< const rw::kinematics::State(*)>(_a[1]))); break;
-        case 5: { bool _r = _t->checkCollisions((*reinterpret_cast< Device::Ptr(*)>(_a[1])),(*reinterpret_cast< const State(*)>(_a[2])),(*reinterpret_cast< const CollisionDetector(*)>(_a[3])),(*reinterpret_cast< const Q(*)>(_a[4])));
+        case 4: _t->homePosition(); break;
+        case 5: _t->placeBottle(); break;
+        case 6: _t->stateChangedListener((*reinterpret_cast< const rw::kinematics::State(*)>(_a[1]))); break;
+        case 7: { bool _r = _t->checkCollisions((*reinterpret_cast< Device::Ptr(*)>(_a[1])),(*reinterpret_cast< const State(*)>(_a[2])),(*reinterpret_cast< const CollisionDetector(*)>(_a[3])),(*reinterpret_cast< const Q(*)>(_a[4])));
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = std::move(_r); }  break;
-        case 6: _t->createPathRRTConnect((*reinterpret_cast< Q(*)>(_a[1])),(*reinterpret_cast< Q(*)>(_a[2])),(*reinterpret_cast< double(*)>(_a[3])),(*reinterpret_cast< double(*)>(_a[4]))); break;
+        case 8: _t->createPathRRTConnect((*reinterpret_cast< Q(*)>(_a[1])),(*reinterpret_cast< Q(*)>(_a[2])),(*reinterpret_cast< double(*)>(_a[3])),(*reinterpret_cast< double(*)>(_a[4]))); break;
         default: ;
         }
     }
@@ -145,13 +154,13 @@ int SamplePlugin::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 7)
+        if (_id < 9)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 7;
+        _id -= 9;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 7)
+        if (_id < 9)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 7;
+        _id -= 9;
     }
     return _id;
 }
