@@ -62,9 +62,9 @@ int main(int argc, char** argv)
     mydata2.open("ROBDATA2.dat", std::ios_base::app);
     mydata3.open("ROBDATA3.dat", std::ios_base::app);
 
-    for (double extend = 0.02; extend <= 0.1; extend+=0.02)
+    for (double extend = 0.02; extend <= 1; extend+=0.01)
     {
-        for(int trial = 0; trial < 5; trial++)
+        for(int trial = 0; trial < 10; trial++)
         {
             const string wcFile = "../../Project_WorkCell/Scene.wc.xml";
             const string deviceName = "UR-6-85-5-A";
@@ -99,29 +99,6 @@ int main(int argc, char** argv)
 
             device->setQ(from1,state);
             Kinematics::gripFrame(bottle_frame, tool_frame, state);
-
-
-            /*
-            Transform3D<> T1(Vector3D<>(0,0,0), EAA<>(0,0,0));
-            Transform3D<> T2(Vector3D<>(1,1,0), EAA<>(1,1,0));
-            Transform3D<> T3(Vector3D<>(2,0,0), EAA<>(2,2,0));
-            LinearInterpolator<Transform3D<> >::Ptr QInt1 =
-                ownedPtr(new LinearInterpolator<Transform3D<> >(T1, T2, 1));
-            LinearInterpolator<Transform3D<> >::Ptr cartInt2 =
-                ownedPtr(new LinearInterpolator<Transform3D<> >(T2, T3, 1));
-            ParabolicBlend<Transform3D<> >::Ptr blend1 =
-                ownedPtr(new ParabolicBlend<Transform3D<> >(cartInt1, cartInt2, 0.25));
-            InterpolatorTrajectory<Transform3D<> > trajectory;
-            trajectory.add(cartInt1);
-            trajectory.add(blend1, cartInt2);
-            std::ofstream out("test.dat");
-            for (double t = 0; t<=trajectory.duration(); t += dt) {
-                 Transform3D<> x = trajectory.x(t);
-                 out<<t<<" "<<x.P()(0)<<" "<<x.P()(1)<<" "<<x.P()(2)<<std::endl;
-            }
-            out.close();
-            */
-
 
             CollisionDetector detector(wc, ProximityStrategyFactory::makeDefaultCollisionStrategy());
             PlannerConstraint constraint = PlannerConstraint::make(&detector, device, state);
@@ -168,7 +145,7 @@ int main(int argc, char** argv)
                 time += 0.01;
             }
 
-            mydata1 << t.getTime() << "\t" << distance << "\t\t" << extend << "\t" << path.size() << "\n";
+            mydata1 << t.getTime() << "\t" << distance << "\t" << extend << "\t" << path.size() << "\n";
 
             distance = 0;
             QPath path2;
@@ -196,7 +173,7 @@ int main(int argc, char** argv)
                 time += 0.01;
             }
 
-            mydata2 << t.getTime() << "\t" << distance << "\t\t" << extend << "\t" << path2.size() << "\n";
+            mydata2 << t.getTime() << "\t" << distance << "\t" << extend << "\t" << path2.size() << "\n";
 
 
             distance = 0;
@@ -227,7 +204,7 @@ int main(int argc, char** argv)
 
             rw::loaders::PathLoader::storeTimedStatePath(*wc, tStatePath, "rrt.rwplay");
 
-            mydata3 << t.getTime() << "\t" << distance << "\t\t" << extend << "\t" << path3.size() << "\n";
+            mydata3 << t.getTime() << "\t" << distance << "\t" << extend << "\t" << path3.size() << "\n";
 
             cout << trial << endl;
         }
