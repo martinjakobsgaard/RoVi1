@@ -70,6 +70,13 @@
        </widget>
       </item>
       <item>
+       <widget class="QPushButton" name="_btn_sparse">
+        <property name="text">
+         <string>Sparse Stereo</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QLabel" name="_label">
         <property name="text">
          <string>Label</string>

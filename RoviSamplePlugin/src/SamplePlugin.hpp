@@ -35,7 +35,7 @@
 #include <rw/loaders/WorkCellFactory.hpp>
 
 #include <functional>
-
+#include <random>
 
 using namespace rw::common;
 using namespace rw::graphics;
@@ -106,6 +106,8 @@ private:
     MovableFrame::Ptr _bottle;
     QPath _path;
     int _step;
+
+    std::random_device rd;
 };
 
 #endif /*RINGONHOOKPLUGIN_HPP_*/

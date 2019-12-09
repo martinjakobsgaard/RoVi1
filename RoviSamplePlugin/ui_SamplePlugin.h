@@ -38,6 +38,7 @@ public:
     QSlider *_slider;
     QPushButton *_btn_home;
     QPushButton *_btn_place;
+    QPushButton *_btn_sparse;
     QLabel *_label;
 
     void setupUi(QDockWidget *SamplePlugin)
@@ -92,6 +93,11 @@ public:
 
         verticalLayout->addWidget(_btn_place);
 
+        _btn_sparse = new QPushButton(dockWidgetContents);
+        _btn_sparse->setObjectName(QStringLiteral("_btn_sparse"));
+
+        verticalLayout->addWidget(_btn_sparse);
+
         _label = new QLabel(dockWidgetContents);
         _label->setObjectName(QStringLiteral("_label"));
 
@@ -116,6 +122,7 @@ public:
         _btn1->setText(QApplication::translate("SamplePlugin", "Run Path", Q_NULLPTR));
         _btn_home->setText(QApplication::translate("SamplePlugin", "Home Position", Q_NULLPTR));
         _btn_place->setText(QApplication::translate("SamplePlugin", "Place Bottle", Q_NULLPTR));
+        _btn_sparse->setText(QApplication::translate("SamplePlugin", "Sparse Stereo", Q_NULLPTR));
         _label->setText(QApplication::translate("SamplePlugin", "Label", Q_NULLPTR));
     } // retranslateUi
 

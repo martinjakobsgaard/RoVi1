@@ -1,7 +1,5 @@
 #include "SamplePlugin.hpp"
 
-#include <random>
-
 SamplePlugin::SamplePlugin():
     RobWorkStudioPlugin("SamplePluginUI", QIcon(":/pa_icon.png"))
 {
@@ -18,6 +16,7 @@ SamplePlugin::SamplePlugin():
         connect(_btn_home, SIGNAL(pressed()), this, SLOT(btnPressed()) );
 	connect(_spinBox  ,SIGNAL(valueChanged(int)), this, SLOT(btnPressed()) );
         connect(_btn_place    ,SIGNAL(pressed()), this, SLOT(btnPressed()) );
+        connect(_btn_sparse    ,SIGNAL(pressed()), this, SLOT(btnPressed()) );
 
 	_framegrabber = NULL;
 	
@@ -177,19 +176,23 @@ void SamplePlugin::btnPressed() {
     {
         placeBottle();
     }
+    else if (obj == _btn_sparse)
+    {
+        placeBottle();
+    }
 }
 
 void SamplePlugin::placeBottle()
 {
-    std::random_device rd;
-    std::mt19937 eng(rd());
+    std::mt19937 engine(rd());
+
     std::uniform_int_distribution<> x_rand(-350, 350);
     std::uniform_int_distribution<> y_rand(350, 550);
 
-    double x_val = x_rand(eng) / 1000;
-    double y_val = y_rand(eng) / 1000;
+    double x_val = x_rand(engine) / 1000.0;
+    double y_val = y_rand(engine) / 1000.0;
 
-    _bottle->moveTo(rw::math::Transform3D<>(rw::math::Vector3D<>(x_val, y_val+0.474, 0.21), rw::math::RPY<>(-90,0,90)), _state);
+    _bottle->moveTo(rw::math::Transform3D<>(rw::math::Vector3D<>(x_val, y_val, 0.21), rw::math::RPY<>(0,0,90*Deg2Rad)), _state);
     getRobWorkStudio()->setState(_state);
 }
 
