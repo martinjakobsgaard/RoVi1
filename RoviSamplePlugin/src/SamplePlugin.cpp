@@ -105,7 +105,6 @@ void SamplePlugin::open(WorkCell* workcell)
     }
 }
 
-
 void SamplePlugin::close()
 {
     log().info() << "CLOSE" << "\n";
@@ -195,29 +194,48 @@ void SamplePlugin::sparseStereo()
     Mat imageLeft = cv::imread("/tmp/Camera_Left.png");
     Mat imageRight = cv::imread("/tmp/Camera_Right.png");
 
-    Mat imageLeft_gray, imageRight_gray;
+    cv::Mat hsv_imageRight;
+    cv::Mat hsv_imageLeft;
+    cv::cvtColor(imageLeft, hsv_imageRight, cv::COLOR_BGR2HSV);
+    cv::cvtColor(imageRight, hsv_imageLeft, cv::COLOR_BGR2HSV);
 
-    cvtColor(imageLeft, imageLeft_gray, CV_BGR2GRAY);
+    cv::Mat lowerRedRight;
+    cv::Mat upperRedRight;
+    cv::Mat lowerRedLeft;
+    cv::Mat upperRedLeft;
 
-    //Reduce the noise so we avoid false circle detection
-    //GaussianBlur(imageLeft_gray, imageLeft_gray, Size(9, 9), 2, 2 );
+    cv::inRange(hsv_imageLeft, cv::Scalar(0, 100, 100), cv::Scalar(10, 255, 255), lowerRedRight);
+    cv::inRange(hsv_imageLeft, cv::Scalar(160, 100, 100), cv::Scalar(179, 255, 255), upperRedRight);
+    cv::inRange(hsv_imageRight, cv::Scalar(0, 100, 100), cv::Scalar(10, 255, 255), lowerRedLeft);
+    cv::inRange(hsv_imageRight, cv::Scalar(160, 100, 100), cv::Scalar(179, 255, 255), upperRedLeft);
 
-    //cv::imwrite("/tmp/test_gray.png", imageLeft_gray);
+    cv::Mat red_hueRight;
+    cv::Mat red_hueLeft;
+    cv::addWeighted(lowerRedRight, 1.0, upperRedRight, 1.0, 0.0, red_hueRight);
+    cv::addWeighted(lowerRedLeft, 1.0, upperRedLeft, 1.0, 0.0, red_hueLeft);
 
-    vector<Vec3f> circles;
+    std::vector<cv::Vec3f> circlesRight;
+    std::vector<cv::Vec3f> circlesLeft;
+    cv::HoughCircles(red_hueRight, circlesRight, CV_HOUGH_GRADIENT, 1, red_hueRight.rows, 20, 10, 0, 0);
+    cv::HoughCircles(red_hueLeft, circlesLeft, CV_HOUGH_GRADIENT, 1, red_hueLeft.rows, 20, 10, 0, 0);
 
-    // Apply the Hough Transform to find the circles
-    HoughCircles(imageLeft_gray, circles, CV_HOUGH_GRADIENT, 1, imageLeft_gray.rows, 50, 25, 0, 0);
-
-    for(size_t i = 0; i < circles.size(); i++)
+    for(size_t current_circle = 0; current_circle < circlesRight.size(); ++current_circle)
     {
-        Point center(cvRound(circles[i][0]), cvRound(circles[i][1]));
-        int radius = cvRound(circles[i][2]);
-        // circle center
-        circle(imageLeft, center, 3, Scalar(0,255,0), -1, 8, 0 );
-        // circle outline
-        circle(imageLeft, center, radius, Scalar(0,0,255), 3, 8, 0 );
-     }
+            cv::Point center(std::round(circlesRight[current_circle][0]), std::round(circlesRight[current_circle][1]));
+            int radius = std::round(circlesRight[current_circle][2]);
+
+            cv::circle(imageRight, center, radius, cv::Scalar(0, 255, 0), 5);
+    }
+
+    for(size_t current_circle = 0; current_circle < circlesLeft.size(); ++current_circle)
+    {
+            cv::Point center(std::round(circlesLeft[current_circle][0]), std::round(circlesLeft[current_circle][1]));
+            int radius = std::round(circlesLeft[current_circle][2]);
+
+            cv::circle(imageLeft, center, radius, cv::Scalar(0, 255, 0), 5);
+    }
+
+    cv::imwrite("/tmp/test1.png", imageRight);
     cv::imwrite("/tmp/test2.png", imageLeft);
 }
 
