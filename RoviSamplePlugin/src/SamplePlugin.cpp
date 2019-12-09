@@ -1,4 +1,8 @@
 #include "SamplePlugin.hpp"
+#include <opencv2/core.hpp>
+#include <opencv2/highgui.hpp>
+#include <fstream>
+#include <opencv2/stereo.hpp>
 
 SamplePlugin::SamplePlugin():
     RobWorkStudioPlugin("SamplePluginUI", QIcon(":/pa_icon.png"))
@@ -102,7 +106,8 @@ void SamplePlugin::open(WorkCell* workcell)
 }
 
 
-void SamplePlugin::close() {
+void SamplePlugin::close()
+{
     log().info() << "CLOSE" << "\n";
 
     // Stop the timer
@@ -125,14 +130,16 @@ void SamplePlugin::close() {
 	_wc = NULL;
 }
 
-Mat SamplePlugin::toOpenCVImage(const Image& img) {
+Mat SamplePlugin::toOpenCVImage(const Image& img)
+{
 	Mat res(img.getHeight(),img.getWidth(), CV_8SC3);
 	res.data = (uchar*)img.getImageData();
 	return res;
 }
 
 
-void SamplePlugin::btnPressed() {
+void SamplePlugin::btnPressed()
+{
     QObject *obj = sender();
     if(obj==_btn0){
 //		log().info() << "Button 0\n";
@@ -178,8 +185,40 @@ void SamplePlugin::btnPressed() {
     }
     else if (obj == _btn_sparse)
     {
-        placeBottle();
+        sparseStereo();
     }
+}
+
+void SamplePlugin::sparseStereo()
+{
+    getImage();
+    Mat imageLeft = cv::imread("/tmp/Camera_Left.png");
+    Mat imageRight = cv::imread("/tmp/Camera_Right.png");
+
+    Mat imageLeft_gray, imageRight_gray;
+
+    cvtColor(imageLeft, imageLeft_gray, CV_BGR2GRAY);
+
+    //Reduce the noise so we avoid false circle detection
+    //GaussianBlur(imageLeft_gray, imageLeft_gray, Size(9, 9), 2, 2 );
+
+    //cv::imwrite("/tmp/test_gray.png", imageLeft_gray);
+
+    vector<Vec3f> circles;
+
+    // Apply the Hough Transform to find the circles
+    HoughCircles(imageLeft_gray, circles, CV_HOUGH_GRADIENT, 1, imageLeft_gray.rows, 50, 25, 0, 0);
+
+    for(size_t i = 0; i < circles.size(); i++)
+    {
+        Point center(cvRound(circles[i][0]), cvRound(circles[i][1]));
+        int radius = cvRound(circles[i][2]);
+        // circle center
+        circle(imageLeft, center, 3, Scalar(0,255,0), -1, 8, 0 );
+        // circle outline
+        circle(imageLeft, center, radius, Scalar(0,0,255), 3, 8, 0 );
+     }
+    cv::imwrite("/tmp/test2.png", imageLeft);
 }
 
 void SamplePlugin::placeBottle()
@@ -259,9 +298,9 @@ void SamplePlugin::getImage() {
 			// Convert to OpenCV image
 			Mat imflip, imflip_mat;
 			cv::flip(image, imflip, 1);
-			cv::cvtColor( imflip, imflip_mat, COLOR_RGB2BGR );
+                        cv::cvtColor(imflip, imflip_mat, COLOR_RGB2BGR );
 
-			cv::imwrite(_cameras[i] + ".png", imflip_mat );
+                        cv::imwrite("/tmp/" +_cameras[i] + ".png", imflip_mat );
 
 			// Show in QLabel
 			QImage img(imflip.data, imflip.cols, imflip.rows, imflip.step, QImage::Format_RGB888);

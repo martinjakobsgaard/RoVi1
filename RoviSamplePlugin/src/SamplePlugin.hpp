@@ -83,6 +83,7 @@ private slots:
     void get25DImage();
     void homePosition();
     void placeBottle();
+    void sparseStereo();
   
     void stateChangedListener(const rw::kinematics::State& state);
 
