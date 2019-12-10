@@ -84,6 +84,8 @@ private slots:
     void homePosition();
     void placeBottle();
     void sparseStereo();
+    void performTask();
+    Eigen::Matrix<double, 3, 4> ProjectionMatrix(std::string frameName);
   
     void stateChangedListener(const rw::kinematics::State& state);
 
@@ -105,6 +107,8 @@ private:
     std::vector<std::string> _cameras25D;
     Device::Ptr _device;
     MovableFrame::Ptr _bottle;
+    MovableFrame::Ptr _bottleEst;
+
     QPath _path;
     int _step;
 

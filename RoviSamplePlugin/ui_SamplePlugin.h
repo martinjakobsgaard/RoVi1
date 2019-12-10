@@ -17,8 +17,6 @@
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QPushButton>
-#include <QtWidgets/QSlider>
-#include <QtWidgets/QSpinBox>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 
@@ -34,11 +32,10 @@ public:
     QPushButton *_btn_scan;
     QPushButton *_btn0;
     QPushButton *_btn1;
-    QSpinBox *_spinBox;
-    QSlider *_slider;
     QPushButton *_btn_home;
     QPushButton *_btn_place;
     QPushButton *_btn_sparse;
+    QPushButton *_performTask;
     QLabel *_label;
 
     void setupUi(QDockWidget *SamplePlugin)
@@ -72,17 +69,6 @@ public:
 
         verticalLayout->addWidget(_btn1);
 
-        _spinBox = new QSpinBox(dockWidgetContents);
-        _spinBox->setObjectName(QStringLiteral("_spinBox"));
-
-        verticalLayout->addWidget(_spinBox);
-
-        _slider = new QSlider(dockWidgetContents);
-        _slider->setObjectName(QStringLiteral("_slider"));
-        _slider->setOrientation(Qt::Horizontal);
-
-        verticalLayout->addWidget(_slider);
-
         _btn_home = new QPushButton(dockWidgetContents);
         _btn_home->setObjectName(QStringLiteral("_btn_home"));
 
@@ -97,6 +83,11 @@ public:
         _btn_sparse->setObjectName(QStringLiteral("_btn_sparse"));
 
         verticalLayout->addWidget(_btn_sparse);
+
+        _performTask = new QPushButton(dockWidgetContents);
+        _performTask->setObjectName(QStringLiteral("_performTask"));
+
+        verticalLayout->addWidget(_performTask);
 
         _label = new QLabel(dockWidgetContents);
         _label->setObjectName(QStringLiteral("_label"));
@@ -123,6 +114,7 @@ public:
         _btn_home->setText(QApplication::translate("SamplePlugin", "Home Position", Q_NULLPTR));
         _btn_place->setText(QApplication::translate("SamplePlugin", "Place Bottle", Q_NULLPTR));
         _btn_sparse->setText(QApplication::translate("SamplePlugin", "Sparse Stereo", Q_NULLPTR));
+        _performTask->setText(QApplication::translate("SamplePlugin", "Perform Pick and Place", Q_NULLPTR));
         _label->setText(QApplication::translate("SamplePlugin", "Label", Q_NULLPTR));
     } // retranslateUi
 

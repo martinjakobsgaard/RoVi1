@@ -3,6 +3,7 @@
 #include <opencv2/highgui.hpp>
 #include <fstream>
 #include <opencv2/stereo.hpp>
+#include <opencv2/core/eigen.hpp>
 
 SamplePlugin::SamplePlugin():
     RobWorkStudioPlugin("SamplePluginUI", QIcon(":/pa_icon.png"))
@@ -18,7 +19,7 @@ SamplePlugin::SamplePlugin():
 	connect(_btn0    ,SIGNAL(pressed()), this, SLOT(btnPressed()) );
 	connect(_btn1    ,SIGNAL(pressed()), this, SLOT(btnPressed()) );
         connect(_btn_home, SIGNAL(pressed()), this, SLOT(btnPressed()) );
-	connect(_spinBox  ,SIGNAL(valueChanged(int)), this, SLOT(btnPressed()) );
+        connect(_performTask  ,SIGNAL(valueChanged(int)), this, SLOT(btnPressed()) );
         connect(_btn_place    ,SIGNAL(pressed()), this, SLOT(btnPressed()) );
         connect(_btn_sparse    ,SIGNAL(pressed()), this, SLOT(btnPressed()) );
 
@@ -56,19 +57,23 @@ void SamplePlugin::open(WorkCell* workcell)
     if (_wc != NULL) {
 	// Add the texture render to this workcell if there is a frame for texture
 	Frame* textureFrame = _wc->findFrame("MarkerTexture");
-	if (textureFrame != NULL) {
+        if (textureFrame != NULL)
+        {
 		getRobWorkStudio()->getWorkCellScene()->addRender("TextureImage",_textureRender,textureFrame);
 	}
 	// Add the background render to this workcell if there is a frame for texture
 	Frame* bgFrame = _wc->findFrame("Background");
-	if (bgFrame != NULL) {
+        if (bgFrame != NULL)
+        {
 		getRobWorkStudio()->getWorkCellScene()->addRender("BackgroundImage",_bgRender,bgFrame);
 	}
 
 	// Create a GLFrameGrabber if there is a camera frame with a Camera property set
 	Frame* cameraFrame = _wc->findFrame(_cameras[0]);
-	if (cameraFrame != NULL) {
-		if (cameraFrame->getPropertyMap().has("Camera")) {
+        if (cameraFrame != NULL)
+        {
+                if (cameraFrame->getPropertyMap().has("Camera"))
+                {
 			// Read the dimensions and field of view
 			double fovy;
 			int width,height;
@@ -83,8 +88,10 @@ void SamplePlugin::open(WorkCell* workcell)
 	}
 	
 	Frame* cameraFrame25D = _wc->findFrame(_cameras25D[0]);
-	if (cameraFrame25D != NULL) {
-		if (cameraFrame25D->getPropertyMap().has("Scanner25D")) {
+        if (cameraFrame25D != NULL)
+        {
+                if (cameraFrame25D->getPropertyMap().has("Scanner25D"))
+                {
 			// Read the dimensions and field of view
 			double fovy;
 			int width,height;
@@ -97,11 +104,10 @@ void SamplePlugin::open(WorkCell* workcell)
 			_framegrabber25D->init(gldrawer);
 		}
 	}
-
     _device = _wc->findDevice("UR-6-85-5-A");
     _bottle = _wc->findFrame<rw::kinematics::MovableFrame>("Bottle");
+    _bottleEst = _wc->findFrame<rw::kinematics::MovableFrame>("BottleEst");
     _step = -1;
-	
     }
 }
 
@@ -140,38 +146,32 @@ Mat SamplePlugin::toOpenCVImage(const Image& img)
 void SamplePlugin::btnPressed()
 {
     QObject *obj = sender();
-    if(obj==_btn0){
-//		log().info() << "Button 0\n";
-//		// Toggle the timer on and off
-//		if (!_timer25D->isActive())
-//		    _timer25D->start(100); // run 10 Hz
-//		else
-//			_timer25D->stop();
-    _timer->stop();
-    rw::math::Math::seed();
-    double extend = 0.05;
-    double maxTime = 60;
-    Q from(6, 1.571, -1.572, -1.572, -1.572, 1.571, 0);
-    Q to(6, 1.847, -2.465, -1.602, -0.647, 1.571, 0); //From pose estimation
-    createPathRRTConnect(from, to, extend, maxTime);
-
-    } else if(obj==_btn1){
-    log().info() << "Button 1\n";
-    // Toggle the timer on and off
-    if (!_timer->isActive()){
-        _timer->start(100); // run 10 Hz
-        _step = 0;
+    if(obj==_btn0)
+    {
+        _timer->stop();
+        rw::math::Math::seed();
+        double extend = 0.05;
+        double maxTime = 60;
+        Q from(6, 1.571, -1.572, -1.572, -1.572, 1.571, 0);
+        Q to(6, 1.847, -2.465, -1.602, -0.647, 1.571, 0); //From pose estimation
+        createPathRRTConnect(from, to, extend, maxTime);
     }
-    else
-        _step = 0;
-
-    } else if(obj==_spinBox){
-            log().info() << "spin value:" << _spinBox->value() << "\n";
+    else if(obj==_btn1)
+    {
+        log().info() << "Button 1\n";
+        // Toggle the timer on and off
+        if (!_timer->isActive()){
+            _timer->start(100); // run 10 Hz
+            _step = 0;
+        }
+        else
+            _step = 0;
     }
     else if( obj==_btn_im ){
             getImage();
     }
-    else if( obj==_btn_scan ){
+    else if( obj==_btn_scan )
+    {
             get25DImage();
     }
     else if (obj == _btn_home)
@@ -186,6 +186,16 @@ void SamplePlugin::btnPressed()
     {
         sparseStereo();
     }
+    else if (obj == _performTask)
+    {
+        performTask();
+    }
+}
+
+void SamplePlugin::performTask()
+{
+    //Interpolation from home to place
+
 }
 
 void SamplePlugin::sparseStereo()
@@ -219,24 +229,84 @@ void SamplePlugin::sparseStereo()
     cv::HoughCircles(red_hueRight, circlesRight, CV_HOUGH_GRADIENT, 1, red_hueRight.rows, 20, 10, 0, 0);
     cv::HoughCircles(red_hueLeft, circlesLeft, CV_HOUGH_GRADIENT, 1, red_hueLeft.rows, 20, 10, 0, 0);
 
+    std::vector<cv::Point2d> CenterPointRight;
+    std::vector<cv::Point2d> CenterPointLeft;
+
     for(size_t current_circle = 0; current_circle < circlesRight.size(); ++current_circle)
     {
-            cv::Point center(std::round(circlesRight[current_circle][0]), std::round(circlesRight[current_circle][1]));
+            cv::Point center(std::round(circlesRight[current_circle][0]-1), std::round(circlesRight[current_circle][1]));
             int radius = std::round(circlesRight[current_circle][2]);
 
-            cv::circle(imageRight, center, radius, cv::Scalar(0, 255, 0), 5);
+            CenterPointRight.push_back(center);
+
+            cv::circle(imageRight, center, radius, cv::Scalar(0, 255, 0), 3);
     }
 
     for(size_t current_circle = 0; current_circle < circlesLeft.size(); ++current_circle)
     {
-            cv::Point center(std::round(circlesLeft[current_circle][0]), std::round(circlesLeft[current_circle][1]));
+            cv::Point center(std::round(circlesLeft[current_circle][0]-1), std::round(circlesLeft[current_circle][1]));
             int radius = std::round(circlesLeft[current_circle][2]);
 
-            cv::circle(imageLeft, center, radius, cv::Scalar(0, 255, 0), 5);
+            CenterPointLeft.push_back(center);
+
+            cv::circle(imageLeft, center, radius, cv::Scalar(0, 255, 0), 3);
     }
+
+    //Vector of Eigenmatrix for both the right and left camera
+    Eigen::Matrix<double, 3, 4> projectMatrixRight = ProjectionMatrix("Camera_Right");
+    Eigen::Matrix<double, 3, 4> projectMatrixLeft = ProjectionMatrix("Camera_Left");
+
+    cv::Mat cam0(3, 4, CV_64F);
+    cv::Mat cam1(3, 4, CV_64F);
+
+    cv::eigen2cv(projectMatrixRight, cam0);
+    cv::eigen2cv(projectMatrixLeft, cam1);
+
+    cv::Mat pnts3D(4,CenterPointRight.size(),CV_64F);
+    cv::triangulatePoints(cam1, cam0, CenterPointLeft, CenterPointRight, pnts3D);
 
     cv::imwrite("/tmp/test1.png", imageRight);
     cv::imwrite("/tmp/test2.png", imageLeft);
+
+    double dif_x = pnts3D.at<double>(0,0) - _bottle->getTransform(_state).P()[0];
+    double dif_y = pnts3D.at<double>(0,1) - _bottle->getTransform(_state).P()[1];
+    double dif_z = pnts3D.at<double>(0,2) - _bottle->getTransform(_state).P()[2];
+
+    double error = sqrt((dif_x*dif_x) + (dif_y*dif_y) + (dif_z*dif_z));
+
+    std::cout << "The error is: " << error << std::endl;
+
+    _bottleEst->moveTo(rw::math::Transform3D<>(rw::math::Vector3D<>(pnts3D.at<double>(0,0), pnts3D.at<double>(0,1), pnts3D.at<double>(0,2)), rw::math::RPY<>(0,0,90*Deg2Rad)), _state);
+    getRobWorkStudio()->setState(_state);
+}
+
+Eigen::Matrix<double, 3, 4> SamplePlugin::ProjectionMatrix(std::string frameName)
+{
+    Frame* cameraFrame = _wc->findFrame(frameName);
+    // Read the dimensions and field of view
+    double fovy;
+    int width,height;
+    std::string camParam = cameraFrame->getPropertyMap().get<std::string>("Camera");
+    std::istringstream iss (camParam, std::istringstream::in);
+    iss >> fovy >> width >> height;
+
+    double fovy_pixel = height / 2 / tan(fovy * (2*M_PI) / 360.0 / 2.0 );
+
+    Eigen::Matrix<double, 3, 4> KA;
+    KA << fovy_pixel, 0, width / 2.0, 0,
+          0, fovy_pixel, height / 2.0, 0,
+          0, 0, 1, 0;
+
+    Transform3D<> camPosOGL = cameraFrame->wTf(_state);
+    Transform3D<> openGLToVis = Transform3D<>(RPY<>(-Pi, 0, Pi).toRotation3D());
+    Transform3D<> H = inverse(camPosOGL * inverse(openGLToVis));
+
+    Eigen::Matrix<double, 4, 4> He;
+    He = H.e();
+
+    Eigen::Matrix<double, 3, 4> P = KA* He;
+
+    return P;
 }
 
 void SamplePlugin::placeBottle()
@@ -268,9 +338,11 @@ void SamplePlugin::homePosition()
         _step = 0;
 }
 
-void SamplePlugin::get25DImage() {
-	if (_framegrabber25D != NULL) {
-		for( int i = 0; i < _cameras25D.size(); i ++)
+void SamplePlugin::get25DImage()
+{
+        if (_framegrabber25D != NULL)
+        {
+                for(size_t i = 0; i < _cameras25D.size(); i ++)
 		{
 			// Get the image as a RW image
 			Frame* cameraFrame25D = _wc->findFrame(_cameras25D[i]); // "Camera");
@@ -300,9 +372,10 @@ void SamplePlugin::get25DImage() {
 	}
 }
 
-void SamplePlugin::getImage() {
+void SamplePlugin::getImage()
+{
 	if (_framegrabber != NULL) {
-		for( int i = 0; i < _cameras.size(); i ++)
+                for(size_t i = 0; i < _cameras.size(); i ++)
 		{
 			// Get the image as a RW image
 			Frame* cameraFrame = _wc->findFrame(_cameras[i]); // "Camera");
@@ -330,10 +403,10 @@ void SamplePlugin::getImage() {
 	}
 }
 
-void SamplePlugin::timer() {
-
-
-    if(0 <= _step && _step < _path.size()){
+void SamplePlugin::timer()
+{
+    if(0 <= _step && _step < _path.size())
+    {
         _device->setQ(_path.at(_step),_state);
         getRobWorkStudio()->setState(_state);
         _step++;
@@ -344,7 +417,8 @@ void SamplePlugin::stateChangedListener(const State& state) {
   _state = state;
 }
 
-bool SamplePlugin::checkCollisions(Device::Ptr device, const State &state, const CollisionDetector &detector, const Q &q) {
+bool SamplePlugin::checkCollisions(Device::Ptr device, const State &state, const CollisionDetector &detector, const Q &q)
+{
     State testState;
     CollisionDetector::QueryResult data;
     bool colFrom;
@@ -364,7 +438,8 @@ bool SamplePlugin::checkCollisions(Device::Ptr device, const State &state, const
     return true;
 }
 
-void SamplePlugin::createPathRRTConnect(Q from, Q to,  double extend, double maxTime){
+void SamplePlugin::createPathRRTConnect(Q from, Q to,  double extend, double maxTime)
+{
     _device->setQ(from,_state);
     getRobWorkStudio()->setState(_state);
     CollisionDetector detector(_wc, ProximityStrategyFactory::makeDefaultCollisionStrategy());

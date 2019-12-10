@@ -46,16 +46,6 @@
        </widget>
       </item>
       <item>
-       <widget class="QSpinBox" name="_spinBox"/>
-      </item>
-      <item>
-       <widget class="QSlider" name="_slider">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
-      <item>
        <widget class="QPushButton" name="_btn_home">
         <property name="text">
          <string>Home Position</string>
@@ -73,6 +63,13 @@
        <widget class="QPushButton" name="_btn_sparse">
         <property name="text">
          <string>Sparse Stereo</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="_performTask">
+        <property name="text">
+         <string>Perform Pick and Place</string>
         </property>
        </widget>
       </item>

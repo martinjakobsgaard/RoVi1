@@ -22,8 +22,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_SamplePlugin_t {
-    QByteArrayData data[25];
-    char stringdata0[255];
+    QByteArrayData data[29];
+    char stringdata0[320];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -41,27 +41,33 @@ QT_MOC_LITERAL(5, 40, 11), // "get25DImage"
 QT_MOC_LITERAL(6, 52, 12), // "homePosition"
 QT_MOC_LITERAL(7, 65, 11), // "placeBottle"
 QT_MOC_LITERAL(8, 77, 12), // "sparseStereo"
-QT_MOC_LITERAL(9, 90, 20), // "stateChangedListener"
-QT_MOC_LITERAL(10, 111, 21), // "rw::kinematics::State"
-QT_MOC_LITERAL(11, 133, 5), // "state"
-QT_MOC_LITERAL(12, 139, 15), // "checkCollisions"
-QT_MOC_LITERAL(13, 155, 11), // "Device::Ptr"
-QT_MOC_LITERAL(14, 167, 6), // "device"
-QT_MOC_LITERAL(15, 174, 5), // "State"
-QT_MOC_LITERAL(16, 180, 17), // "CollisionDetector"
-QT_MOC_LITERAL(17, 198, 8), // "detector"
-QT_MOC_LITERAL(18, 207, 1), // "Q"
-QT_MOC_LITERAL(19, 209, 1), // "q"
-QT_MOC_LITERAL(20, 211, 20), // "createPathRRTConnect"
-QT_MOC_LITERAL(21, 232, 4), // "from"
-QT_MOC_LITERAL(22, 237, 2), // "to"
-QT_MOC_LITERAL(23, 240, 6), // "extend"
-QT_MOC_LITERAL(24, 247, 7) // "maxTime"
+QT_MOC_LITERAL(9, 90, 16), // "ProjectionMatrix"
+QT_MOC_LITERAL(10, 107, 25), // "Eigen::Matrix<double,3,4>"
+QT_MOC_LITERAL(11, 133, 11), // "std::string"
+QT_MOC_LITERAL(12, 145, 9), // "frameName"
+QT_MOC_LITERAL(13, 155, 20), // "stateChangedListener"
+QT_MOC_LITERAL(14, 176, 21), // "rw::kinematics::State"
+QT_MOC_LITERAL(15, 198, 5), // "state"
+QT_MOC_LITERAL(16, 204, 15), // "checkCollisions"
+QT_MOC_LITERAL(17, 220, 11), // "Device::Ptr"
+QT_MOC_LITERAL(18, 232, 6), // "device"
+QT_MOC_LITERAL(19, 239, 5), // "State"
+QT_MOC_LITERAL(20, 245, 17), // "CollisionDetector"
+QT_MOC_LITERAL(21, 263, 8), // "detector"
+QT_MOC_LITERAL(22, 272, 1), // "Q"
+QT_MOC_LITERAL(23, 274, 1), // "q"
+QT_MOC_LITERAL(24, 276, 20), // "createPathRRTConnect"
+QT_MOC_LITERAL(25, 297, 4), // "from"
+QT_MOC_LITERAL(26, 302, 2), // "to"
+QT_MOC_LITERAL(27, 305, 6), // "extend"
+QT_MOC_LITERAL(28, 312, 7) // "maxTime"
 
     },
     "SamplePlugin\0btnPressed\0\0timer\0getImage\0"
     "get25DImage\0homePosition\0placeBottle\0"
-    "sparseStereo\0stateChangedListener\0"
+    "sparseStereo\0ProjectionMatrix\0"
+    "Eigen::Matrix<double,3,4>\0std::string\0"
+    "frameName\0stateChangedListener\0"
     "rw::kinematics::State\0state\0checkCollisions\0"
     "Device::Ptr\0device\0State\0CollisionDetector\0"
     "detector\0Q\0q\0createPathRRTConnect\0"
@@ -75,7 +81,7 @@ static const uint qt_meta_data_SamplePlugin[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      10,   14, // methods
+      11,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -83,16 +89,17 @@ static const uint qt_meta_data_SamplePlugin[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    0,   64,    2, 0x08 /* Private */,
-       3,    0,   65,    2, 0x08 /* Private */,
-       4,    0,   66,    2, 0x08 /* Private */,
-       5,    0,   67,    2, 0x08 /* Private */,
-       6,    0,   68,    2, 0x08 /* Private */,
-       7,    0,   69,    2, 0x08 /* Private */,
-       8,    0,   70,    2, 0x08 /* Private */,
-       9,    1,   71,    2, 0x08 /* Private */,
-      12,    4,   74,    2, 0x08 /* Private */,
-      20,    4,   83,    2, 0x08 /* Private */,
+       1,    0,   69,    2, 0x08 /* Private */,
+       3,    0,   70,    2, 0x08 /* Private */,
+       4,    0,   71,    2, 0x08 /* Private */,
+       5,    0,   72,    2, 0x08 /* Private */,
+       6,    0,   73,    2, 0x08 /* Private */,
+       7,    0,   74,    2, 0x08 /* Private */,
+       8,    0,   75,    2, 0x08 /* Private */,
+       9,    1,   76,    2, 0x08 /* Private */,
+      13,    1,   79,    2, 0x08 /* Private */,
+      16,    4,   82,    2, 0x08 /* Private */,
+      24,    4,   91,    2, 0x08 /* Private */,
 
  // slots: parameters
     QMetaType::Void,
@@ -102,9 +109,10 @@ static const uint qt_meta_data_SamplePlugin[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Void, 0x80000000 | 10,   11,
-    QMetaType::Bool, 0x80000000 | 13, 0x80000000 | 15, 0x80000000 | 16, 0x80000000 | 18,   14,   11,   17,   19,
-    QMetaType::Void, 0x80000000 | 18, 0x80000000 | 18, QMetaType::Double, QMetaType::Double,   21,   22,   23,   24,
+    0x80000000 | 10, 0x80000000 | 11,   12,
+    QMetaType::Void, 0x80000000 | 14,   15,
+    QMetaType::Bool, 0x80000000 | 17, 0x80000000 | 19, 0x80000000 | 20, 0x80000000 | 22,   18,   15,   21,   23,
+    QMetaType::Void, 0x80000000 | 22, 0x80000000 | 22, QMetaType::Double, QMetaType::Double,   25,   26,   27,   28,
 
        0        // eod
 };
@@ -122,10 +130,12 @@ void SamplePlugin::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
         case 4: _t->homePosition(); break;
         case 5: _t->placeBottle(); break;
         case 6: _t->sparseStereo(); break;
-        case 7: _t->stateChangedListener((*reinterpret_cast< const rw::kinematics::State(*)>(_a[1]))); break;
-        case 8: { bool _r = _t->checkCollisions((*reinterpret_cast< Device::Ptr(*)>(_a[1])),(*reinterpret_cast< const State(*)>(_a[2])),(*reinterpret_cast< const CollisionDetector(*)>(_a[3])),(*reinterpret_cast< const Q(*)>(_a[4])));
+        case 7: { Eigen::Matrix<double,3,4> _r = _t->ProjectionMatrix((*reinterpret_cast< std::string(*)>(_a[1])));
+            if (_a[0]) *reinterpret_cast< Eigen::Matrix<double,3,4>*>(_a[0]) = std::move(_r); }  break;
+        case 8: _t->stateChangedListener((*reinterpret_cast< const rw::kinematics::State(*)>(_a[1]))); break;
+        case 9: { bool _r = _t->checkCollisions((*reinterpret_cast< Device::Ptr(*)>(_a[1])),(*reinterpret_cast< const State(*)>(_a[2])),(*reinterpret_cast< const CollisionDetector(*)>(_a[3])),(*reinterpret_cast< const Q(*)>(_a[4])));
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = std::move(_r); }  break;
-        case 9: _t->createPathRRTConnect((*reinterpret_cast< Q(*)>(_a[1])),(*reinterpret_cast< Q(*)>(_a[2])),(*reinterpret_cast< double(*)>(_a[3])),(*reinterpret_cast< double(*)>(_a[4]))); break;
+        case 10: _t->createPathRRTConnect((*reinterpret_cast< Q(*)>(_a[1])),(*reinterpret_cast< Q(*)>(_a[2])),(*reinterpret_cast< double(*)>(_a[3])),(*reinterpret_cast< double(*)>(_a[4]))); break;
         default: ;
         }
     }
@@ -158,13 +168,13 @@ int SamplePlugin::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 10)
+        if (_id < 11)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 10;
+        _id -= 11;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 10)
+        if (_id < 11)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 10;
+        _id -= 11;
     }
     return _id;
 }
