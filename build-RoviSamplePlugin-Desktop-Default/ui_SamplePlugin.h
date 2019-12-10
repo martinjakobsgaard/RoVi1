@@ -17,8 +17,6 @@
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QPushButton>
-#include <QtWidgets/QSlider>
-#include <QtWidgets/QSpinBox>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 
@@ -34,8 +32,11 @@ public:
     QPushButton *_btn_scan;
     QPushButton *_btn0;
     QPushButton *_btn1;
-    QSpinBox *_spinBox;
-    QSlider *_slider;
+    QPushButton *_btn_home;
+    QPushButton *_btn_place;
+    QPushButton *_btn_sparse;
+    QPushButton *_performTask;
+    QPushButton *_btn_pose;
     QLabel *_label;
 
     void setupUi(QDockWidget *SamplePlugin)
@@ -69,16 +70,30 @@ public:
 
         verticalLayout->addWidget(_btn1);
 
-        _spinBox = new QSpinBox(dockWidgetContents);
-        _spinBox->setObjectName(QStringLiteral("_spinBox"));
+        _btn_home = new QPushButton(dockWidgetContents);
+        _btn_home->setObjectName(QStringLiteral("_btn_home"));
 
-        verticalLayout->addWidget(_spinBox);
+        verticalLayout->addWidget(_btn_home);
 
-        _slider = new QSlider(dockWidgetContents);
-        _slider->setObjectName(QStringLiteral("_slider"));
-        _slider->setOrientation(Qt::Horizontal);
+        _btn_place = new QPushButton(dockWidgetContents);
+        _btn_place->setObjectName(QStringLiteral("_btn_place"));
 
-        verticalLayout->addWidget(_slider);
+        verticalLayout->addWidget(_btn_place);
+
+        _btn_sparse = new QPushButton(dockWidgetContents);
+        _btn_sparse->setObjectName(QStringLiteral("_btn_sparse"));
+
+        verticalLayout->addWidget(_btn_sparse);
+
+        _performTask = new QPushButton(dockWidgetContents);
+        _performTask->setObjectName(QStringLiteral("_performTask"));
+
+        verticalLayout->addWidget(_performTask);
+
+        _btn_pose = new QPushButton(dockWidgetContents);
+        _btn_pose->setObjectName(QStringLiteral("_btn_pose"));
+
+        verticalLayout->addWidget(_btn_pose);
 
         _label = new QLabel(dockWidgetContents);
         _label->setObjectName(QStringLiteral("_label"));
@@ -97,11 +112,16 @@ public:
 
     void retranslateUi(QDockWidget *SamplePlugin)
     {
-        SamplePlugin->setWindowTitle(QApplication::translate("SamplePlugin", "DockWidget", Q_NULLPTR));
+        SamplePlugin->setWindowTitle(QApplication::translate("SamplePlugin", "Doc&kWidget", Q_NULLPTR));
         _btn_im->setText(QApplication::translate("SamplePlugin", "Get Image", Q_NULLPTR));
         _btn_scan->setText(QApplication::translate("SamplePlugin", "Get Scan", Q_NULLPTR));
         _btn0->setText(QApplication::translate("SamplePlugin", "Calculate Path", Q_NULLPTR));
         _btn1->setText(QApplication::translate("SamplePlugin", "Run Path", Q_NULLPTR));
+        _btn_home->setText(QApplication::translate("SamplePlugin", "Home Position", Q_NULLPTR));
+        _btn_place->setText(QApplication::translate("SamplePlugin", "Place Bottle", Q_NULLPTR));
+        _btn_sparse->setText(QApplication::translate("SamplePlugin", "Sparse Stereo", Q_NULLPTR));
+        _performTask->setText(QApplication::translate("SamplePlugin", "Perform Pick and Place", Q_NULLPTR));
+        _btn_pose->setText(QApplication::translate("SamplePlugin", "Pose Estimation", Q_NULLPTR));
         _label->setText(QApplication::translate("SamplePlugin", "Label", Q_NULLPTR));
     } // retranslateUi
 

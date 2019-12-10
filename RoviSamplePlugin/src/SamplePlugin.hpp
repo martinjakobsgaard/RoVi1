@@ -1,6 +1,6 @@
 #ifndef SAMPLEPLUGIN_HPP
 #define SAMPLEPLUGIN_HPP
-
+#include <QObject>
 // RobWork includes
 #include <rw/models/WorkCell.hpp>
 #include <rw/kinematics/State.hpp>
@@ -22,6 +22,32 @@
 // OpenCV 3
 #include <opencv2/opencv.hpp>
 
+
+// PCL includes
+#include <pcl/io/pcd_io.h>
+#include <pcl/point_types.h>
+#include <pcl/point_cloud.h>
+#include <pcl/filters/voxel_grid.h>
+#include <pcl/filters/statistical_outlier_removal.h>
+#include <pcl/filters/convolution_3d.h>
+#include <pcl/kdtree/kdtree_flann.h>
+#include <pcl/surface/mls.h>
+#include <pcl/filters/passthrough.h>
+#include <pcl/console/parse.h>
+#include <pcl/common/transforms.h>
+#include <Eigen/Core>
+#include <pcl/common/time.h>
+#include <pcl/console/print.h>
+#include <pcl/features/normal_3d_omp.h>
+#include <pcl/features/fpfh_omp.h>
+#include <pcl/filters/filter.h>
+#include <pcl/io/pcd_io.h>
+#include <pcl/registration/icp.h>
+#include <pcl/registration/sample_consensus_prerejective.h>
+#include <pcl/segmentation/sac_segmentation.h>
+#include <pcl/visualization/pcl_visualizer.h>
+#include <pcl/common/projection_matrix.h>
+
 // Qt
 #include <QTimer>
 
@@ -36,6 +62,8 @@
 
 #include <functional>
 #include <random>
+
+
 
 using namespace rw::common;
 using namespace rw::graphics;
@@ -85,6 +113,7 @@ private slots:
     void placeBottle();
     void sparseStereo();
     void performTask();
+    void poseEstimation();
     Eigen::Matrix<double, 3, 4> ProjectionMatrix(std::string frameName);
   
     void stateChangedListener(const rw::kinematics::State& state);
@@ -108,6 +137,7 @@ private:
     Device::Ptr _device;
     MovableFrame::Ptr _bottle;
     MovableFrame::Ptr _bottleEst;
+    MovableFrame::Ptr _WORLD;
 
     QPath _path;
     int _step;

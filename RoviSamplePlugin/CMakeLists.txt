@@ -54,6 +54,13 @@ LINK_DIRECTORIES( ${ROBWORKSTUDIO_LIBRARY_DIRS} )
 # Use OpenCV 3
 find_package(OpenCV 3 REQUIRED)
 
+# Use PCL
+find_package(PCL 1.7 REQUIRED REQUIRED COMPONENTS io registration segmentation visualization)
+
+include_directories(${PCL_INCLUDE_DIRS})
+link_directories(${PCL_LIBRARY_DIRS})
+add_definitions(${PCL_DEFINITIONS})
+
 # Set the output dir for generated libraries and binaries
 SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${ROOT}/bin/${CMAKE_BUILD_TYPE}" CACHE PATH "Runtime directory" FORCE)
 SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${ROOT}/libs/${CMAKE_BUILD_TYPE}" CACHE PATH "Library directory" FORCE)
@@ -77,5 +84,5 @@ SET(SrcFiles src/SamplePlugin.cpp ${UIS_OUT_H})
 
 # The shared library to build:
 ADD_LIBRARY(${PROJECT_NAME} MODULE ${SrcFiles} ${MocSrcFiles}  ${RccSrcFiles})
-TARGET_LINK_LIBRARIES(${PROJECT_NAME} ${ROBWORKSTUDIO_LIBRARIES} ${ROBWORK_LIBRARIES} ${OpenCV_LIBS})
+TARGET_LINK_LIBRARIES(${PROJECT_NAME} ${ROBWORKSTUDIO_LIBRARIES} ${ROBWORK_LIBRARIES} ${OpenCV_LIBS}  ${PCL_LIBRARIES} )
 

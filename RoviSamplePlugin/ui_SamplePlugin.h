@@ -35,6 +35,7 @@ public:
     QPushButton *_btn_home;
     QPushButton *_btn_place;
     QPushButton *_btn_sparse;
+    QPushButton *_btn_pose;
     QPushButton *_performTask;
     QLabel *_label;
 
