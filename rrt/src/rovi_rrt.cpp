@@ -1,3 +1,10 @@
+/*  This is based on the solution given for RRT.
+ *  It has been expanded to check more locations, log more data etc.
+ *  As well as working for the given project workcell.
+ *  However the basics of the source code is based on a solution from the Robotics Course at SDU.
+*/
+
+
 #include <iostream>
 #include <fstream>
 #include <cstdio>

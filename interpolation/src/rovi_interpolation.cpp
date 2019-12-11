@@ -1,3 +1,7 @@
+/*
+ * The check collisions function has been used based on a solution given for reachability exercise.
+*/
+
 #include <rw/rw.hpp>
 #include <rw/invkin.hpp>
 #include <rwlibs/proximitystrategies/ProximityStrategyFactory.hpp>

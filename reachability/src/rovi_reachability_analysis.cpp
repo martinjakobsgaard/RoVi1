@@ -1,3 +1,9 @@
+/*  The code used here is primarily based on the excerise involving reachability.
+ *  It has been converted to the project workcell along with much added functionality
+ *  such as moving the base frame, checking multiple locations, moving the bottle around,
+ *  logging the output etc.
+*/
+
 #include <rw/rw.hpp>
 #include <rw/invkin.hpp>
 #include <rwlibs/proximitystrategies/ProximityStrategyFactory.hpp>
