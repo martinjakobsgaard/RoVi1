@@ -247,6 +247,8 @@ void SamplePlugin::poseEstimation()
      transform_1 (2,3) = 1.325;
      pcl::transformPointCloud (*input_cloud, *input_cloud, transform_1);
         // perform downsampling of object
+     // Downsample
+      pcl::console::print_highlight ("Downsampling...\n");
            double cube_size=0.01f;
             pcl::VoxelGrid<pcl::PointNormal> sor1;
            sor1.setInputCloud (input_cloud);
@@ -303,13 +305,28 @@ reader.read ("/home/student/Workspace/RobWork/RobWorkStudio/bin/release/Scanner2
                 }
 
             }
-            pcl::console::print_info ("    | %6.3f %6.3f %6.3f | \n", eibottleT (0,0), eibottleT (0,1), eibottleT (0,2));
-            pcl::console::print_info ("R = | %6.3f %6.3f %6.3f | \n", eibottleT (1,0), eibottleT (1,1), eibottleT  (1,2));
-            pcl::console::print_info ("    | %6.3f %6.3f %6.3f | \n", eibottleT (2,0), eibottleT (2,1), eibottleT (2,2));
-            pcl::console::print_info ("t = < %0.3f, %0.3f, %0.3f >\n", eibottleT (0,3), eibottleT (1,3), eibottleT (2,3));
+            pcl::console::print_highlight ("Printing the eigen matrix...\n");
+            pcl::console::print_info ("    | %6.3f %6.3f %6.3f %6.3f| \n", eibottleT (0,0), eibottleT (0,1), eibottleT (0,2), eibottleT (0,3));
+            pcl::console::print_info ("    | %6.3f %6.3f %6.3f %6.3f| \n", eibottleT (1,0), eibottleT (1,1), eibottleT  (1,2), eibottleT (1,3));
+            pcl::console::print_info ("    | %6.3f %6.3f %6.3f %6.3f| \n", eibottleT (2,0), eibottleT (2,1), eibottleT (2,2), eibottleT (2,3));
+            pcl::console::print_info ("    | %6.3f %6.3f %6.3f %6.3f| \n", eibottleT (3,0), eibottleT (3,1), eibottleT (3,2), eibottleT (3,3));
+
+            pcl::console::print_highlight ("Printing the inverse...\n");
+            pcl::console::print_info ("    | %6.3f %6.3f %6.3f %6.3f| \n", eibottleT.inverse() (0,0), eibottleT.inverse() (0,1), eibottleT.inverse() (0,2), eibottleT.inverse() (0,3));
+            pcl::console::print_info ("    | %6.3f %6.3f %6.3f %6.3f| \n", eibottleT.inverse() (1,0), eibottleT.inverse() (1,1), eibottleT.inverse()  (1,2), eibottleT.inverse() (1,3));
+            pcl::console::print_info ("    | %6.3f %6.3f %6.3f %6.3f| \n", eibottleT.inverse() (2,0), eibottleT.inverse() (2,1), eibottleT.inverse() (2,2), eibottleT.inverse() (2,3));
+            pcl::console::print_info ("    | %6.3f %6.3f %6.3f %6.3f| \n", eibottleT.inverse() (3,0), eibottleT.inverse() (3,1), eibottleT.inverse() (3,2), eibottleT.inverse() (3,3));
 
 
+
+             pcl::copyPointCloud(*input_cloud,*scene);
+           pcl::copyPointCloud(*output_cloud,*object);
            pcl::transformPointCloud (*object, *object, eibottleT.inverse());
+            pcl::PCDWriter writer;
+             writer.write<pcl::PointNormal> ("/home/student/Workspace/RobWork/RobWorkStudio/bin/release/cloud_filtered_object_after_transformation.pcd", *object, false);
+            // writer.write<pcl::PointNormal> ("/home/student/Workspace/RobWork/RobWorkStudio/bin/release/cloud_filtered_object_after_transformation.pcd", *, false);
+            //writer.write<pcl::PointNormal> ("../point_cloud_processing_template/cloud_filtered_scene.pcd", *scene, false);*/
+
 
           pcl::PassThrough<pcl::PointNormal> pass;
           pass.setInputCloud (scene);
@@ -317,15 +334,8 @@ reader.read ("/home/student/Workspace/RobWork/RobWorkStudio/bin/release/Scanner2
           pass.setFilterLimits (-4.0f, 1.0f);
       //    pass.setFilterLimitsNegative (true);
           pass.filter (*scene);
-        // Downsample
-         pcl::console::print_highlight ("Downsampling...\n");
-         pcl::VoxelGrid<PointNT> grid;
-         const float leaf = 0.01f;
-         grid.setLeafSize (leaf, leaf, leaf);
-         grid.setInputCloud (object);
-         grid.filter (*object);
-         grid.setInputCloud (scene);
-         grid.filter (*scene);
+
+
 
          // Estimate normals for scene
          pcl::console::print_highlight ("Estimating scene normals...\n");
@@ -347,12 +357,9 @@ reader.read ("/home/student/Workspace/RobWork/RobWorkStudio/bin/release/Scanner2
          fest.setInputCloud (scene);
          fest.setInputNormals (scene);
          fest.compute (*scene_features);
-        /* pcl::PCDWriter writer;
-          writer.write<pcl::PointNormal> ("../point_cloud_processing_template/cloud_filtered_object.pcd", *object, false);
-          writer.write<pcl::PointNormal> ("../point_cloud_processing_template/cloud_filtered_scene.pcd", *scene, false);*/
 
-
-
+writer.write<pcl::PointNormal> ("/home/student/Workspace/RobWork/RobWorkStudio/bin/release/cloud_filtered_object_after_transformation_align.pcd", *object, false);
+writer.write<pcl::PointNormal> ("/home/student/Workspace/RobWork/RobWorkStudio/bin/release/cloud_filtered_scene_after_transformation.pcd", *scene, false);
          // Perform alignment
          pcl::console::print_highlight ("Starting alignment...\n");
          pcl::SampleConsensusPrerejective<PointNT,PointNT,FeatureT> align;
@@ -364,7 +371,7 @@ reader.read ("/home/student/Workspace/RobWork/RobWorkStudio/bin/release/Scanner2
          align.setNumberOfSamples (3); // Number of points to sample for generating/prerejecting a pose
          align.setCorrespondenceRandomness (5); // Number of nearest features to use
          align.setSimilarityThreshold (0.9f); // Polygonal edge length similarity threshold
-         align.setMaxCorrespondenceDistance (2.5f * leaf); // Inlier threshold
+         align.setMaxCorrespondenceDistance (2.5f * cube_size); // Inlier threshold
          align.setInlierFraction (0.25f); // Required inlier fraction for accepting a pose hypothesis
          {
            pcl::ScopeTime t("Alignment");
@@ -384,11 +391,35 @@ reader.read ("/home/student/Workspace/RobWork/RobWorkStudio/bin/release/Scanner2
            pcl::console::print_info ("\n");
            pcl::console::print_info ("Inliers: %i/%i\n", align.getInliers ().size (), object->size ());
 
+            pcl::transformPointCloud (*scene, *scene, transformation.inverse());
+            writer.write<pcl::PointNormal> ("/home/student/Workspace/RobWork/RobWorkStudio/bin/release/cloud_filtered_sceneIcp.pcd", *scene, false);
+
+           pcl::IterativeClosestPoint<pcl::PointNormal, pcl::PointNormal> icp;
+             icp.setInputSource(object);
+             icp.setInputTarget(scene);
+             pcl::PointCloud<pcl::PointNormal> Final;
+             icp.align(Final);
+             std::cout << "has converged:" << icp.hasConverged() << " score: " <<
+             icp.getFitnessScore() << std::endl;
+             std::cout << icp.getFinalTransformation() << std::endl;
+             Eigen::Matrix4f FinalT =transformation*icp.getFinalTransformation();
+             cout << endl;
+             cout << FinalT << endl;
            // Show alignment
-           pcl::visualization::PCLVisualizer visu("Alignment");
+          /* pcl::visualization::PCLVisualizer visu("Alignment");
            visu.addPointCloud (scene, ColorHandlerT (scene, 0.0, 255.0, 0.0), "scene");
            visu.addPointCloud (object_aligned, ColorHandlerT (object_aligned, 0.0, 0.0, 255.0), "object_aligned");
-           visu.spin ();
+           visu.spin ();*/
+             writer.write<pcl::PointNormal> ("/home/student/Workspace/RobWork/RobWorkStudio/bin/release/cloud_filtered_icp.pcd", Final, false);
+           double   dif_x = FinalT(0,3) - eibottleT(0,3);//_bottle->getTransform(_state).P()[0];
+              double dif_y =FinalT(1,3) - eibottleT(1,3);//_bottle->getTransform(_state).P()[1];
+            double  dif_z = FinalT(2,3) - eibottleT(2,3);//_bottle->getTransform(_state).P()[2];
+
+            cout << "x: " << _bottle->getTransform(_state).P()[0] << "y: " << _bottle->getTransform(_state).P()[1] << "z: " << _bottle->getTransform(_state).P()[2] << endl;
+
+             double error = sqrt((dif_x*dif_x) + (dif_y*dif_y) + (dif_z*dif_z));
+             std::cout << "The error is: " << error*1000 << "mm"<< std::endl;
+
          }
          else
          {
