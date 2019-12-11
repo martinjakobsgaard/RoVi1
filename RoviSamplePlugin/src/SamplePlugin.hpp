@@ -14,6 +14,7 @@
 #include <rwlibs/proximitystrategies/ProximityStrategyFactory.hpp>
 #include <rw/trajectory/LinearInterpolator.hpp>
 
+#include <rw/invkin.hpp>
 
 // RobWorkStudio includes
 #include <RobWorkStudioConfig.hpp> // For RWS_USE_QT5 definition

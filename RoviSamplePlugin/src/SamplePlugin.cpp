@@ -194,8 +194,38 @@ void SamplePlugin::btnPressed()
 
 void SamplePlugin::performTask()
 {
-    //Interpolation from home to place
+    _path.clear();
 
+    //Interpolation from home to place
+    std::vector<rw::math::Q> qs;
+    qs.resize(6);
+    qs.at(0) = Q(6,  1.607, -1.903, -2.101, -2.277, -2.529, 0.001);
+    qs.at(1) = Q(6,  1.368, -1.554, -1.590, -2.062,  -1.869, -0.059);
+    qs.at(2) = Q(6,  0.868, -1.927, -1.814, -2.297,  -1.205, -0.101);
+    qs.at(3) = Q(6, -0.030, -2.066, -1.494, -2.368, 0.312, -0.017);
+    qs.at(4) = Q(6, -0.778, -2.228, -1.209, -2.381, 1.731, 0.020);
+    qs.at(5) = Q(6, -1.308, -2.315, -1.389, -2.581, 2.511, -0.001);
+
+    double t = 1;
+    unsigned int t_res = 100;
+
+    std::vector<rw::trajectory::LinearInterpolator<rw::math::Q>> ls;
+
+    for (unsigned int i = 0; i < qs.size()-1; i++)
+    {
+        ls.emplace_back(qs.at(i), qs.at(i+1), t);
+    }
+
+    /*
+    for (unsigned int i = 0; i < ls.size(); i++)
+    {
+        for (unsigned int j = 0; j < t_res; j++)
+        {
+            _device->setQ(ls.at(i).x(t*j/t_res), _state);
+            _path.push_back(t*i+t*j/t_res, _state);
+        }
+    }
+    */
 }
 
 void SamplePlugin::sparseStereo()
@@ -210,24 +240,15 @@ void SamplePlugin::sparseStereo()
     cv::cvtColor(imageRight, hsv_imageLeft, cv::COLOR_BGR2HSV);
 
     cv::Mat lowerRedRight;
-    cv::Mat upperRedRight;
     cv::Mat lowerRedLeft;
-    cv::Mat upperRedLeft;
 
-    cv::inRange(hsv_imageLeft, cv::Scalar(0, 100, 100), cv::Scalar(10, 255, 255), lowerRedRight);
-    cv::inRange(hsv_imageLeft, cv::Scalar(160, 100, 100), cv::Scalar(179, 255, 255), upperRedRight);
-    cv::inRange(hsv_imageRight, cv::Scalar(0, 100, 100), cv::Scalar(10, 255, 255), lowerRedLeft);
-    cv::inRange(hsv_imageRight, cv::Scalar(160, 100, 100), cv::Scalar(179, 255, 255), upperRedLeft);
-
-    cv::Mat red_hueRight;
-    cv::Mat red_hueLeft;
-    cv::addWeighted(lowerRedRight, 1.0, upperRedRight, 1.0, 0.0, red_hueRight);
-    cv::addWeighted(lowerRedLeft, 1.0, upperRedLeft, 1.0, 0.0, red_hueLeft);
+    cv::inRange(hsv_imageLeft, cv::Scalar(100,50,50), cv::Scalar(110, 255, 255), lowerRedRight);
+    cv::inRange(hsv_imageRight, cv::Scalar(100, 50, 50), cv::Scalar(110, 255, 255), lowerRedLeft);
 
     std::vector<cv::Vec3f> circlesRight;
     std::vector<cv::Vec3f> circlesLeft;
-    cv::HoughCircles(red_hueRight, circlesRight, CV_HOUGH_GRADIENT, 1, red_hueRight.rows, 20, 10, 0, 0);
-    cv::HoughCircles(red_hueLeft, circlesLeft, CV_HOUGH_GRADIENT, 1, red_hueLeft.rows, 20, 10, 0, 0);
+    cv::HoughCircles(lowerRedRight, circlesRight, CV_HOUGH_GRADIENT, 1, lowerRedRight.rows, 20, 10, 0, 15);
+    cv::HoughCircles(lowerRedLeft, circlesLeft, CV_HOUGH_GRADIENT, 1, lowerRedLeft.rows, 20, 10, 0, 15);
 
     std::vector<cv::Point2d> CenterPointRight;
     std::vector<cv::Point2d> CenterPointLeft;
@@ -265,18 +286,14 @@ void SamplePlugin::sparseStereo()
     cv::Mat pnts3D(4,CenterPointRight.size(),CV_64F);
     cv::triangulatePoints(cam1, cam0, CenterPointLeft, CenterPointRight, pnts3D);
 
-    cv::imwrite("/tmp/test1.png", imageRight);
-    cv::imwrite("/tmp/test2.png", imageLeft);
+    double dif_x = pnts3D.at<double>(0,0)/pnts3D.at<double>(0,3) - _bottle->getTransform(_state).P()[0];
+    double dif_y = pnts3D.at<double>(0,1)/pnts3D.at<double>(0,3) - _bottle->getTransform(_state).P()[1];
 
-    double dif_x = pnts3D.at<double>(0,0) - _bottle->getTransform(_state).P()[0];
-    double dif_y = pnts3D.at<double>(0,1) - _bottle->getTransform(_state).P()[1];
-    double dif_z = pnts3D.at<double>(0,2) - _bottle->getTransform(_state).P()[2];
-
-    double error = sqrt((dif_x*dif_x) + (dif_y*dif_y) + (dif_z*dif_z));
+    double error = sqrt((dif_x*dif_x) + (dif_y*dif_y));
 
     std::cout << "The error is: " << error << std::endl;
 
-    _bottleEst->moveTo(rw::math::Transform3D<>(rw::math::Vector3D<>(pnts3D.at<double>(0,0), pnts3D.at<double>(0,1), pnts3D.at<double>(0,2)), rw::math::RPY<>(0,0,90*Deg2Rad)), _state);
+    _bottleEst->moveTo(rw::math::Transform3D<>(rw::math::Vector3D<>(pnts3D.at<double>(0,0)/pnts3D.at<double>(0,3), pnts3D.at<double>(0,1)/pnts3D.at<double>(0,3), 0.21), rw::math::RPY<>(0,0,90*Deg2Rad)), _state);
     getRobWorkStudio()->setState(_state);
 }
 
@@ -458,11 +475,9 @@ void SamplePlugin::createPathRRTConnect(Q from, Q to,  double extend, double max
     planner->query(from,to,_path,maxTime);
     t.pause();
 
-
     if (t.getTime() >= maxTime) {
         cout << "Notice: max time of " << maxTime << " seconds reached." << endl;
     }
-
 	const int duration = 10;
 
     if(_path.size() == 2){  //The interpolated path between Q start and Q goal is collision free. Set the duration with respect to the desired velocity
