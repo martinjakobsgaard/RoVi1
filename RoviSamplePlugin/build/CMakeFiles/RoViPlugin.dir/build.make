@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/martin/Desktop/Mega/Mega/Current/RoVi_Project/RoviSamplePlugin
+CMAKE_SOURCE_DIR = /home/student/RoVi1/RoviSamplePlugin
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/martin/Desktop/Mega/Mega/Current/RoVi_Project/RoviSamplePlugin/build
+CMAKE_BINARY_DIR = /home/student/RoVi1/RoviSamplePlugin/build
 
 # Include any dependencies generated for this target.
 include CMakeFiles/RoViPlugin.dir/depend.make
@@ -58,30 +58,30 @@ include CMakeFiles/RoViPlugin.dir/progress.make
 include CMakeFiles/RoViPlugin.dir/flags.make
 
 ui_SamplePlugin.h: ../src/SamplePlugin.ui
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/martin/Desktop/Mega/Mega/Current/RoVi_Project/RoviSamplePlugin/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Generating ui_SamplePlugin.h"
-	/usr/lib/qt5/bin/uic -o /home/martin/Desktop/Mega/Mega/Current/RoVi_Project/RoviSamplePlugin/build/ui_SamplePlugin.h /home/martin/Desktop/Mega/Mega/Current/RoVi_Project/RoviSamplePlugin/src/SamplePlugin.ui
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/student/RoVi1/RoviSamplePlugin/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Generating ui_SamplePlugin.h"
+	/usr/lib/qt5/bin/uic -o /home/student/RoVi1/RoviSamplePlugin/build/ui_SamplePlugin.h /home/student/RoVi1/RoviSamplePlugin/src/SamplePlugin.ui
 
 src/moc_SamplePlugin.cpp: ../src/SamplePlugin.hpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/martin/Desktop/Mega/Mega/Current/RoVi_Project/RoviSamplePlugin/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Generating src/moc_SamplePlugin.cpp"
-	cd /home/martin/Desktop/Mega/Mega/Current/RoVi_Project/RoviSamplePlugin/build/src && /usr/lib/qt5/bin/moc @/home/martin/Desktop/Mega/Mega/Current/RoVi_Project/RoviSamplePlugin/build/src/moc_SamplePlugin.cpp_parameters
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/student/RoVi1/RoviSamplePlugin/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Generating src/moc_SamplePlugin.cpp"
+	cd /home/student/RoVi1/RoviSamplePlugin/build/src && /usr/lib/qt5/bin/moc @/home/student/RoVi1/RoviSamplePlugin/build/src/moc_SamplePlugin.cpp_parameters
 
 qrc_resources.cpp: ../src/pa_icon.png
 qrc_resources.cpp: ../src/resources.qrc
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/martin/Desktop/Mega/Mega/Current/RoVi_Project/RoviSamplePlugin/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Generating qrc_resources.cpp"
-	/usr/lib/qt5/bin/rcc --name resources --output /home/martin/Desktop/Mega/Mega/Current/RoVi_Project/RoviSamplePlugin/build/qrc_resources.cpp /home/martin/Desktop/Mega/Mega/Current/RoVi_Project/RoviSamplePlugin/src/resources.qrc
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/student/RoVi1/RoviSamplePlugin/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Generating qrc_resources.cpp"
+	/usr/lib/qt5/bin/rcc --name resources --output /home/student/RoVi1/RoviSamplePlugin/build/qrc_resources.cpp /home/student/RoVi1/RoviSamplePlugin/src/resources.qrc
 
 CMakeFiles/RoViPlugin.dir/src/SamplePlugin.cpp.o: CMakeFiles/RoViPlugin.dir/flags.make
 CMakeFiles/RoViPlugin.dir/src/SamplePlugin.cpp.o: ../src/SamplePlugin.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/martin/Desktop/Mega/Mega/Current/RoVi_Project/RoviSamplePlugin/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/RoViPlugin.dir/src/SamplePlugin.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/RoViPlugin.dir/src/SamplePlugin.cpp.o -c /home/martin/Desktop/Mega/Mega/Current/RoVi_Project/RoviSamplePlugin/src/SamplePlugin.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/student/RoVi1/RoviSamplePlugin/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/RoViPlugin.dir/src/SamplePlugin.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/RoViPlugin.dir/src/SamplePlugin.cpp.o -c /home/student/RoVi1/RoviSamplePlugin/src/SamplePlugin.cpp
 
 CMakeFiles/RoViPlugin.dir/src/SamplePlugin.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/RoViPlugin.dir/src/SamplePlugin.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/martin/Desktop/Mega/Mega/Current/RoVi_Project/RoviSamplePlugin/src/SamplePlugin.cpp > CMakeFiles/RoViPlugin.dir/src/SamplePlugin.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/student/RoVi1/RoviSamplePlugin/src/SamplePlugin.cpp > CMakeFiles/RoViPlugin.dir/src/SamplePlugin.cpp.i
 
 CMakeFiles/RoViPlugin.dir/src/SamplePlugin.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/RoViPlugin.dir/src/SamplePlugin.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/martin/Desktop/Mega/Mega/Current/RoVi_Project/RoviSamplePlugin/src/SamplePlugin.cpp -o CMakeFiles/RoViPlugin.dir/src/SamplePlugin.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/student/RoVi1/RoviSamplePlugin/src/SamplePlugin.cpp -o CMakeFiles/RoViPlugin.dir/src/SamplePlugin.cpp.s
 
 CMakeFiles/RoViPlugin.dir/src/SamplePlugin.cpp.o.requires:
 
@@ -96,16 +96,16 @@ CMakeFiles/RoViPlugin.dir/src/SamplePlugin.cpp.o.provides.build: CMakeFiles/RoVi
 
 CMakeFiles/RoViPlugin.dir/src/moc_SamplePlugin.cpp.o: CMakeFiles/RoViPlugin.dir/flags.make
 CMakeFiles/RoViPlugin.dir/src/moc_SamplePlugin.cpp.o: src/moc_SamplePlugin.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/martin/Desktop/Mega/Mega/Current/RoVi_Project/RoviSamplePlugin/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/RoViPlugin.dir/src/moc_SamplePlugin.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/RoViPlugin.dir/src/moc_SamplePlugin.cpp.o -c /home/martin/Desktop/Mega/Mega/Current/RoVi_Project/RoviSamplePlugin/build/src/moc_SamplePlugin.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/student/RoVi1/RoviSamplePlugin/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/RoViPlugin.dir/src/moc_SamplePlugin.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/RoViPlugin.dir/src/moc_SamplePlugin.cpp.o -c /home/student/RoVi1/RoviSamplePlugin/build/src/moc_SamplePlugin.cpp
 
 CMakeFiles/RoViPlugin.dir/src/moc_SamplePlugin.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/RoViPlugin.dir/src/moc_SamplePlugin.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/martin/Desktop/Mega/Mega/Current/RoVi_Project/RoviSamplePlugin/build/src/moc_SamplePlugin.cpp > CMakeFiles/RoViPlugin.dir/src/moc_SamplePlugin.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/student/RoVi1/RoviSamplePlugin/build/src/moc_SamplePlugin.cpp > CMakeFiles/RoViPlugin.dir/src/moc_SamplePlugin.cpp.i
 
 CMakeFiles/RoViPlugin.dir/src/moc_SamplePlugin.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/RoViPlugin.dir/src/moc_SamplePlugin.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/martin/Desktop/Mega/Mega/Current/RoVi_Project/RoviSamplePlugin/build/src/moc_SamplePlugin.cpp -o CMakeFiles/RoViPlugin.dir/src/moc_SamplePlugin.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/student/RoVi1/RoviSamplePlugin/build/src/moc_SamplePlugin.cpp -o CMakeFiles/RoViPlugin.dir/src/moc_SamplePlugin.cpp.s
 
 CMakeFiles/RoViPlugin.dir/src/moc_SamplePlugin.cpp.o.requires:
 
@@ -120,16 +120,16 @@ CMakeFiles/RoViPlugin.dir/src/moc_SamplePlugin.cpp.o.provides.build: CMakeFiles/
 
 CMakeFiles/RoViPlugin.dir/qrc_resources.cpp.o: CMakeFiles/RoViPlugin.dir/flags.make
 CMakeFiles/RoViPlugin.dir/qrc_resources.cpp.o: qrc_resources.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/martin/Desktop/Mega/Mega/Current/RoVi_Project/RoviSamplePlugin/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/RoViPlugin.dir/qrc_resources.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/RoViPlugin.dir/qrc_resources.cpp.o -c /home/martin/Desktop/Mega/Mega/Current/RoVi_Project/RoviSamplePlugin/build/qrc_resources.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/student/RoVi1/RoviSamplePlugin/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/RoViPlugin.dir/qrc_resources.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/RoViPlugin.dir/qrc_resources.cpp.o -c /home/student/RoVi1/RoviSamplePlugin/build/qrc_resources.cpp
 
 CMakeFiles/RoViPlugin.dir/qrc_resources.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/RoViPlugin.dir/qrc_resources.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/martin/Desktop/Mega/Mega/Current/RoVi_Project/RoviSamplePlugin/build/qrc_resources.cpp > CMakeFiles/RoViPlugin.dir/qrc_resources.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/student/RoVi1/RoviSamplePlugin/build/qrc_resources.cpp > CMakeFiles/RoViPlugin.dir/qrc_resources.cpp.i
 
 CMakeFiles/RoViPlugin.dir/qrc_resources.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/RoViPlugin.dir/qrc_resources.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/martin/Desktop/Mega/Mega/Current/RoVi_Project/RoviSamplePlugin/build/qrc_resources.cpp -o CMakeFiles/RoViPlugin.dir/qrc_resources.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/student/RoVi1/RoviSamplePlugin/build/qrc_resources.cpp -o CMakeFiles/RoViPlugin.dir/qrc_resources.cpp.s
 
 CMakeFiles/RoViPlugin.dir/qrc_resources.cpp.o.requires:
 
@@ -155,25 +155,12 @@ RoViPlugin_EXTERNAL_OBJECTS =
 ../libs/Release/libRoViPlugin.so: CMakeFiles/RoViPlugin.dir/src/moc_SamplePlugin.cpp.o
 ../libs/Release/libRoViPlugin.so: CMakeFiles/RoViPlugin.dir/qrc_resources.cpp.o
 ../libs/Release/libRoViPlugin.so: CMakeFiles/RoViPlugin.dir/build.make
-../libs/Release/libRoViPlugin.so: /home/martin/RobWork/RobWork/libs/release/librw_algorithms.so
-../libs/Release/libRoViPlugin.so: /home/martin/RobWork/RobWork/libs/release/librw_pathplanners.so
-../libs/Release/libRoViPlugin.so: /home/martin/RobWork/RobWork/libs/release/librw_pathoptimization.so
-../libs/Release/libRoViPlugin.so: /home/martin/RobWork/RobWork/libs/release/librw_simulation.so
-../libs/Release/libRoViPlugin.so: /home/martin/RobWork/RobWork/libs/release/librw_opengl.so
-../libs/Release/libRoViPlugin.so: /home/martin/RobWork/RobWork/libs/release/librw_assembly.so
-../libs/Release/libRoViPlugin.so: /home/martin/RobWork/RobWork/libs/release/librw_task.so
-../libs/Release/libRoViPlugin.so: /home/martin/RobWork/RobWork/libs/release/librw_calibration.so
-../libs/Release/libRoViPlugin.so: /home/martin/RobWork/RobWork/libs/release/librw_csg.so
-../libs/Release/libRoViPlugin.so: /home/martin/RobWork/RobWork/libs/release/librw_control.so
-../libs/Release/libRoViPlugin.so: /home/martin/RobWork/RobWork/libs/release/librw_proximitystrategies.so
-../libs/Release/libRoViPlugin.so: /home/martin/RobWork/RobWork/libs/release/libyaobi.so
-../libs/Release/libRoViPlugin.so: /home/martin/RobWork/RobWork/libs/release/libpqp.so
-../libs/Release/libRoViPlugin.so: /home/martin/RobWork/RobWork/libs/release/libfcl.so
-../libs/Release/libRoViPlugin.so: /home/martin/RobWork/RobWork/libs/release/librw.so
+../libs/Release/libRoViPlugin.so: /usr/lib/x86_64-linux-gnu/libpython3.6m.so
+../libs/Release/libRoViPlugin.so: /usr/lib/x86_64-linux-gnu/liblua5.2.so
+../libs/Release/libRoViPlugin.so: /usr/lib/x86_64-linux-gnu/libm.so
 ../libs/Release/libRoViPlugin.so: /usr/lib/x86_64-linux-gnu/libGL.so
 ../libs/Release/libRoViPlugin.so: /usr/lib/x86_64-linux-gnu/libGLU.so
 ../libs/Release/libRoViPlugin.so: /usr/lib/x86_64-linux-gnu/libxerces-c.so
-../libs/Release/libRoViPlugin.so: /home/martin/RobWork/RobWork/libs/release/librw_assimp.so
 ../libs/Release/libRoViPlugin.so: /usr/lib/x86_64-linux-gnu/libboost_filesystem.so
 ../libs/Release/libRoViPlugin.so: /usr/lib/x86_64-linux-gnu/libboost_regex.so
 ../libs/Release/libRoViPlugin.so: /usr/lib/x86_64-linux-gnu/libboost_serialization.so
@@ -186,34 +173,41 @@ RoViPlugin_EXTERNAL_OBJECTS =
 ../libs/Release/libRoViPlugin.so: /usr/lib/x86_64-linux-gnu/libpthread.so
 ../libs/Release/libRoViPlugin.so: /usr/lib/x86_64-linux-gnu/libboost_test_exec_monitor.a
 ../libs/Release/libRoViPlugin.so: /usr/lib/x86_64-linux-gnu/libboost_unit_test_framework.so
-../libs/Release/libRoViPlugin.so: /home/martin/RobWork/RobWork/libs/release/librw_qhull.a
-../libs/Release/libRoViPlugin.so: /home/martin/RobWork/RobWork/libs/release/librw_csgjs.a
-../libs/Release/libRoViPlugin.so: /home/martin/RobWork/RobWork/libs/release/librw_unzip.a
 ../libs/Release/libRoViPlugin.so: /usr/lib/x86_64-linux-gnu/libz.so
 ../libs/Release/libRoViPlugin.so: /usr/lib/x86_64-linux-gnu/libdl.so
 ../libs/Release/libRoViPlugin.so: /usr/lib/x86_64-linux-gnu/libQt5OpenGL.so.5.9.5
 ../libs/Release/libRoViPlugin.so: /usr/lib/x86_64-linux-gnu/libboost_program_options.so
 ../libs/Release/libRoViPlugin.so: /usr/lib/x86_64-linux-gnu/libGL.so
 ../libs/Release/libRoViPlugin.so: /usr/lib/x86_64-linux-gnu/libGLU.so
-../libs/Release/libRoViPlugin.so: /home/martin/RobWork/RobWork/libs/release/librw_algorithms.so
-../libs/Release/libRoViPlugin.so: /home/martin/RobWork/RobWork/libs/release/librw_pathplanners.so
-../libs/Release/libRoViPlugin.so: /home/martin/RobWork/RobWork/libs/release/librw_pathoptimization.so
-../libs/Release/libRoViPlugin.so: /home/martin/RobWork/RobWork/libs/release/librw_simulation.so
-../libs/Release/libRoViPlugin.so: /home/martin/RobWork/RobWork/libs/release/librw_opengl.so
-../libs/Release/libRoViPlugin.so: /home/martin/RobWork/RobWork/libs/release/librw_assembly.so
-../libs/Release/libRoViPlugin.so: /home/martin/RobWork/RobWork/libs/release/librw_task.so
-../libs/Release/libRoViPlugin.so: /home/martin/RobWork/RobWork/libs/release/librw_calibration.so
-../libs/Release/libRoViPlugin.so: /home/martin/RobWork/RobWork/libs/release/librw_csg.so
-../libs/Release/libRoViPlugin.so: /home/martin/RobWork/RobWork/libs/release/librw_control.so
-../libs/Release/libRoViPlugin.so: /home/martin/RobWork/RobWork/libs/release/librw_proximitystrategies.so
-../libs/Release/libRoViPlugin.so: /home/martin/RobWork/RobWork/libs/release/libyaobi.so
-../libs/Release/libRoViPlugin.so: /home/martin/RobWork/RobWork/libs/release/libpqp.so
-../libs/Release/libRoViPlugin.so: /home/martin/RobWork/RobWork/libs/release/libfcl.so
-../libs/Release/libRoViPlugin.so: /home/martin/RobWork/RobWork/libs/release/librw.so
+../libs/Release/libRoViPlugin.so: /home/student/Workspace/RobWork/RobWork/libs/release/libsdurw_lua_s.a
+../libs/Release/libRoViPlugin.so: /home/student/Workspace/RobWork/RobWork/libs/release/libsdurw_assembly_lua_s.a
+../libs/Release/libRoViPlugin.so: /home/student/Workspace/RobWork/RobWork/libs/release/libsdurw_control_lua_s.a
+../libs/Release/libRoViPlugin.so: /home/student/Workspace/RobWork/RobWork/libs/release/libsdurw_pathoptimization_lua_s.a
+../libs/Release/libRoViPlugin.so: /home/student/Workspace/RobWork/RobWork/libs/release/libsdurw_pathplanners_lua_s.a
+../libs/Release/libRoViPlugin.so: /home/student/Workspace/RobWork/RobWork/libs/release/libsdurw_proximitystrategies_lua_s.a
+../libs/Release/libRoViPlugin.so: /home/student/Workspace/RobWork/RobWork/libs/release/libsdurw_simulation_lua_s.a
+../libs/Release/libRoViPlugin.so: /home/student/Workspace/RobWork/RobWork/libs/release/libsdurw_task_lua_s.a
+../libs/Release/libRoViPlugin.so: /usr/lib/x86_64-linux-gnu/liblua5.2.so
+../libs/Release/libRoViPlugin.so: /usr/lib/x86_64-linux-gnu/libm.so
+../libs/Release/libRoViPlugin.so: /home/student/Workspace/RobWork/RobWork/libs/release/libsdurw_algorithms.so
+../libs/Release/libRoViPlugin.so: /home/student/Workspace/RobWork/RobWork/libs/release/libsdurw_pathplanners.so
+../libs/Release/libRoViPlugin.so: /home/student/Workspace/RobWork/RobWork/libs/release/libsdurw_pathoptimization.so
+../libs/Release/libRoViPlugin.so: /home/student/Workspace/RobWork/RobWork/libs/release/libsdurw_simulation.so
+../libs/Release/libRoViPlugin.so: /home/student/Workspace/RobWork/RobWork/libs/release/libsdurw_opengl.so
+../libs/Release/libRoViPlugin.so: /home/student/Workspace/RobWork/RobWork/libs/release/libsdurw_assembly.so
+../libs/Release/libRoViPlugin.so: /home/student/Workspace/RobWork/RobWork/libs/release/libsdurw_task.so
+../libs/Release/libRoViPlugin.so: /home/student/Workspace/RobWork/RobWork/libs/release/libsdurw_calibration.so
+../libs/Release/libRoViPlugin.so: /home/student/Workspace/RobWork/RobWork/libs/release/libsdurw_csg.so
+../libs/Release/libRoViPlugin.so: /home/student/Workspace/RobWork/RobWork/libs/release/libsdurw_control.so
+../libs/Release/libRoViPlugin.so: /home/student/Workspace/RobWork/RobWork/libs/release/libsdurw_proximitystrategies.so
+../libs/Release/libRoViPlugin.so: /home/student/Workspace/RobWork/RobWork/libs/release/libyaobi.so
+../libs/Release/libRoViPlugin.so: /home/student/Workspace/RobWork/RobWork/libs/release/libpqp.so
+../libs/Release/libRoViPlugin.so: /home/student/Workspace/RobWork/RobWork/libs/release/libfcl.so
+../libs/Release/libRoViPlugin.so: /home/student/Workspace/RobWork/RobWork/libs/release/libsdurw.so
 ../libs/Release/libRoViPlugin.so: /usr/lib/x86_64-linux-gnu/libGL.so
 ../libs/Release/libRoViPlugin.so: /usr/lib/x86_64-linux-gnu/libGLU.so
 ../libs/Release/libRoViPlugin.so: /usr/lib/x86_64-linux-gnu/libxerces-c.so
-../libs/Release/libRoViPlugin.so: /home/martin/RobWork/RobWork/libs/release/librw_assimp.so
+../libs/Release/libRoViPlugin.so: /home/student/Workspace/RobWork/RobWork/libs/release/libsdurw_assimp.so
 ../libs/Release/libRoViPlugin.so: /usr/lib/x86_64-linux-gnu/libboost_filesystem.so
 ../libs/Release/libRoViPlugin.so: /usr/lib/x86_64-linux-gnu/libboost_regex.so
 ../libs/Release/libRoViPlugin.so: /usr/lib/x86_64-linux-gnu/libboost_serialization.so
@@ -226,9 +220,7 @@ RoViPlugin_EXTERNAL_OBJECTS =
 ../libs/Release/libRoViPlugin.so: /usr/lib/x86_64-linux-gnu/libpthread.so
 ../libs/Release/libRoViPlugin.so: /usr/lib/x86_64-linux-gnu/libboost_test_exec_monitor.a
 ../libs/Release/libRoViPlugin.so: /usr/lib/x86_64-linux-gnu/libboost_unit_test_framework.so
-../libs/Release/libRoViPlugin.so: /home/martin/RobWork/RobWork/libs/release/librw_qhull.a
-../libs/Release/libRoViPlugin.so: /home/martin/RobWork/RobWork/libs/release/librw_csgjs.a
-../libs/Release/libRoViPlugin.so: /home/martin/RobWork/RobWork/libs/release/librw_unzip.a
+../libs/Release/libRoViPlugin.so: /home/student/Workspace/RobWork/RobWork/libs/release/libsdurw_unzip.a
 ../libs/Release/libRoViPlugin.so: /usr/lib/x86_64-linux-gnu/libz.so
 ../libs/Release/libRoViPlugin.so: /usr/lib/x86_64-linux-gnu/libdl.so
 ../libs/Release/libRoViPlugin.so: /usr/lib/x86_64-linux-gnu/libopencv_shape.so.3.2.0
@@ -257,6 +249,48 @@ RoViPlugin_EXTERNAL_OBJECTS =
 ../libs/Release/libRoViPlugin.so: /usr/lib/x86_64-linux-gnu/libopencv_ximgproc.so.3.2.0
 ../libs/Release/libRoViPlugin.so: /usr/lib/x86_64-linux-gnu/libopencv_xobjdetect.so.3.2.0
 ../libs/Release/libRoViPlugin.so: /usr/lib/x86_64-linux-gnu/libopencv_xphoto.so.3.2.0
+../libs/Release/libRoViPlugin.so: /usr/lib/x86_64-linux-gnu/liblua5.2.so
+../libs/Release/libRoViPlugin.so: /usr/lib/x86_64-linux-gnu/libm.so
+../libs/Release/libRoViPlugin.so: /usr/lib/x86_64-linux-gnu/libGL.so
+../libs/Release/libRoViPlugin.so: /usr/lib/x86_64-linux-gnu/libGLU.so
+../libs/Release/libRoViPlugin.so: /usr/lib/x86_64-linux-gnu/libxerces-c.so
+../libs/Release/libRoViPlugin.so: /usr/lib/x86_64-linux-gnu/libboost_filesystem.so
+../libs/Release/libRoViPlugin.so: /usr/lib/x86_64-linux-gnu/libboost_regex.so
+../libs/Release/libRoViPlugin.so: /usr/lib/x86_64-linux-gnu/libboost_serialization.so
+../libs/Release/libRoViPlugin.so: /usr/lib/x86_64-linux-gnu/libboost_system.so
+../libs/Release/libRoViPlugin.so: /usr/lib/x86_64-linux-gnu/libboost_thread.so
+../libs/Release/libRoViPlugin.so: /usr/lib/x86_64-linux-gnu/libboost_program_options.so
+../libs/Release/libRoViPlugin.so: /usr/lib/x86_64-linux-gnu/libboost_chrono.so
+../libs/Release/libRoViPlugin.so: /usr/lib/x86_64-linux-gnu/libboost_date_time.so
+../libs/Release/libRoViPlugin.so: /usr/lib/x86_64-linux-gnu/libboost_atomic.so
+../libs/Release/libRoViPlugin.so: /usr/lib/x86_64-linux-gnu/libpthread.so
+../libs/Release/libRoViPlugin.so: /usr/lib/x86_64-linux-gnu/libboost_test_exec_monitor.a
+../libs/Release/libRoViPlugin.so: /usr/lib/x86_64-linux-gnu/libboost_unit_test_framework.so
+../libs/Release/libRoViPlugin.so: /home/student/Workspace/RobWork/RobWork/libs/release/libsdurw_lua_s.a
+../libs/Release/libRoViPlugin.so: /home/student/Workspace/RobWork/RobWork/libs/release/libsdurw_assembly_lua_s.a
+../libs/Release/libRoViPlugin.so: /home/student/Workspace/RobWork/RobWork/libs/release/libsdurw_control_lua_s.a
+../libs/Release/libRoViPlugin.so: /home/student/Workspace/RobWork/RobWork/libs/release/libsdurw_pathoptimization_lua_s.a
+../libs/Release/libRoViPlugin.so: /home/student/Workspace/RobWork/RobWork/libs/release/libsdurw_pathplanners_lua_s.a
+../libs/Release/libRoViPlugin.so: /home/student/Workspace/RobWork/RobWork/libs/release/libsdurw_proximitystrategies_lua_s.a
+../libs/Release/libRoViPlugin.so: /home/student/Workspace/RobWork/RobWork/libs/release/libsdurw_simulation_lua_s.a
+../libs/Release/libRoViPlugin.so: /home/student/Workspace/RobWork/RobWork/libs/release/libsdurw_task_lua_s.a
+../libs/Release/libRoViPlugin.so: /home/student/Workspace/RobWork/RobWork/libs/release/libsdurw_algorithms.so
+../libs/Release/libRoViPlugin.so: /home/student/Workspace/RobWork/RobWork/libs/release/libsdurw_pathplanners.so
+../libs/Release/libRoViPlugin.so: /home/student/Workspace/RobWork/RobWork/libs/release/libsdurw_pathoptimization.so
+../libs/Release/libRoViPlugin.so: /home/student/Workspace/RobWork/RobWork/libs/release/libsdurw_simulation.so
+../libs/Release/libRoViPlugin.so: /home/student/Workspace/RobWork/RobWork/libs/release/libsdurw_opengl.so
+../libs/Release/libRoViPlugin.so: /home/student/Workspace/RobWork/RobWork/libs/release/libsdurw_assembly.so
+../libs/Release/libRoViPlugin.so: /home/student/Workspace/RobWork/RobWork/libs/release/libsdurw_task.so
+../libs/Release/libRoViPlugin.so: /home/student/Workspace/RobWork/RobWork/libs/release/libsdurw_calibration.so
+../libs/Release/libRoViPlugin.so: /home/student/Workspace/RobWork/RobWork/libs/release/libsdurw_csg.so
+../libs/Release/libRoViPlugin.so: /home/student/Workspace/RobWork/RobWork/libs/release/libsdurw_control.so
+../libs/Release/libRoViPlugin.so: /home/student/Workspace/RobWork/RobWork/libs/release/libsdurw_proximitystrategies.so
+../libs/Release/libRoViPlugin.so: /home/student/Workspace/RobWork/RobWork/libs/release/libyaobi.so
+../libs/Release/libRoViPlugin.so: /home/student/Workspace/RobWork/RobWork/libs/release/libpqp.so
+../libs/Release/libRoViPlugin.so: /home/student/Workspace/RobWork/RobWork/libs/release/libfcl.so
+../libs/Release/libRoViPlugin.so: /home/student/Workspace/RobWork/RobWork/libs/release/libsdurw.so
+../libs/Release/libRoViPlugin.so: /home/student/Workspace/RobWork/RobWork/libs/release/libsdurw_assimp.so
+../libs/Release/libRoViPlugin.so: /home/student/Workspace/RobWork/RobWork/libs/release/libsdurw_unzip.a
 ../libs/Release/libRoViPlugin.so: /usr/lib/x86_64-linux-gnu/libQt5Widgets.so.5.9.5
 ../libs/Release/libRoViPlugin.so: /usr/lib/x86_64-linux-gnu/libQt5Gui.so.5.9.5
 ../libs/Release/libRoViPlugin.so: /usr/lib/x86_64-linux-gnu/libQt5Core.so.5.9.5
@@ -276,7 +310,7 @@ RoViPlugin_EXTERNAL_OBJECTS =
 ../libs/Release/libRoViPlugin.so: /usr/lib/x86_64-linux-gnu/libopencv_imgproc.so.3.2.0
 ../libs/Release/libRoViPlugin.so: /usr/lib/x86_64-linux-gnu/libopencv_core.so.3.2.0
 ../libs/Release/libRoViPlugin.so: CMakeFiles/RoViPlugin.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/martin/Desktop/Mega/Mega/Current/RoVi_Project/RoviSamplePlugin/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX shared module ../libs/Release/libRoViPlugin.so"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/student/RoVi1/RoviSamplePlugin/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX shared module ../libs/Release/libRoViPlugin.so"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/RoViPlugin.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -297,6 +331,6 @@ CMakeFiles/RoViPlugin.dir/clean:
 CMakeFiles/RoViPlugin.dir/depend: ui_SamplePlugin.h
 CMakeFiles/RoViPlugin.dir/depend: src/moc_SamplePlugin.cpp
 CMakeFiles/RoViPlugin.dir/depend: qrc_resources.cpp
-	cd /home/martin/Desktop/Mega/Mega/Current/RoVi_Project/RoviSamplePlugin/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/martin/Desktop/Mega/Mega/Current/RoVi_Project/RoviSamplePlugin /home/martin/Desktop/Mega/Mega/Current/RoVi_Project/RoviSamplePlugin /home/martin/Desktop/Mega/Mega/Current/RoVi_Project/RoviSamplePlugin/build /home/martin/Desktop/Mega/Mega/Current/RoVi_Project/RoviSamplePlugin/build /home/martin/Desktop/Mega/Mega/Current/RoVi_Project/RoviSamplePlugin/build/CMakeFiles/RoViPlugin.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/student/RoVi1/RoviSamplePlugin/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/student/RoVi1/RoviSamplePlugin /home/student/RoVi1/RoviSamplePlugin /home/student/RoVi1/RoviSamplePlugin/build /home/student/RoVi1/RoviSamplePlugin/build /home/student/RoVi1/RoviSamplePlugin/build/CMakeFiles/RoViPlugin.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/RoViPlugin.dir/depend
 

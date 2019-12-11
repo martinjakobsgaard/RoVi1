@@ -4,6 +4,13 @@
 #include <fstream>
 #include <opencv2/stereo.hpp>
 #include <opencv2/core/eigen.hpp>
+// type defnitions for pcl pose estimation
+typedef pcl::PointNormal PointNT;
+typedef pcl::PointCloud<PointNT> PointCloudT;
+typedef pcl::FPFHSignature33 FeatureT;
+typedef pcl::FPFHEstimationOMP<PointNT,PointNT,FeatureT> FeatureEstimationT;
+typedef pcl::PointCloud<FeatureT> FeatureCloudT;
+typedef pcl::visualization::PointCloudColorHandlerCustom<PointNT> ColorHandlerT;
 
 SamplePlugin::SamplePlugin():
     RobWorkStudioPlugin("SamplePluginUI", QIcon(":/pa_icon.png"))
@@ -22,6 +29,9 @@ SamplePlugin::SamplePlugin():
         connect(_performTask  ,SIGNAL(valueChanged(int)), this, SLOT(btnPressed()) );
         connect(_btn_place    ,SIGNAL(pressed()), this, SLOT(btnPressed()) );
         connect(_btn_sparse    ,SIGNAL(pressed()), this, SLOT(btnPressed()) );
+      connect(_btn_pose    ,SIGNAL(pressed()), this, SLOT(btnPressed()) );
+
+
 
 	_framegrabber = NULL;
 	
@@ -186,6 +196,10 @@ void SamplePlugin::btnPressed()
     {
         sparseStereo();
     }
+    else if (obj == _btn_pose)
+    {
+        poseEstimation();
+    }
     else if (obj == _performTask)
     {
         performTask();
@@ -226,6 +240,230 @@ void SamplePlugin::performTask()
         }
     }
     */
+}
+
+void SamplePlugin::poseEstimation()
+{
+    // Perform voxel grid / down sampling
+    pcl::PointCloud<pcl::PointNormal>::Ptr input_cloud (new pcl::PointCloud<pcl::PointNormal>);
+    pcl::PointCloud<pcl::PointNormal>::Ptr output_cloud (new pcl::PointCloud<pcl::PointNormal>);
+     Eigen::Matrix4f transform_1 = Eigen::Matrix4f::Identity();
+
+
+
+
+
+     pcl::PCDReader reader;
+     reader.read ("/home/student/Workspace/RobWork/RobWorkStudio/bin/release/Scanner25D.pcd", *input_cloud); // Remember to download the file first!
+
+
+ // transform the input_pointcloud to world
+     // Define a rotation matrix (see https://en.wikipedia.org/wiki/Rotation_matrix)
+     ; // The angle of rotation in radians
+     transform_1 (0,0) = 1;
+     transform_1 (0,1) = -0;
+     transform_1 (0,2) = 0;
+     transform_1 (1,0) = 0;
+     transform_1 (1,1) = 0.906308;
+     transform_1 (1,2) = 0.422618;
+     transform_1 (2,0) = -0;
+     transform_1 (2,1) = -0.422618;
+     transform_1 (2,2) = 0.906308;
+     //    (row, column)
+
+     // Define a translation of 2.5 meters on the x axis.
+     transform_1 (0,3) = 0;
+     transform_1 (1,3) = 1.033;
+     transform_1 (2,3) = 1.325;
+     pcl::transformPointCloud (*input_cloud, *input_cloud, transform_1);
+        // perform downsampling of object
+     // Downsample
+      pcl::console::print_highlight ("Downsampling...\n");
+           double cube_size=0.01f;
+            pcl::VoxelGrid<pcl::PointNormal> sor1;
+           sor1.setInputCloud (input_cloud);
+            sor1.setLeafSize (cube_size, cube_size, cube_size);
+            sor1.filter (*output_cloud);
+
+
+      // Perform outlier removal
+        // Create the filtering object
+       pcl::StatisticalOutlierRemoval<pcl::PointNormal> sor;
+        sor.setInputCloud (output_cloud);
+        sor.setMeanK (50);
+        sor.setStddevMulThresh (1.0f);
+        sor.filter (*output_cloud);
+
+
+   // Perform spatial removal
+        pcl::PassThrough<pcl::PointNormal> pass1;
+        pass1.setInputCloud (output_cloud);
+        pass1.setFilterFieldName ("x");
+        pass1.setFilterLimits (-.04f, .04f);
+        pass1.filter (*output_cloud);
+        pass1.setFilterFieldName ("y");
+        pass1.setFilterLimits (0.4f,0.515f);
+        pass1.filter (*output_cloud);
+        pass1.setFilterFieldName ("z");
+        pass1.setFilterLimits (0.01f, 0.3f);
+    //    pass.setFilterLimitsNegative (true);
+        pass1.filter (*output_cloud);
+
+
+
+          PointCloudT::Ptr object_aligned (new PointCloudT);
+
+          FeatureCloudT::Ptr object_features (new FeatureCloudT);
+          FeatureCloudT::Ptr scene_features (new FeatureCloudT);
+
+
+
+
+           pcl::PointCloud<pcl::PointNormal>::Ptr scene (new pcl::PointCloud<pcl::PointNormal>);
+           pcl::PointCloud<pcl::PointNormal>::Ptr object (new pcl::PointCloud<pcl::PointNormal>);
+reader.read ("/home/student/Workspace/RobWork/RobWorkStudio/bin/release/Scanner25D.pcd", *scene);
+
+           pcl::transformPointCloud (*scene, *scene, transform_1);
+           // Transform3D<> fTmf = Kinematics::frameTframe(_bottle, _WORLD, _state);
+
+            rw::math::Transform3D<> rwbottleT=_bottle->wTf(_state);
+            Eigen::Matrix4f eibottleT = Eigen::Matrix4f::Identity();
+            for(int i= 0; i <3; i++){
+                for (int j=0; j<4; j++){
+                    eibottleT(i,j)=rwbottleT(i,j);
+
+                }
+
+            }
+            pcl::console::print_highlight ("Printing the eigen matrix...\n");
+            pcl::console::print_info ("    | %6.3f %6.3f %6.3f %6.3f| \n", eibottleT (0,0), eibottleT (0,1), eibottleT (0,2), eibottleT (0,3));
+            pcl::console::print_info ("    | %6.3f %6.3f %6.3f %6.3f| \n", eibottleT (1,0), eibottleT (1,1), eibottleT  (1,2), eibottleT (1,3));
+            pcl::console::print_info ("    | %6.3f %6.3f %6.3f %6.3f| \n", eibottleT (2,0), eibottleT (2,1), eibottleT (2,2), eibottleT (2,3));
+            pcl::console::print_info ("    | %6.3f %6.3f %6.3f %6.3f| \n", eibottleT (3,0), eibottleT (3,1), eibottleT (3,2), eibottleT (3,3));
+
+            pcl::console::print_highlight ("Printing the inverse...\n");
+            pcl::console::print_info ("    | %6.3f %6.3f %6.3f %6.3f| \n", eibottleT.inverse() (0,0), eibottleT.inverse() (0,1), eibottleT.inverse() (0,2), eibottleT.inverse() (0,3));
+            pcl::console::print_info ("    | %6.3f %6.3f %6.3f %6.3f| \n", eibottleT.inverse() (1,0), eibottleT.inverse() (1,1), eibottleT.inverse()  (1,2), eibottleT.inverse() (1,3));
+            pcl::console::print_info ("    | %6.3f %6.3f %6.3f %6.3f| \n", eibottleT.inverse() (2,0), eibottleT.inverse() (2,1), eibottleT.inverse() (2,2), eibottleT.inverse() (2,3));
+            pcl::console::print_info ("    | %6.3f %6.3f %6.3f %6.3f| \n", eibottleT.inverse() (3,0), eibottleT.inverse() (3,1), eibottleT.inverse() (3,2), eibottleT.inverse() (3,3));
+
+
+
+             pcl::copyPointCloud(*input_cloud,*scene);
+           pcl::copyPointCloud(*output_cloud,*object);
+           pcl::transformPointCloud (*object, *object, eibottleT.inverse());
+            pcl::PCDWriter writer;
+             writer.write<pcl::PointNormal> ("/home/student/Workspace/RobWork/RobWorkStudio/bin/release/cloud_filtered_object_after_transformation.pcd", *object, false);
+            // writer.write<pcl::PointNormal> ("/home/student/Workspace/RobWork/RobWorkStudio/bin/release/cloud_filtered_object_after_transformation.pcd", *, false);
+            //writer.write<pcl::PointNormal> ("../point_cloud_processing_template/cloud_filtered_scene.pcd", *scene, false);*/
+
+
+          pcl::PassThrough<pcl::PointNormal> pass;
+          pass.setInputCloud (scene);
+          pass.setFilterFieldName ("z");
+          pass.setFilterLimits (-4.0f, 1.0f);
+      //    pass.setFilterLimitsNegative (true);
+          pass.filter (*scene);
+
+
+
+         // Estimate normals for scene
+         pcl::console::print_highlight ("Estimating scene normals...\n");
+         pcl::NormalEstimationOMP<PointNT,PointNT> nest;
+         nest.setRadiusSearch (0.01);
+         nest.setInputCloud (scene);
+         nest.compute (*scene);
+         nest.setInputCloud (object);
+         nest.compute (*object);
+
+
+         // Estimate features
+         pcl::console::print_highlight ("Estimating features...\n");
+         FeatureEstimationT fest;
+         fest.setRadiusSearch (0.025);
+         fest.setInputCloud (object);
+         fest.setInputNormals (object);
+         fest.compute (*object_features);
+         fest.setInputCloud (scene);
+         fest.setInputNormals (scene);
+         fest.compute (*scene_features);
+
+writer.write<pcl::PointNormal> ("/home/student/Workspace/RobWork/RobWorkStudio/bin/release/cloud_filtered_object_after_transformation_align.pcd", *object, false);
+writer.write<pcl::PointNormal> ("/home/student/Workspace/RobWork/RobWorkStudio/bin/release/cloud_filtered_scene_after_transformation.pcd", *scene, false);
+         // Perform alignment
+         pcl::console::print_highlight ("Starting alignment...\n");
+         pcl::SampleConsensusPrerejective<PointNT,PointNT,FeatureT> align;
+         align.setInputSource (object);
+         align.setSourceFeatures (object_features);
+         align.setInputTarget (scene);
+         align.setTargetFeatures (scene_features);
+         align.setMaximumIterations (50000); // Number of RANSAC iterations
+         align.setNumberOfSamples (3); // Number of points to sample for generating/prerejecting a pose
+         align.setCorrespondenceRandomness (5); // Number of nearest features to use
+         align.setSimilarityThreshold (0.9f); // Polygonal edge length similarity threshold
+         align.setMaxCorrespondenceDistance (2.5f * cube_size); // Inlier threshold
+         align.setInlierFraction (0.25f); // Required inlier fraction for accepting a pose hypothesis
+         {
+           pcl::ScopeTime t("Alignment");
+           align.align (*object_aligned);
+         }
+
+         if (align.hasConverged ())
+         {
+           // Print results
+           printf ("\n");
+           Eigen::Matrix4f transformation = align.getFinalTransformation ();
+           pcl::console::print_info ("    | %6.3f %6.3f %6.3f | \n", transformation (0,0), transformation (0,1), transformation (0,2));
+           pcl::console::print_info ("R = | %6.3f %6.3f %6.3f | \n", transformation (1,0), transformation (1,1), transformation (1,2));
+           pcl::console::print_info ("    | %6.3f %6.3f %6.3f | \n", transformation (2,0), transformation (2,1), transformation (2,2));
+           pcl::console::print_info ("\n");
+           pcl::console::print_info ("t = < %0.3f, %0.3f, %0.3f >\n", transformation (0,3), transformation (1,3), transformation (2,3));
+           pcl::console::print_info ("\n");
+           pcl::console::print_info ("Inliers: %i/%i\n", align.getInliers ().size (), object->size ());
+
+            pcl::transformPointCloud (*scene, *scene, transformation.inverse());
+            writer.write<pcl::PointNormal> ("/home/student/Workspace/RobWork/RobWorkStudio/bin/release/cloud_filtered_sceneIcp.pcd", *scene, false);
+
+           pcl::IterativeClosestPoint<pcl::PointNormal, pcl::PointNormal> icp;
+             icp.setInputSource(object);
+             icp.setInputTarget(scene);
+             pcl::PointCloud<pcl::PointNormal> Final;
+             icp.align(Final);
+             std::cout << "has converged:" << icp.hasConverged() << " score: " <<
+             icp.getFitnessScore() << std::endl;
+             std::cout << icp.getFinalTransformation() << std::endl;
+             Eigen::Matrix4f FinalT =transformation*icp.getFinalTransformation();
+             cout << endl;
+             cout << FinalT << endl;
+           // Show alignment
+          /* pcl::visualization::PCLVisualizer visu("Alignment");
+           visu.addPointCloud (scene, ColorHandlerT (scene, 0.0, 255.0, 0.0), "scene");
+           visu.addPointCloud (object_aligned, ColorHandlerT (object_aligned, 0.0, 0.0, 255.0), "object_aligned");
+           visu.spin ();*/
+             writer.write<pcl::PointNormal> ("/home/student/Workspace/RobWork/RobWorkStudio/bin/release/cloud_filtered_icp.pcd", Final, false);
+           double   dif_x = FinalT(0,3) - eibottleT(0,3);//_bottle->getTransform(_state).P()[0];
+              double dif_y =FinalT(1,3) - eibottleT(1,3);//_bottle->getTransform(_state).P()[1];
+            double  dif_z = FinalT(2,3) - eibottleT(2,3);//_bottle->getTransform(_state).P()[2];
+
+            cout << "x: " << _bottle->getTransform(_state).P()[0] << "y: " << _bottle->getTransform(_state).P()[1] << "z: " << _bottle->getTransform(_state).P()[2] << endl;
+
+             double error = sqrt((dif_x*dif_x) + (dif_y*dif_y) + (dif_z*dif_z));
+             std::cout << "The error is: " << error*1000 << "mm"<< std::endl;
+             _bottleEst->moveTo(rw::math::Transform3D<>(rw::math::Vector3D<>(FinalT(0,0), FinalT(1,3), FinalT(2,3)), rw::math::RPY<>(0,0,90*Deg2Rad)), _state);
+             getRobWorkStudio()->setState(_state);
+
+         }
+         else
+         {
+           pcl::console::print_error ("Alignment failed!\n");
+
+         }
+
+
+
+
+
+
 }
 
 void SamplePlugin::sparseStereo()
@@ -369,7 +607,7 @@ void SamplePlugin::get25DImage()
 
 			const rw::geometry::PointCloud* img = &(_framegrabber25D->getImage());
 
-			std::ofstream output(_cameras25D[i] + ".pcd");
+            std::ofstream output(_cameras25D[i] + ".pcd");
 			output << "# .PCD v.5 - Point Cloud Data file format\n";
 			output << "FIELDS x y z\n";
 			output << "SIZE 4 4 4\n";

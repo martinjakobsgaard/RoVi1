@@ -6,7 +6,7 @@
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
 
-#include "../../src/SamplePlugin.hpp"
+#include "../../RoviSamplePlugin/src/SamplePlugin.hpp"
 #include <QtCore/qbytearray.h>
 #include <QtCore/qmetatype.h>
 #include <QtCore/qplugin.h>
@@ -22,8 +22,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_SamplePlugin_t {
-    QByteArrayData data[22];
-    char stringdata0[217];
+    QByteArrayData data[31];
+    char stringdata0[347];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -38,26 +38,38 @@ QT_MOC_LITERAL(2, 24, 0), // ""
 QT_MOC_LITERAL(3, 25, 5), // "timer"
 QT_MOC_LITERAL(4, 31, 8), // "getImage"
 QT_MOC_LITERAL(5, 40, 11), // "get25DImage"
-QT_MOC_LITERAL(6, 52, 20), // "stateChangedListener"
-QT_MOC_LITERAL(7, 73, 21), // "rw::kinematics::State"
-QT_MOC_LITERAL(8, 95, 5), // "state"
-QT_MOC_LITERAL(9, 101, 15), // "checkCollisions"
-QT_MOC_LITERAL(10, 117, 11), // "Device::Ptr"
-QT_MOC_LITERAL(11, 129, 6), // "device"
-QT_MOC_LITERAL(12, 136, 5), // "State"
-QT_MOC_LITERAL(13, 142, 17), // "CollisionDetector"
-QT_MOC_LITERAL(14, 160, 8), // "detector"
-QT_MOC_LITERAL(15, 169, 1), // "Q"
-QT_MOC_LITERAL(16, 171, 1), // "q"
-QT_MOC_LITERAL(17, 173, 20), // "createPathRRTConnect"
-QT_MOC_LITERAL(18, 194, 4), // "from"
-QT_MOC_LITERAL(19, 199, 2), // "to"
-QT_MOC_LITERAL(20, 202, 6), // "extend"
-QT_MOC_LITERAL(21, 209, 7) // "maxTime"
+QT_MOC_LITERAL(6, 52, 12), // "homePosition"
+QT_MOC_LITERAL(7, 65, 11), // "placeBottle"
+QT_MOC_LITERAL(8, 77, 12), // "sparseStereo"
+QT_MOC_LITERAL(9, 90, 11), // "performTask"
+QT_MOC_LITERAL(10, 102, 14), // "poseEstimation"
+QT_MOC_LITERAL(11, 117, 16), // "ProjectionMatrix"
+QT_MOC_LITERAL(12, 134, 25), // "Eigen::Matrix<double,3,4>"
+QT_MOC_LITERAL(13, 160, 11), // "std::string"
+QT_MOC_LITERAL(14, 172, 9), // "frameName"
+QT_MOC_LITERAL(15, 182, 20), // "stateChangedListener"
+QT_MOC_LITERAL(16, 203, 21), // "rw::kinematics::State"
+QT_MOC_LITERAL(17, 225, 5), // "state"
+QT_MOC_LITERAL(18, 231, 15), // "checkCollisions"
+QT_MOC_LITERAL(19, 247, 11), // "Device::Ptr"
+QT_MOC_LITERAL(20, 259, 6), // "device"
+QT_MOC_LITERAL(21, 266, 5), // "State"
+QT_MOC_LITERAL(22, 272, 17), // "CollisionDetector"
+QT_MOC_LITERAL(23, 290, 8), // "detector"
+QT_MOC_LITERAL(24, 299, 1), // "Q"
+QT_MOC_LITERAL(25, 301, 1), // "q"
+QT_MOC_LITERAL(26, 303, 20), // "createPathRRTConnect"
+QT_MOC_LITERAL(27, 324, 4), // "from"
+QT_MOC_LITERAL(28, 329, 2), // "to"
+QT_MOC_LITERAL(29, 332, 6), // "extend"
+QT_MOC_LITERAL(30, 339, 7) // "maxTime"
 
     },
     "SamplePlugin\0btnPressed\0\0timer\0getImage\0"
-    "get25DImage\0stateChangedListener\0"
+    "get25DImage\0homePosition\0placeBottle\0"
+    "sparseStereo\0performTask\0poseEstimation\0"
+    "ProjectionMatrix\0Eigen::Matrix<double,3,4>\0"
+    "std::string\0frameName\0stateChangedListener\0"
     "rw::kinematics::State\0state\0checkCollisions\0"
     "Device::Ptr\0device\0State\0CollisionDetector\0"
     "detector\0Q\0q\0createPathRRTConnect\0"
@@ -71,7 +83,7 @@ static const uint qt_meta_data_SamplePlugin[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       7,   14, // methods
+      13,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -79,22 +91,34 @@ static const uint qt_meta_data_SamplePlugin[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    0,   49,    2, 0x08 /* Private */,
-       3,    0,   50,    2, 0x08 /* Private */,
-       4,    0,   51,    2, 0x08 /* Private */,
-       5,    0,   52,    2, 0x08 /* Private */,
-       6,    1,   53,    2, 0x08 /* Private */,
-       9,    4,   56,    2, 0x08 /* Private */,
-      17,    4,   65,    2, 0x08 /* Private */,
+       1,    0,   79,    2, 0x08 /* Private */,
+       3,    0,   80,    2, 0x08 /* Private */,
+       4,    0,   81,    2, 0x08 /* Private */,
+       5,    0,   82,    2, 0x08 /* Private */,
+       6,    0,   83,    2, 0x08 /* Private */,
+       7,    0,   84,    2, 0x08 /* Private */,
+       8,    0,   85,    2, 0x08 /* Private */,
+       9,    0,   86,    2, 0x08 /* Private */,
+      10,    0,   87,    2, 0x08 /* Private */,
+      11,    1,   88,    2, 0x08 /* Private */,
+      15,    1,   91,    2, 0x08 /* Private */,
+      18,    4,   94,    2, 0x08 /* Private */,
+      26,    4,  103,    2, 0x08 /* Private */,
 
  // slots: parameters
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
-    QMetaType::Void, 0x80000000 | 7,    8,
-    QMetaType::Bool, 0x80000000 | 10, 0x80000000 | 12, 0x80000000 | 13, 0x80000000 | 15,   11,    8,   14,   16,
-    QMetaType::Void, 0x80000000 | 15, 0x80000000 | 15, QMetaType::Double, QMetaType::Double,   18,   19,   20,   21,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    0x80000000 | 12, 0x80000000 | 13,   14,
+    QMetaType::Void, 0x80000000 | 16,   17,
+    QMetaType::Bool, 0x80000000 | 19, 0x80000000 | 21, 0x80000000 | 22, 0x80000000 | 24,   20,   17,   23,   25,
+    QMetaType::Void, 0x80000000 | 24, 0x80000000 | 24, QMetaType::Double, QMetaType::Double,   27,   28,   29,   30,
 
        0        // eod
 };
@@ -109,10 +133,17 @@ void SamplePlugin::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
         case 1: _t->timer(); break;
         case 2: _t->getImage(); break;
         case 3: _t->get25DImage(); break;
-        case 4: _t->stateChangedListener((*reinterpret_cast< const rw::kinematics::State(*)>(_a[1]))); break;
-        case 5: { bool _r = _t->checkCollisions((*reinterpret_cast< Device::Ptr(*)>(_a[1])),(*reinterpret_cast< const State(*)>(_a[2])),(*reinterpret_cast< const CollisionDetector(*)>(_a[3])),(*reinterpret_cast< const Q(*)>(_a[4])));
+        case 4: _t->homePosition(); break;
+        case 5: _t->placeBottle(); break;
+        case 6: _t->sparseStereo(); break;
+        case 7: _t->performTask(); break;
+        case 8: _t->poseEstimation(); break;
+        case 9: { Eigen::Matrix<double,3,4> _r = _t->ProjectionMatrix((*reinterpret_cast< std::string(*)>(_a[1])));
+            if (_a[0]) *reinterpret_cast< Eigen::Matrix<double,3,4>*>(_a[0]) = std::move(_r); }  break;
+        case 10: _t->stateChangedListener((*reinterpret_cast< const rw::kinematics::State(*)>(_a[1]))); break;
+        case 11: { bool _r = _t->checkCollisions((*reinterpret_cast< Device::Ptr(*)>(_a[1])),(*reinterpret_cast< const State(*)>(_a[2])),(*reinterpret_cast< const CollisionDetector(*)>(_a[3])),(*reinterpret_cast< const Q(*)>(_a[4])));
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = std::move(_r); }  break;
-        case 6: _t->createPathRRTConnect((*reinterpret_cast< Q(*)>(_a[1])),(*reinterpret_cast< Q(*)>(_a[2])),(*reinterpret_cast< double(*)>(_a[3])),(*reinterpret_cast< double(*)>(_a[4]))); break;
+        case 12: _t->createPathRRTConnect((*reinterpret_cast< Q(*)>(_a[1])),(*reinterpret_cast< Q(*)>(_a[2])),(*reinterpret_cast< double(*)>(_a[3])),(*reinterpret_cast< double(*)>(_a[4]))); break;
         default: ;
         }
     }
@@ -145,13 +176,13 @@ int SamplePlugin::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 7)
+        if (_id < 13)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 7;
+        _id -= 13;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 7)
+        if (_id < 13)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 7;
+        _id -= 13;
     }
     return _id;
 }
