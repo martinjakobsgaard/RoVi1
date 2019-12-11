@@ -419,6 +419,8 @@ writer.write<pcl::PointNormal> ("/home/student/Workspace/RobWork/RobWorkStudio/b
 
              double error = sqrt((dif_x*dif_x) + (dif_y*dif_y) + (dif_z*dif_z));
              std::cout << "The error is: " << error*1000 << "mm"<< std::endl;
+             _bottleEst->moveTo(rw::math::Transform3D<>(rw::math::Vector3D<>(FinalT(0,0), FinalT(1,3), FinalT(2,3)), rw::math::RPY<>(0,0,90*Deg2Rad)), _state);
+             getRobWorkStudio()->setState(_state);
 
          }
          else
