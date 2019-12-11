@@ -28,10 +28,6 @@ public:
     QWidget *dockWidgetContents;
     QVBoxLayout *verticalLayout_2;
     QVBoxLayout *verticalLayout;
-    QPushButton *_btn_im;
-    QPushButton *_btn_scan;
-    QPushButton *_btn0;
-    QPushButton *_btn1;
     QPushButton *_btn_home;
     QPushButton *_btn_place;
     QPushButton *_btn_sparse;
@@ -50,26 +46,6 @@ public:
         verticalLayout_2->setObjectName(QStringLiteral("verticalLayout_2"));
         verticalLayout = new QVBoxLayout();
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
-        _btn_im = new QPushButton(dockWidgetContents);
-        _btn_im->setObjectName(QStringLiteral("_btn_im"));
-
-        verticalLayout->addWidget(_btn_im);
-
-        _btn_scan = new QPushButton(dockWidgetContents);
-        _btn_scan->setObjectName(QStringLiteral("_btn_scan"));
-
-        verticalLayout->addWidget(_btn_scan);
-
-        _btn0 = new QPushButton(dockWidgetContents);
-        _btn0->setObjectName(QStringLiteral("_btn0"));
-
-        verticalLayout->addWidget(_btn0);
-
-        _btn1 = new QPushButton(dockWidgetContents);
-        _btn1->setObjectName(QStringLiteral("_btn1"));
-
-        verticalLayout->addWidget(_btn1);
-
         _btn_home = new QPushButton(dockWidgetContents);
         _btn_home->setObjectName(QStringLiteral("_btn_home"));
 
@@ -84,6 +60,11 @@ public:
         _btn_sparse->setObjectName(QStringLiteral("_btn_sparse"));
 
         verticalLayout->addWidget(_btn_sparse);
+
+        _btn_pose = new QPushButton(dockWidgetContents);
+        _btn_pose->setObjectName(QStringLiteral("_btn_pose"));
+
+        verticalLayout->addWidget(_btn_pose);
 
         _performTask = new QPushButton(dockWidgetContents);
         _performTask->setObjectName(QStringLiteral("_performTask"));
@@ -108,13 +89,10 @@ public:
     void retranslateUi(QDockWidget *SamplePlugin)
     {
         SamplePlugin->setWindowTitle(QApplication::translate("SamplePlugin", "Doc&kWidget", Q_NULLPTR));
-        _btn_im->setText(QApplication::translate("SamplePlugin", "Get Image", Q_NULLPTR));
-        _btn_scan->setText(QApplication::translate("SamplePlugin", "Get Scan", Q_NULLPTR));
-        _btn0->setText(QApplication::translate("SamplePlugin", "Calculate Path", Q_NULLPTR));
-        _btn1->setText(QApplication::translate("SamplePlugin", "Run Path", Q_NULLPTR));
         _btn_home->setText(QApplication::translate("SamplePlugin", "Home Position", Q_NULLPTR));
         _btn_place->setText(QApplication::translate("SamplePlugin", "Place Bottle", Q_NULLPTR));
         _btn_sparse->setText(QApplication::translate("SamplePlugin", "Sparse Stereo", Q_NULLPTR));
+        _btn_pose->setText(QApplication::translate("SamplePlugin", "Pose Estimation", Q_NULLPTR));
         _performTask->setText(QApplication::translate("SamplePlugin", "Perform Pick and Place", Q_NULLPTR));
         _label->setText(QApplication::translate("SamplePlugin", "Label", Q_NULLPTR));
     } // retranslateUi

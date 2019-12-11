@@ -21,17 +21,15 @@ SamplePlugin::SamplePlugin():
     connect(_timer, SIGNAL(timeout()), this, SLOT(timer()));
 
 	// now connect stuff from the ui component
-	connect(_btn_im    ,SIGNAL(pressed()), this, SLOT(btnPressed()) );
-	connect(_btn_scan    ,SIGNAL(pressed()), this, SLOT(btnPressed()) );
-	connect(_btn0    ,SIGNAL(pressed()), this, SLOT(btnPressed()) );
-	connect(_btn1    ,SIGNAL(pressed()), this, SLOT(btnPressed()) );
+        //connect(_btn_im    ,SIGNAL(pressed()), this, SLOT(btnPressed()) );
+        //connect(_btn_scan    ,SIGNAL(pressed()), this, SLOT(btnPressed()) );
+        //connect(_btn0    ,SIGNAL(pressed()), this, SLOT(btnPressed()) );
+        //connect(_btn1    ,SIGNAL(pressed()), this, SLOT(btnPressed()) );
         connect(_btn_home, SIGNAL(pressed()), this, SLOT(btnPressed()) );
         connect(_performTask  ,SIGNAL(valueChanged(int)), this, SLOT(btnPressed()) );
         connect(_btn_place    ,SIGNAL(pressed()), this, SLOT(btnPressed()) );
         connect(_btn_sparse    ,SIGNAL(pressed()), this, SLOT(btnPressed()) );
       connect(_btn_pose    ,SIGNAL(pressed()), this, SLOT(btnPressed()) );
-
-
 
 	_framegrabber = NULL;
 	
@@ -156,7 +154,7 @@ Mat SamplePlugin::toOpenCVImage(const Image& img)
 void SamplePlugin::btnPressed()
 {
     QObject *obj = sender();
-    if(obj==_btn0)
+    /*if(obj==_btn0)
     {
         _timer->stop();
         rw::math::Math::seed();
@@ -165,8 +163,8 @@ void SamplePlugin::btnPressed()
         Q from(6, 1.571, -1.572, -1.572, -1.572, 1.571, 0);
         Q to(6, 1.847, -2.465, -1.602, -0.647, 1.571, 0); //From pose estimation
         createPathRRTConnect(from, to, extend, maxTime);
-    }
-    else if(obj==_btn1)
+    }*/
+    /*else if(obj==_btn1)
     {
         log().info() << "Button 1\n";
         // Toggle the timer on and off
@@ -176,15 +174,15 @@ void SamplePlugin::btnPressed()
         }
         else
             _step = 0;
-    }
-    else if( obj==_btn_im ){
+    }*/
+    /*else if( obj==_btn_im ){
             getImage();
     }
     else if( obj==_btn_scan )
     {
             get25DImage();
-    }
-    else if (obj == _btn_home)
+    }*/
+    if (obj == _btn_home)
     {
         homePosition();
     }
@@ -249,13 +247,8 @@ void SamplePlugin::poseEstimation()
     pcl::PointCloud<pcl::PointNormal>::Ptr output_cloud (new pcl::PointCloud<pcl::PointNormal>);
      Eigen::Matrix4f transform_1 = Eigen::Matrix4f::Identity();
 
-
-
-
-
      pcl::PCDReader reader;
-     reader.read ("/home/student/Workspace/RobWork/RobWorkStudio/bin/release/Scanner25D.pcd", *input_cloud); // Remember to download the file first!
-
+     reader.read ("/tmp/Scanner25D.pcd", *input_cloud); // Remember to download the file first!
 
  // transform the input_pointcloud to world
      // Define a rotation matrix (see https://en.wikipedia.org/wiki/Rotation_matrix)
@@ -285,7 +278,6 @@ void SamplePlugin::poseEstimation()
             sor1.setLeafSize (cube_size, cube_size, cube_size);
             sor1.filter (*output_cloud);
 
-
       // Perform outlier removal
         // Create the filtering object
        pcl::StatisticalOutlierRemoval<pcl::PointNormal> sor;
@@ -293,7 +285,6 @@ void SamplePlugin::poseEstimation()
         sor.setMeanK (50);
         sor.setStddevMulThresh (1.0f);
         sor.filter (*output_cloud);
-
 
    // Perform spatial removal
         pcl::PassThrough<pcl::PointNormal> pass1;
@@ -309,8 +300,6 @@ void SamplePlugin::poseEstimation()
     //    pass.setFilterLimitsNegative (true);
         pass1.filter (*output_cloud);
 
-
-
           PointCloudT::Ptr object_aligned (new PointCloudT);
 
           FeatureCloudT::Ptr object_features (new FeatureCloudT);
@@ -321,7 +310,7 @@ void SamplePlugin::poseEstimation()
 
            pcl::PointCloud<pcl::PointNormal>::Ptr scene (new pcl::PointCloud<pcl::PointNormal>);
            pcl::PointCloud<pcl::PointNormal>::Ptr object (new pcl::PointCloud<pcl::PointNormal>);
-reader.read ("/home/student/Workspace/RobWork/RobWorkStudio/bin/release/Scanner25D.pcd", *scene);
+reader.read ("/tmp/Scanner25D.pcd", *scene);
 
            pcl::transformPointCloud (*scene, *scene, transform_1);
            // Transform3D<> fTmf = Kinematics::frameTframe(_bottle, _WORLD, _state);
@@ -347,16 +336,14 @@ reader.read ("/home/student/Workspace/RobWork/RobWorkStudio/bin/release/Scanner2
             pcl::console::print_info ("    | %6.3f %6.3f %6.3f %6.3f| \n", eibottleT.inverse() (2,0), eibottleT.inverse() (2,1), eibottleT.inverse() (2,2), eibottleT.inverse() (2,3));
             pcl::console::print_info ("    | %6.3f %6.3f %6.3f %6.3f| \n", eibottleT.inverse() (3,0), eibottleT.inverse() (3,1), eibottleT.inverse() (3,2), eibottleT.inverse() (3,3));
 
-
-
              pcl::copyPointCloud(*input_cloud,*scene);
            pcl::copyPointCloud(*output_cloud,*object);
            pcl::transformPointCloud (*object, *object, eibottleT.inverse());
             pcl::PCDWriter writer;
-             writer.write<pcl::PointNormal> ("/home/student/Workspace/RobWork/RobWorkStudio/bin/release/cloud_filtered_object_after_transformation.pcd", *object, false);
+            /*
+            writer.write<pcl::PointNormal> ("/home/student/Workspace/RobWork/RobWorkStudio/bin/release/cloud_filtered_object_after_transformation.pcd", *object, false);
             // writer.write<pcl::PointNormal> ("/home/student/Workspace/RobWork/RobWorkStudio/bin/release/cloud_filtered_object_after_transformation.pcd", *, false);
             //writer.write<pcl::PointNormal> ("../point_cloud_processing_template/cloud_filtered_scene.pcd", *scene, false);*/
-
 
           pcl::PassThrough<pcl::PointNormal> pass;
           pass.setInputCloud (scene);
@@ -364,8 +351,6 @@ reader.read ("/home/student/Workspace/RobWork/RobWorkStudio/bin/release/Scanner2
           pass.setFilterLimits (-4.0f, 1.0f);
       //    pass.setFilterLimitsNegative (true);
           pass.filter (*scene);
-
-
 
          // Estimate normals for scene
          pcl::console::print_highlight ("Estimating scene normals...\n");
@@ -375,7 +360,6 @@ reader.read ("/home/student/Workspace/RobWork/RobWorkStudio/bin/release/Scanner2
          nest.compute (*scene);
          nest.setInputCloud (object);
          nest.compute (*object);
-
 
          // Estimate features
          pcl::console::print_highlight ("Estimating features...\n");
@@ -388,8 +372,8 @@ reader.read ("/home/student/Workspace/RobWork/RobWorkStudio/bin/release/Scanner2
          fest.setInputNormals (scene);
          fest.compute (*scene_features);
 
-writer.write<pcl::PointNormal> ("/home/student/Workspace/RobWork/RobWorkStudio/bin/release/cloud_filtered_object_after_transformation_align.pcd", *object, false);
-writer.write<pcl::PointNormal> ("/home/student/Workspace/RobWork/RobWorkStudio/bin/release/cloud_filtered_scene_after_transformation.pcd", *scene, false);
+        //writer.write<pcl::PointNormal> ("/tmp/cloud_filtered_object_after_transformation_align.pcd", *object, false);
+        //writer.write<pcl::PointNormal> ("/tmp/cloud_filtered_scene_after_transformation.pcd", *scene, false);
          // Perform alignment
          pcl::console::print_highlight ("Starting alignment...\n");
          pcl::SampleConsensusPrerejective<PointNT,PointNT,FeatureT> align;
@@ -422,7 +406,7 @@ writer.write<pcl::PointNormal> ("/home/student/Workspace/RobWork/RobWorkStudio/b
            pcl::console::print_info ("Inliers: %i/%i\n", align.getInliers ().size (), object->size ());
 
             pcl::transformPointCloud (*scene, *scene, transformation.inverse());
-            writer.write<pcl::PointNormal> ("/home/student/Workspace/RobWork/RobWorkStudio/bin/release/cloud_filtered_sceneIcp.pcd", *scene, false);
+            //writer.write<pcl::PointNormal> ("/tmp/cloud_filtered_sceneIcp.pcd", *scene, false);
 
            pcl::IterativeClosestPoint<pcl::PointNormal, pcl::PointNormal> icp;
              icp.setInputSource(object);
@@ -440,7 +424,7 @@ writer.write<pcl::PointNormal> ("/home/student/Workspace/RobWork/RobWorkStudio/b
            visu.addPointCloud (scene, ColorHandlerT (scene, 0.0, 255.0, 0.0), "scene");
            visu.addPointCloud (object_aligned, ColorHandlerT (object_aligned, 0.0, 0.0, 255.0), "object_aligned");
            visu.spin ();*/
-             writer.write<pcl::PointNormal> ("/home/student/Workspace/RobWork/RobWorkStudio/bin/release/cloud_filtered_icp.pcd", Final, false);
+           //writer.write<pcl::PointNormal> ("/tmp/cloud_filtered_icp.pcd", Final, false);
            double   dif_x = FinalT(0,3) - eibottleT(0,3);//_bottle->getTransform(_state).P()[0];
               double dif_y =FinalT(1,3) - eibottleT(1,3);//_bottle->getTransform(_state).P()[1];
             double  dif_z = FinalT(2,3) - eibottleT(2,3);//_bottle->getTransform(_state).P()[2];
@@ -458,12 +442,6 @@ writer.write<pcl::PointNormal> ("/home/student/Workspace/RobWork/RobWorkStudio/b
            pcl::console::print_error ("Alignment failed!\n");
 
          }
-
-
-
-
-
-
 }
 
 void SamplePlugin::sparseStereo()
@@ -607,7 +585,7 @@ void SamplePlugin::get25DImage()
 
 			const rw::geometry::PointCloud* img = &(_framegrabber25D->getImage());
 
-            std::ofstream output(_cameras25D[i] + ".pcd");
+            std::ofstream output("/tmp/" + _cameras25D[i] + ".pcd");
 			output << "# .PCD v.5 - Point Cloud Data file format\n";
 			output << "FIELDS x y z\n";
 			output << "SIZE 4 4 4\n";
