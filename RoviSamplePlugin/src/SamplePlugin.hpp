@@ -148,6 +148,8 @@ private:
     QPath _path;
     int _step;
 
+    bool sparse_test = false;
+
     rw::math::Q Qhome = Q(6,  1.202, -1.770, -1.396, -0.972, 1.296, 0);
     rw::math::Q QbottleEst = Q(6, 0, 0, 0, 0, 0, 0);
 

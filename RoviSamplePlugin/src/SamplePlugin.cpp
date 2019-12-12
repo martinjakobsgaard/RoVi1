@@ -168,16 +168,16 @@ void SamplePlugin::btnPressed()
     else if (obj == _btn_place)
     {
         placeBottle();
-        _path.clear();
-        _step = 0;
     }
     else if (obj == _btn_sparse)
     {
+        sparse_test = false;
         std_gaussian = 0.f;
         sparseStereo();
     }
     else if (obj == _btn_sparse_test)
     {
+        sparse_test = true;
         std_gaussian = 10.f;
         for (size_t i = 0; i < 25; i++)
         {
@@ -286,6 +286,8 @@ void SamplePlugin::performTask()
 
     std::cout << "Going to QbottleEst: " << QbottleEst << std::endl;
 
+    //_bottle->attachTo(_device.get(), _state);
+
     createPathRRTConnect(QbottleEst, Qhome, extend, maxTime);
 
     std::cout << "Going to Qhome: " << Qhome << std::endl;
@@ -300,6 +302,12 @@ void SamplePlugin::performTask()
     std::cout << "Going to Qhome: " << Qpos << std::endl;
 
     timerStart();
+
+    /*
+    _bottle->setTransform(
+            rw::math::inverse(_table->wTf(_state)) * _bottle->wTf(_state),_state);
+    _bottle->attachTo(_table.get(), _state);
+    */
 }
 
 void SamplePlugin::poseEstimation()
@@ -516,8 +524,8 @@ void SamplePlugin::sparseStereo()
 
     cv::Mat lowerRedRight;
     cv::Mat lowerRedLeft;
-    cv::inRange(hsv_imageLeft, cv::Scalar(100,50,50), cv::Scalar(110, 255, 255), lowerRedRight);
-    cv::inRange(hsv_imageRight, cv::Scalar(100, 50, 50), cv::Scalar(110, 255, 255), lowerRedLeft);
+    cv::inRange(hsv_imageLeft, cv::Scalar(85,50,50), cv::Scalar(125, 255, 255), lowerRedRight);
+    cv::inRange(hsv_imageRight, cv::Scalar(85, 50, 50), cv::Scalar(125, 255, 255), lowerRedLeft);
 
     cv::blur(lowerRedRight,lowerRedRight,Size(3,3));
     cv::blur(lowerRedLeft,lowerRedLeft,Size(3,3));
@@ -532,54 +540,66 @@ void SamplePlugin::sparseStereo()
     std::vector<cv::Point2d> CenterPointRight;
     std::vector<cv::Point2d> CenterPointLeft;
 
-    for(size_t current_circle = 0; current_circle < circlesRight.size(); ++current_circle)
+
+    if ((circlesRight.size() != 0) && (circlesLeft.size() != 0))
     {
-            cv::Point center(std::round(circlesRight[current_circle][0]-1), std::round(circlesRight[current_circle][1]));
-            int radius = std::round(circlesRight[current_circle][2]);
+        for(size_t current_circle = 0; current_circle < circlesRight.size(); ++current_circle)
+        {
+                cv::Point center(std::round(circlesRight[current_circle][0]-1), std::round(circlesRight[current_circle][1]));
+                int radius = std::round(circlesRight[current_circle][2]);
 
-            CenterPointRight.push_back(center);
+                CenterPointRight.push_back(center);
 
-            cv::circle(imageRight, center, radius, cv::Scalar(0, 0, 150), 3);
+                cv::circle(imageRight, center, radius, cv::Scalar(0, 0, 150), 3);
+        }
+
+        for(size_t current_circle = 0; current_circle < circlesLeft.size(); ++current_circle)
+        {
+                cv::Point center(std::round(circlesLeft[current_circle][0]-1), std::round(circlesLeft[current_circle][1]));
+                int radius = std::round(circlesLeft[current_circle][2]);
+
+                CenterPointLeft.push_back(center);
+
+                cv::circle(imageLeft, center, radius, cv::Scalar(0, 0, 150), 3);
+        }
+
+        //Vector of Eigenmatrix for both the right and left camera
+        Eigen::Matrix<double, 3, 4> projectMatrixRight = ProjectionMatrix("Camera_Right");
+        Eigen::Matrix<double, 3, 4> projectMatrixLeft = ProjectionMatrix("Camera_Left");
+
+        cv::Mat cam0(3, 4, CV_64F);
+        cv::Mat cam1(3, 4, CV_64F);
+
+        cv::eigen2cv(projectMatrixRight, cam0);
+        cv::eigen2cv(projectMatrixLeft, cam1);
+
+        cv::Mat pnts3D(4,CenterPointRight.size(),CV_64F);
+        cv::triangulatePoints(cam1, cam0, CenterPointLeft, CenterPointRight, pnts3D);
+
+        double dif_x = pnts3D.at<double>(0,0)/pnts3D.at<double>(0,3) - _bottle->getTransform(_state).P()[0];
+        double dif_y = pnts3D.at<double>(0,1)/pnts3D.at<double>(0,3) - _bottle->getTransform(_state).P()[1];
+
+        double error = sqrt((dif_x*dif_x) + (dif_y*dif_y));
+
+        if (sparse_test == true)
+        {
+            if (error < 0.5)
+            {
+                std::ofstream myfile;
+                myfile.open ("/tmp/sparse_test.DAT", ios::app);
+                myfile << error << "\n";
+                myfile.close();
+                std::cout << "Error found to be: " << error << std::endl;
+            }
+        }
+
+        _bottleEst->moveTo(rw::math::Transform3D<>(rw::math::Vector3D<>(pnts3D.at<double>(0,0)/pnts3D.at<double>(0,3), pnts3D.at<double>(0,1)/pnts3D.at<double>(0,3), 0.1), rw::math::RPY<>(0,0,90*Deg2Rad)), _state);
+        getRobWorkStudio()->setState(_state);
     }
-
-    for(size_t current_circle = 0; current_circle < circlesLeft.size(); ++current_circle)
+    else
     {
-            cv::Point center(std::round(circlesLeft[current_circle][0]-1), std::round(circlesLeft[current_circle][1]));
-            int radius = std::round(circlesLeft[current_circle][2]);
-
-            CenterPointLeft.push_back(center);
-
-            cv::circle(imageLeft, center, radius, cv::Scalar(0, 0, 150), 3);
+        std::cout << "Circles were not found." << std::endl;
     }
-
-    //Vector of Eigenmatrix for both the right and left camera
-    Eigen::Matrix<double, 3, 4> projectMatrixRight = ProjectionMatrix("Camera_Right");
-    Eigen::Matrix<double, 3, 4> projectMatrixLeft = ProjectionMatrix("Camera_Left");
-
-    cv::Mat cam0(3, 4, CV_64F);
-    cv::Mat cam1(3, 4, CV_64F);
-
-    cv::eigen2cv(projectMatrixRight, cam0);
-    cv::eigen2cv(projectMatrixLeft, cam1);
-
-    cv::Mat pnts3D(4,CenterPointRight.size(),CV_64F);
-    cv::triangulatePoints(cam1, cam0, CenterPointLeft, CenterPointRight, pnts3D);
-
-    double dif_x = pnts3D.at<double>(0,0)/pnts3D.at<double>(0,3) - _bottle->getTransform(_state).P()[0];
-    double dif_y = pnts3D.at<double>(0,1)/pnts3D.at<double>(0,3) - _bottle->getTransform(_state).P()[1];
-
-    double error = sqrt((dif_x*dif_x) + (dif_y*dif_y));
-
-    if (error < 1)
-    {
-        std::ofstream myfile;
-        myfile.open ("/tmp/sparse_test.DAT", ios::app);
-        myfile << error << "\n";
-        myfile.close();
-    }
-
-    _bottleEst->moveTo(rw::math::Transform3D<>(rw::math::Vector3D<>(pnts3D.at<double>(0,0)/pnts3D.at<double>(0,3), pnts3D.at<double>(0,1)/pnts3D.at<double>(0,3), 0.1), rw::math::RPY<>(0,0,90*Deg2Rad)), _state);
-    getRobWorkStudio()->setState(_state);
 }
 
 //  Somewhat based on a triangulation exercise during computer vision at SDU Robotics.
