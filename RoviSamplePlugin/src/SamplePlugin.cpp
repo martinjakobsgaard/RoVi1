@@ -649,7 +649,12 @@ Eigen::Matrix<double, 3, 4> SamplePlugin::ProjectionMatrix(std::string frameName
     Eigen::Matrix<double, 4, 4> He;
     He = H.e();
 
-    Eigen::Matrix<double, 3, 4> P = KA* He;
+    std::cout << std::endl << "H" << H.e() << std::endl;
+    std::cout << std::endl << "KA" << KA << std::endl;
+
+    Eigen::Matrix<double, 3, 4> P = KA * He;
+
+    std::cout << std::endl << "P: " << P << std::endl;
 
     return P;
 }
