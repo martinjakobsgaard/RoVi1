@@ -46,7 +46,14 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="_performTask">
+       <widget class="QPushButton" name="_btn_sparse_test">
+        <property name="text">
+         <string>Sparse Stereo Test</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="_btn_performTask">
         <property name="text">
          <string>Perform Pick and Place</string>
         </property>

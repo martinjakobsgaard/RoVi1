@@ -65,8 +65,6 @@
 #include <functional>
 #include <random>
 
-
-
 using namespace rw::common;
 using namespace rw::graphics;
 using namespace rw::kinematics;
@@ -120,6 +118,10 @@ private slots:
   
     void stateChangedListener(const rw::kinematics::State& state);
 
+    std::vector<rw::math::Q> getConfigurations(const std::string nameGoal, const std::string nameTcp, State state_clone);
+    bool reachabilityCheck();
+    void timerStart();
+
     bool checkCollisions(Device::Ptr device, const State &state, const CollisionDetector &detector, const Q &q);
     void createPathRRTConnect(Q from, Q to,  double extend, double maxTime);
 
@@ -141,8 +143,13 @@ private:
     MovableFrame::Ptr _bottleEst;
     MovableFrame::Ptr _WORLD;
 
+    float std_gaussian = 10.f;
+
     QPath _path;
     int _step;
+
+    rw::math::Q Qhome = Q(6,  1.202, -1.770, -1.396, -0.972, 1.296, 0);
+    rw::math::Q QbottleEst = Q(6, 0, 0, 0, 0, 0, 0);
 
     std::random_device rd;
 };

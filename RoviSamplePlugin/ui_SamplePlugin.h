@@ -32,7 +32,8 @@ public:
     QPushButton *_btn_place;
     QPushButton *_btn_sparse;
     QPushButton *_btn_pose;
-    QPushButton *_performTask;
+    QPushButton *_btn_sparse_test;
+    QPushButton *_btn_performTask;
     QLabel *_label;
 
     void setupUi(QDockWidget *SamplePlugin)
@@ -66,10 +67,15 @@ public:
 
         verticalLayout->addWidget(_btn_pose);
 
-        _performTask = new QPushButton(dockWidgetContents);
-        _performTask->setObjectName(QStringLiteral("_performTask"));
+        _btn_sparse_test = new QPushButton(dockWidgetContents);
+        _btn_sparse_test->setObjectName(QStringLiteral("_btn_sparse_test"));
 
-        verticalLayout->addWidget(_performTask);
+        verticalLayout->addWidget(_btn_sparse_test);
+
+        _btn_performTask = new QPushButton(dockWidgetContents);
+        _btn_performTask->setObjectName(QStringLiteral("_btn_performTask"));
+
+        verticalLayout->addWidget(_btn_performTask);
 
         _label = new QLabel(dockWidgetContents);
         _label->setObjectName(QStringLiteral("_label"));
@@ -93,7 +99,8 @@ public:
         _btn_place->setText(QApplication::translate("SamplePlugin", "Place Bottle", Q_NULLPTR));
         _btn_sparse->setText(QApplication::translate("SamplePlugin", "Sparse Stereo", Q_NULLPTR));
         _btn_pose->setText(QApplication::translate("SamplePlugin", "Pose Estimation", Q_NULLPTR));
-        _performTask->setText(QApplication::translate("SamplePlugin", "Perform Pick and Place", Q_NULLPTR));
+        _btn_sparse_test->setText(QApplication::translate("SamplePlugin", "Sparse Stereo Test", Q_NULLPTR));
+        _btn_performTask->setText(QApplication::translate("SamplePlugin", "Perform Pick and Place", Q_NULLPTR));
         _label->setText(QApplication::translate("SamplePlugin", "Label", Q_NULLPTR));
     } // retranslateUi
 
