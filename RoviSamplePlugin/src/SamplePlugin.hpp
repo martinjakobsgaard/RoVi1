@@ -112,14 +112,14 @@ private slots:
     void homePosition();
     void placeBottle();
     void sparseStereo();
-    void performTask();
+    void performTask(std::string);
     void poseEstimation();
     Eigen::Matrix<double, 3, 4> ProjectionMatrix(std::string frameName);
   
     void stateChangedListener(const rw::kinematics::State& state);
 
     std::vector<rw::math::Q> getConfigurations(const std::string nameGoal, const std::string nameTcp, State state_clone);
-    bool reachabilityCheck();
+    bool reachabilityCheck(std::string approach);
     void timerStart();
 
     bool checkCollisions(Device::Ptr device, const State &state, const CollisionDetector &detector, const Q &q);
@@ -141,6 +141,7 @@ private:
     Device::Ptr _device;
     MovableFrame::Ptr _bottle;
     MovableFrame::Ptr _bottleEst;
+    MovableFrame::Ptr _bottleEstTop;
     MovableFrame::Ptr _WORLD;
 
     float std_gaussian = 10.f;

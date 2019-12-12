@@ -22,8 +22,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_SamplePlugin_t {
-    QByteArrayData data[38];
-    char stringdata0[448];
+    QByteArrayData data[39];
+    char stringdata0[457];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -42,10 +42,10 @@ QT_MOC_LITERAL(6, 52, 12), // "homePosition"
 QT_MOC_LITERAL(7, 65, 11), // "placeBottle"
 QT_MOC_LITERAL(8, 77, 12), // "sparseStereo"
 QT_MOC_LITERAL(9, 90, 11), // "performTask"
-QT_MOC_LITERAL(10, 102, 14), // "poseEstimation"
-QT_MOC_LITERAL(11, 117, 16), // "ProjectionMatrix"
-QT_MOC_LITERAL(12, 134, 25), // "Eigen::Matrix<double,3,4>"
-QT_MOC_LITERAL(13, 160, 11), // "std::string"
+QT_MOC_LITERAL(10, 102, 11), // "std::string"
+QT_MOC_LITERAL(11, 114, 14), // "poseEstimation"
+QT_MOC_LITERAL(12, 129, 16), // "ProjectionMatrix"
+QT_MOC_LITERAL(13, 146, 25), // "Eigen::Matrix<double,3,4>"
 QT_MOC_LITERAL(14, 172, 9), // "frameName"
 QT_MOC_LITERAL(15, 182, 20), // "stateChangedListener"
 QT_MOC_LITERAL(16, 203, 21), // "rw::kinematics::State"
@@ -57,34 +57,35 @@ QT_MOC_LITERAL(21, 283, 7), // "nameTcp"
 QT_MOC_LITERAL(22, 291, 5), // "State"
 QT_MOC_LITERAL(23, 297, 11), // "state_clone"
 QT_MOC_LITERAL(24, 309, 17), // "reachabilityCheck"
-QT_MOC_LITERAL(25, 327, 10), // "timerStart"
-QT_MOC_LITERAL(26, 338, 15), // "checkCollisions"
-QT_MOC_LITERAL(27, 354, 11), // "Device::Ptr"
-QT_MOC_LITERAL(28, 366, 6), // "device"
-QT_MOC_LITERAL(29, 373, 17), // "CollisionDetector"
-QT_MOC_LITERAL(30, 391, 8), // "detector"
-QT_MOC_LITERAL(31, 400, 1), // "Q"
-QT_MOC_LITERAL(32, 402, 1), // "q"
-QT_MOC_LITERAL(33, 404, 20), // "createPathRRTConnect"
-QT_MOC_LITERAL(34, 425, 4), // "from"
-QT_MOC_LITERAL(35, 430, 2), // "to"
-QT_MOC_LITERAL(36, 433, 6), // "extend"
-QT_MOC_LITERAL(37, 440, 7) // "maxTime"
+QT_MOC_LITERAL(25, 327, 8), // "approach"
+QT_MOC_LITERAL(26, 336, 10), // "timerStart"
+QT_MOC_LITERAL(27, 347, 15), // "checkCollisions"
+QT_MOC_LITERAL(28, 363, 11), // "Device::Ptr"
+QT_MOC_LITERAL(29, 375, 6), // "device"
+QT_MOC_LITERAL(30, 382, 17), // "CollisionDetector"
+QT_MOC_LITERAL(31, 400, 8), // "detector"
+QT_MOC_LITERAL(32, 409, 1), // "Q"
+QT_MOC_LITERAL(33, 411, 1), // "q"
+QT_MOC_LITERAL(34, 413, 20), // "createPathRRTConnect"
+QT_MOC_LITERAL(35, 434, 4), // "from"
+QT_MOC_LITERAL(36, 439, 2), // "to"
+QT_MOC_LITERAL(37, 442, 6), // "extend"
+QT_MOC_LITERAL(38, 449, 7) // "maxTime"
 
     },
     "SamplePlugin\0btnPressed\0\0timer\0getImage\0"
     "get25DImage\0homePosition\0placeBottle\0"
-    "sparseStereo\0performTask\0poseEstimation\0"
-    "ProjectionMatrix\0Eigen::Matrix<double,3,4>\0"
-    "std::string\0frameName\0stateChangedListener\0"
-    "rw::kinematics::State\0state\0"
-    "getConfigurations\0std::vector<rw::math::Q>\0"
-    "nameGoal\0nameTcp\0State\0state_clone\0"
-    "reachabilityCheck\0timerStart\0"
-    "checkCollisions\0Device::Ptr\0device\0"
-    "CollisionDetector\0detector\0Q\0q\0"
-    "createPathRRTConnect\0from\0to\0extend\0"
-    "maxTime"
+    "sparseStereo\0performTask\0std::string\0"
+    "poseEstimation\0ProjectionMatrix\0"
+    "Eigen::Matrix<double,3,4>\0frameName\0"
+    "stateChangedListener\0rw::kinematics::State\0"
+    "state\0getConfigurations\0"
+    "std::vector<rw::math::Q>\0nameGoal\0"
+    "nameTcp\0State\0state_clone\0reachabilityCheck\0"
+    "approach\0timerStart\0checkCollisions\0"
+    "Device::Ptr\0device\0CollisionDetector\0"
+    "detector\0Q\0q\0createPathRRTConnect\0"
+    "from\0to\0extend\0maxTime"
 };
 #undef QT_MOC_LITERAL
 
@@ -109,15 +110,15 @@ static const uint qt_meta_data_SamplePlugin[] = {
        6,    0,   98,    2, 0x08 /* Private */,
        7,    0,   99,    2, 0x08 /* Private */,
        8,    0,  100,    2, 0x08 /* Private */,
-       9,    0,  101,    2, 0x08 /* Private */,
-      10,    0,  102,    2, 0x08 /* Private */,
-      11,    1,  103,    2, 0x08 /* Private */,
-      15,    1,  106,    2, 0x08 /* Private */,
-      18,    3,  109,    2, 0x08 /* Private */,
-      24,    0,  116,    2, 0x08 /* Private */,
-      25,    0,  117,    2, 0x08 /* Private */,
-      26,    4,  118,    2, 0x08 /* Private */,
-      33,    4,  127,    2, 0x08 /* Private */,
+       9,    1,  101,    2, 0x08 /* Private */,
+      11,    0,  104,    2, 0x08 /* Private */,
+      12,    1,  105,    2, 0x08 /* Private */,
+      15,    1,  108,    2, 0x08 /* Private */,
+      18,    3,  111,    2, 0x08 /* Private */,
+      24,    1,  118,    2, 0x08 /* Private */,
+      26,    0,  121,    2, 0x08 /* Private */,
+      27,    4,  122,    2, 0x08 /* Private */,
+      34,    4,  131,    2, 0x08 /* Private */,
 
  // slots: parameters
     QMetaType::Void,
@@ -127,15 +128,15 @@ static const uint qt_meta_data_SamplePlugin[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
+    QMetaType::Void, 0x80000000 | 10,    2,
     QMetaType::Void,
-    QMetaType::Void,
-    0x80000000 | 12, 0x80000000 | 13,   14,
+    0x80000000 | 13, 0x80000000 | 10,   14,
     QMetaType::Void, 0x80000000 | 16,   17,
-    0x80000000 | 19, 0x80000000 | 13, 0x80000000 | 13, 0x80000000 | 22,   20,   21,   23,
-    QMetaType::Bool,
+    0x80000000 | 19, 0x80000000 | 10, 0x80000000 | 10, 0x80000000 | 22,   20,   21,   23,
+    QMetaType::Bool, 0x80000000 | 10,   25,
     QMetaType::Void,
-    QMetaType::Bool, 0x80000000 | 27, 0x80000000 | 22, 0x80000000 | 29, 0x80000000 | 31,   28,   17,   30,   32,
-    QMetaType::Void, 0x80000000 | 31, 0x80000000 | 31, QMetaType::Double, QMetaType::Double,   34,   35,   36,   37,
+    QMetaType::Bool, 0x80000000 | 28, 0x80000000 | 22, 0x80000000 | 30, 0x80000000 | 32,   29,   17,   31,   33,
+    QMetaType::Void, 0x80000000 | 32, 0x80000000 | 32, QMetaType::Double, QMetaType::Double,   35,   36,   37,   38,
 
        0        // eod
 };
@@ -153,14 +154,14 @@ void SamplePlugin::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id
         case 4: _t->homePosition(); break;
         case 5: _t->placeBottle(); break;
         case 6: _t->sparseStereo(); break;
-        case 7: _t->performTask(); break;
+        case 7: _t->performTask((*reinterpret_cast< std::string(*)>(_a[1]))); break;
         case 8: _t->poseEstimation(); break;
         case 9: { Eigen::Matrix<double,3,4> _r = _t->ProjectionMatrix((*reinterpret_cast< std::string(*)>(_a[1])));
             if (_a[0]) *reinterpret_cast< Eigen::Matrix<double,3,4>*>(_a[0]) = std::move(_r); }  break;
         case 10: _t->stateChangedListener((*reinterpret_cast< const rw::kinematics::State(*)>(_a[1]))); break;
         case 11: { std::vector<rw::math::Q> _r = _t->getConfigurations((*reinterpret_cast< const std::string(*)>(_a[1])),(*reinterpret_cast< const std::string(*)>(_a[2])),(*reinterpret_cast< State(*)>(_a[3])));
             if (_a[0]) *reinterpret_cast< std::vector<rw::math::Q>*>(_a[0]) = std::move(_r); }  break;
-        case 12: { bool _r = _t->reachabilityCheck();
+        case 12: { bool _r = _t->reachabilityCheck((*reinterpret_cast< std::string(*)>(_a[1])));
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = std::move(_r); }  break;
         case 13: _t->timerStart(); break;
         case 14: { bool _r = _t->checkCollisions((*reinterpret_cast< Device::Ptr(*)>(_a[1])),(*reinterpret_cast< const State(*)>(_a[2])),(*reinterpret_cast< const CollisionDetector(*)>(_a[3])),(*reinterpret_cast< const Q(*)>(_a[4])));

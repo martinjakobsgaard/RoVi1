@@ -55,7 +55,14 @@
       <item>
        <widget class="QPushButton" name="_btn_performTask">
         <property name="text">
-         <string>Perform Pick and Place</string>
+         <string>Perform Pick and Place From Side</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="_btn_performTaskTop">
+        <property name="text">
+         <string>Perform Pick and Place From Top</string>
         </property>
        </widget>
       </item>

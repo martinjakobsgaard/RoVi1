@@ -34,6 +34,7 @@ public:
     QPushButton *_btn_pose;
     QPushButton *_btn_sparse_test;
     QPushButton *_btn_performTask;
+    QPushButton *_btn_performTaskTop;
     QLabel *_label;
 
     void setupUi(QDockWidget *SamplePlugin)
@@ -77,6 +78,11 @@ public:
 
         verticalLayout->addWidget(_btn_performTask);
 
+        _btn_performTaskTop = new QPushButton(dockWidgetContents);
+        _btn_performTaskTop->setObjectName(QStringLiteral("_btn_performTaskTop"));
+
+        verticalLayout->addWidget(_btn_performTaskTop);
+
         _label = new QLabel(dockWidgetContents);
         _label->setObjectName(QStringLiteral("_label"));
 
@@ -100,7 +106,8 @@ public:
         _btn_sparse->setText(QApplication::translate("SamplePlugin", "Sparse Stereo", Q_NULLPTR));
         _btn_pose->setText(QApplication::translate("SamplePlugin", "Pose Estimation", Q_NULLPTR));
         _btn_sparse_test->setText(QApplication::translate("SamplePlugin", "Sparse Stereo Test", Q_NULLPTR));
-        _btn_performTask->setText(QApplication::translate("SamplePlugin", "Perform Pick and Place", Q_NULLPTR));
+        _btn_performTask->setText(QApplication::translate("SamplePlugin", "Perform Pick and Place From Side", Q_NULLPTR));
+        _btn_performTaskTop->setText(QApplication::translate("SamplePlugin", "Perform Pick and Place From Top", Q_NULLPTR));
         _label->setText(QApplication::translate("SamplePlugin", "Label", Q_NULLPTR));
     } // retranslateUi
 

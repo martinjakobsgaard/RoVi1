@@ -37,6 +37,7 @@ SamplePlugin::SamplePlugin():
     connect(_btn_sparse    ,SIGNAL(pressed()), this, SLOT(btnPressed()) );
     connect(_btn_sparse_test    ,SIGNAL(pressed()), this, SLOT(btnPressed()) );
     connect(_btn_pose    ,SIGNAL(pressed()), this, SLOT(btnPressed()) );
+    connect(_btn_performTaskTop    ,SIGNAL(pressed()), this, SLOT(btnPressed()) );
 
     _framegrabber = NULL;
 
@@ -122,7 +123,15 @@ void SamplePlugin::open(WorkCell* workcell)
     _device = _wc->findDevice("UR-6-85-5-A");
     _bottle = _wc->findFrame<rw::kinematics::MovableFrame>("Bottle");
     _bottleEst = _wc->findFrame<rw::kinematics::MovableFrame>("BottleEst");
+    _bottleEstTop = _wc->findFrame<rw::kinematics::MovableFrame>("BottleEstTop");
     _step = -1;
+
+    // https://stackoverflow.com/questions/17032970/clear-data-inside-text-file-in-c
+    // Delete contents if it already exists when opening the workcell.
+    std::ofstream myfile;
+    myfile.open("/tmp/sparse_test.DAT", std::ofstream::out | std::ofstream::trunc);
+    myfile << "Error" << "\n";
+    myfile.close();
     }
 }
 
@@ -191,12 +200,16 @@ void SamplePlugin::btnPressed()
     }
     else if (obj == _btn_performTask)
     {
-        performTask();
+        performTask("BottleEst");
+    }
+    else if (obj == _btn_performTaskTop)
+    {
+        performTask("BottleEstTop");
     }
 }
 
 //  Function taken from reachability which is based on the solution from reachability analysis.
-bool SamplePlugin::reachabilityCheck()
+bool SamplePlugin::reachabilityCheck(std::string approach)
 {
     State state_clone = _state;
     std::vector<rw::math::Q> collisionFreeSolutions;
@@ -210,7 +223,7 @@ bool SamplePlugin::reachabilityCheck()
                                         rw::math::Vector3D<>(_bottleEst->getTransform(state_clone).P()),
                                         rw::math::RPY<>(rollAngle*rw::math::Deg2Rad,0,1.57)), state_clone);
 
-        std::vector<rw::math::Q> solutions = getConfigurations("BottleEst", "GraspTCP", state_clone);
+        std::vector<rw::math::Q> solutions = getConfigurations(approach, "GraspTCP", state_clone);
 
         for(unsigned int i=0; i<solutions.size(); i++)
         {
@@ -271,7 +284,7 @@ void SamplePlugin::timerStart()
         _step = 0;
 }
 
-void SamplePlugin::performTask()
+void SamplePlugin::performTask(std::string approach)
 {
     double extend = 0.3;
     double maxTime = 60;
@@ -281,7 +294,7 @@ void SamplePlugin::performTask()
 
     std::cout << "Going to Qhome: " << Qhome << std::endl;
 
-    reachabilityCheck();
+    reachabilityCheck(approach);
     createPathRRTConnect(Qhome, QbottleEst, extend, maxTime);
 
     std::cout << "Going to QbottleEst: " << QbottleEst << std::endl;
@@ -292,14 +305,22 @@ void SamplePlugin::performTask()
 
     std::cout << "Going to Qhome: " << Qhome << std::endl;
 
-    Q Qgoal(6, -1.308, -2.315, -1.389, -2.581, 2.511, -0.001);
-    createPathRRTConnect(Qhome, Qgoal, extend, maxTime);
-
-    std::cout << "Going to Qgoal: " << Qgoal << std::endl;
-
-    createPathRRTConnect(Qgoal, Qhome, extend, maxTime);
-
-    std::cout << "Going to Qhome: " << Qpos << std::endl;
+    if (approach == "BottleEst")
+    {
+        Q Qgoal(6, -1.308, -2.315, -1.389, -2.581, 2.511, -0.001);
+        createPathRRTConnect(Qhome, Qgoal, extend, maxTime);
+        std::cout << "Going to Qgoal: " << Qgoal << std::endl;
+        createPathRRTConnect(Qgoal, Qhome, extend, maxTime);
+        std::cout << "Going to Qhome: " << Qpos << std::endl;
+    }
+    else
+    {
+        Q QgoalTop(6,-0.930, -2.036, -1.330, -4.488, -1.571, 0.584);
+        createPathRRTConnect(Qhome, QgoalTop, extend, maxTime);
+        std::cout << "Going to Qgoal: " << QgoalTop << std::endl;
+        createPathRRTConnect(QgoalTop, Qhome, extend, maxTime);
+        std::cout << "Going to Qhome: " << Qpos << std::endl;
+    }
 
     timerStart();
 
@@ -532,6 +553,7 @@ void SamplePlugin::sparseStereo()
 
     cv::imwrite("/tmp/blur_noise_10.png", lowerRedRight);
 
+    // Values found through trial and error.
     std::vector<cv::Vec3f> circlesRight;
     std::vector<cv::Vec3f> circlesLeft;
     cv::HoughCircles(lowerRedRight, circlesRight, CV_HOUGH_GRADIENT, 1, lowerRedRight.rows, 20, 10, 5, 15);
@@ -540,10 +562,9 @@ void SamplePlugin::sparseStereo()
     std::vector<cv::Point2d> CenterPointRight;
     std::vector<cv::Point2d> CenterPointLeft;
 
-
     if ((circlesRight.size() != 0) && (circlesLeft.size() != 0))
     {
-        for(size_t current_circle = 0; current_circle < circlesRight.size(); ++current_circle)
+        for(size_t current_circle = 0; current_circle < 1; ++current_circle)
         {
                 cv::Point center(std::round(circlesRight[current_circle][0]-1), std::round(circlesRight[current_circle][1]));
                 int radius = std::round(circlesRight[current_circle][2]);
@@ -553,7 +574,7 @@ void SamplePlugin::sparseStereo()
                 cv::circle(imageRight, center, radius, cv::Scalar(0, 0, 150), 3);
         }
 
-        for(size_t current_circle = 0; current_circle < circlesLeft.size(); ++current_circle)
+        for(size_t current_circle = 0; current_circle < 1; ++current_circle)
         {
                 cv::Point center(std::round(circlesLeft[current_circle][0]-1), std::round(circlesLeft[current_circle][1]));
                 int radius = std::round(circlesLeft[current_circle][2]);
@@ -573,6 +594,7 @@ void SamplePlugin::sparseStereo()
         cv::eigen2cv(projectMatrixRight, cam0);
         cv::eigen2cv(projectMatrixLeft, cam1);
 
+        //https://docs.opencv.org/3.1.0/d0/dbd/group__triangulation.html
         cv::Mat pnts3D(4,CenterPointRight.size(),CV_64F);
         cv::triangulatePoints(cam1, cam0, CenterPointLeft, CenterPointRight, pnts3D);
 
@@ -602,7 +624,7 @@ void SamplePlugin::sparseStereo()
     }
 }
 
-//  Somewhat based on a triangulation exercise during computer vision at SDU Robotics.
+//  Mostly based on a triangulation exercise during computer vision at SDU Robotics.
 Eigen::Matrix<double, 3, 4> SamplePlugin::ProjectionMatrix(std::string frameName)
 {
     Frame* cameraFrame = _wc->findFrame(frameName);
@@ -632,6 +654,8 @@ Eigen::Matrix<double, 3, 4> SamplePlugin::ProjectionMatrix(std::string frameName
     return P;
 }
 
+// https://stackoverflow.com/questions/7560114/random-number-c-in-some-range
+// How to generate a random number in a specified range c++
 void SamplePlugin::placeBottle()
 {
     std::mt19937 engine(rd());
