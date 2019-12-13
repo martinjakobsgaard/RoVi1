@@ -53,6 +53,13 @@
        </widget>
       </item>
       <item>
+       <widget class="QPushButton" name="_btn_pose_test">
+        <property name="text">
+         <string>Pose Estimation Test</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="_btn_performTask">
         <property name="text">
          <string>Perform Pick and Place From Side</string>
@@ -63,13 +70,6 @@
        <widget class="QPushButton" name="_btn_performTaskTop">
         <property name="text">
          <string>Perform Pick and Place From Top</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="_btn_pose_test">
-        <property name="text">
-         <string>Pose Estimation Test</string>
         </property>
        </widget>
       </item>

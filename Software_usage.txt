@@ -4,4 +4,4 @@ The seperate methods for robotics can be run by changing directory into either i
 The methods are now built. Change directory to the build folder inside now and run the binary with ./rovi_rrt, ./rovi_reachability_analysis, ./rovi_interpolation. A .m file along with some data files are also located inside some of these build folders. These are the files used for statistical evaluation of plotting of the methods.
 
 Everything related to vision is implemented inside the RoviSamplePlugin. To run this, change directory into the RoviSamplePlugin folder, run cmake .  then make.
-Now open RobWorkStudio, load plugin and load the plugin which i located inside /RoviSamplePlugin/libs/Releases. The workcell will open and a set of buttons will appear. These buttons do simply what they state. This is also described in the report in the integration section. 
+Now open RobWorkStudio, load plugin and load the plugin which i located inside /RoviSamplePlugin/libs/Releases. The workcell will open and a set of buttons will appear. These buttons do simply what they state. This is also described in the report in the integration section. Most data is saved to /tmp/ for the tests.

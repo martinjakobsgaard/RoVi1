@@ -624,7 +624,7 @@ pcl::transformPointCloud (*scene, *scene, transform_1);
 
             if (pose_test == true)
             {
-                if (error < 0.5)
+                if (error < 500)
                 {
                     std::ofstream myfile2;
                     myfile2.open ("/tmp/pose_test.DAT", ios::app);
