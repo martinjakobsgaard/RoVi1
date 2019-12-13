@@ -38,6 +38,7 @@ SamplePlugin::SamplePlugin():
     connect(_btn_sparse_test    ,SIGNAL(pressed()), this, SLOT(btnPressed()) );
     connect(_btn_pose    ,SIGNAL(pressed()), this, SLOT(btnPressed()) );
     connect(_btn_performTaskTop    ,SIGNAL(pressed()), this, SLOT(btnPressed()) );
+     connect(_btn_pose_test    ,SIGNAL(pressed()), this, SLOT(btnPressed()) );
 
     _framegrabber = NULL;
 
@@ -132,6 +133,10 @@ void SamplePlugin::open(WorkCell* workcell)
     myfile.open("/tmp/sparse_test.DAT", std::ofstream::out | std::ofstream::trunc);
     myfile << "Error" << "\n";
     myfile.close();
+    std::ofstream myfile2;
+    myfile2.open("/tmp/pose_test.DAT", std::ofstream::out | std::ofstream::trunc);
+    myfile2 << "Error" << "\n";
+    myfile2.close();
 
     }
     ScanForBottle();
@@ -199,8 +204,19 @@ void SamplePlugin::btnPressed()
     }
     else if (obj == _btn_pose)
     {
+        pose_test = false;
         get25DImage();
         poseEstimation();
+    }
+    else if (obj == _btn_pose_test)
+    {
+        for (size_t i = 0; i < 25; i++)
+        {
+            pose_test = true;
+            placeBottle();
+            get25DImage();
+            poseEstimation();
+        }
     }
     else if (obj == _btn_performTask)
     {
@@ -601,12 +617,27 @@ pcl::transformPointCloud (*scene, *scene, transform_1);
 
             cout << "x: " << _bottle->getTransform(_state).P()[0] << "y: " << _bottle->getTransform(_state).P()[1] << "z: " << _bottle->getTransform(_state).P()[2] << endl;
 
-             double error = sqrt((dif_x*dif_x) + (dif_y*dif_y) + (dif_z*dif_z));
-             std::cout << "The error is: " << error*1000 << "mm"<< std::endl;
+             double error = (sqrt((dif_x*dif_x) + (dif_y*dif_y) + (dif_z*dif_z)))*1000;
+             std::cout << "The error is: " << error << "mm"<< std::endl;
              _bottleEst->moveTo(rw::math::Transform3D<>(rw::math::Vector3D<>(FinalT(0,0), FinalT(1,3), FinalT(2,3)), rw::math::RPY<>(0,0,90*Deg2Rad)), _state);
              getRobWorkStudio()->setState(_state);
 
+            if (pose_test == true)
+            {
+                if (error < 0.5)
+                {
+                    std::ofstream myfile2;
+                    myfile2.open ("/tmp/pose_test.DAT", ios::app);
+                    myfile2 << error << "\n";
+                    myfile2.close();
+                    std::cout << "Error found to be: " << error << std::endl;
+                }
+            }
+
+
          }
+
+
          else
          {
            pcl::console::print_error ("Alignment failed!\n");
