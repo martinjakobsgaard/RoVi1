@@ -114,6 +114,8 @@ private slots:
     void sparseStereo();
     void performTask(std::string);
     void poseEstimation();
+    void ScanForBottle();
+    void FilterObject();
     Eigen::Matrix<double, 3, 4> ProjectionMatrix(std::string frameName);
   
     void stateChangedListener(const rw::kinematics::State& state);
