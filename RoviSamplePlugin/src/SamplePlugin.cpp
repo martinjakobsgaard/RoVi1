@@ -212,7 +212,7 @@ void SamplePlugin::btnPressed()
     }
 }
 
-//  Function taken from reachability which is based on the solution from reachability analysis.
+//  Function taken from reachability for this project which is based on the solution from reachability analysis.
 bool SamplePlugin::reachabilityCheck(std::string approach)
 {
     State state_clone = _state;
