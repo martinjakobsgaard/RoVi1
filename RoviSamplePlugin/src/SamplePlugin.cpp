@@ -229,6 +229,7 @@ void SamplePlugin::btnPressed()
 }
 
 //  Function taken from reachability for this project which is based on the solution from reachability analysis.
+//  The base solution which it was taken from is by Jeppe Langaa SDU robotics
 bool SamplePlugin::reachabilityCheck(std::string approach)
 {
     State state_clone = _state;
@@ -260,6 +261,7 @@ bool SamplePlugin::reachabilityCheck(std::string approach)
 }
 
 //  Function taken from reachability which is based on the solution from reachability analysis.
+//  The base solution which it was taken from is by Jeppe Langaa SDU robotics
 std::vector<rw::math::Q> SamplePlugin::getConfigurations(const std::string nameGoal, const std::string nameTcp, State state_clone)
 {
     rw::models::SerialDevice::Ptr robotUR5 = _wc->findDevice<rw::models::SerialDevice>("UR-6-85-5-A");
