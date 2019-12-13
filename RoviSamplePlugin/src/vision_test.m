@@ -1,6 +1,6 @@
 clc; clear;
 
-T1 = readtable('sparse_test_0_new.DAT');
+T1 = readtable('sparse_test_0.DAT');
 mean_no_noise = mean(T1.Error);
 Use_count_0 = sum(T1.Error<0.05);
 
@@ -8,34 +8,38 @@ Use_count_0 = sum(T1.Error<0.05);
 %title('Boxplot of error with no noise')
 %ylabel('Error [m]') 
 
-T2 = readtable ('sparse_test_5_new.DAT');
+T2 = readtable ('sparse_test_5.DAT');
 mean_low_noise = mean(T2.Error);
 
 Use_count_5 = sum(T2.Error<0.05);
 
-boxplot(T2.Error);
-title('Boxplot of error with a low amount of added noise.')
-ylabel('Error [m]') 
+%boxplot(T2.Error);
+%title('Boxplot of error with a low amount of added noise.')
+%ylabel('Error [m]') 
 
-T3 = readtable ('sparse_test_10_new.DAT');
+T3 = readtable ('sparse_test_10.DAT');
 mean_high_noise = mean(T3.Error);
 
 Use_count_10 = sum(T3.Error<0.05);
 
-%boxplot(T3.Error);
-%title('Boxplot of error with a high amount of added noise.')
-%ylabel('Error [m]') 
+boxplot(T3.Error);
+title('Boxplot of error with a high amount of added noise.')
+ylabel('Error [m]') 
 
+T4 = readtable ('sparse_test_15.DAT');
+mean_15_noise = mean(T4.Error);
+
+Use_count_15 = sum(T4.Error<0.05);
 
 %%This part is based on https://in.mathworks.com/matlabcentral/answers/289642-multiple-boxplots-on-same-figure
-%Errors = [T1.Error' T2.Error' T3.Error'];
+%Errors = [T1.Error' T2.Error' T3.Error' T4.Error'];
 
-%group = [ones(size(T1.Error)); 2 * ones(size(T2.Error)); 3 * ones(size(T3.Error))];
+%group = [ones(size(T1.Error)); 2 * ones(size(T2.Error)); 3 * ones(size(T3.Error)); 4 * ones(size(T4.Error))];
      
 %figure
-%boxplot([T1.Error; T2.Error; T3.Error],group)
+%boxplot([T1.Error; T2.Error; T3.Error; T4.Error],group)
 %title('Boxplot of error with a low amount of added noise.')
 %ylabel('Error [m]') 
 %xlabel('Deviation')
-%set(gca,'XTickLabel',{'0 ','5','10'})
+%set(gca,'XTickLabel',{'0 ','5','10', '15'})
 
