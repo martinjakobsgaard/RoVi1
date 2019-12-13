@@ -195,7 +195,7 @@ void SamplePlugin::btnPressed()
     else if (obj == _btn_sparse_test)
     {
         sparse_test = true;
-        std_gaussian = 10.f;
+        std_gaussian = 15.f;
         for (size_t i = 0; i < 25; i++)
         {
             placeBottle();
@@ -669,8 +669,9 @@ void SamplePlugin::sparseStereo()
     cv::inRange(hsv_imageLeft, cv::Scalar(85,50,50), cv::Scalar(125, 255, 255), lowerRedRight);
     cv::inRange(hsv_imageRight, cv::Scalar(85, 50, 50), cv::Scalar(125, 255, 255), lowerRedLeft);
 
-    cv::blur(lowerRedRight,lowerRedRight,Size(3,3));
-    cv::blur(lowerRedLeft,lowerRedLeft,Size(3,3));
+    // https://www.opencv-srf.com/2018/03/gaussian-blur.html
+    cv::GaussianBlur(lowerRedRight,lowerRedRight,Size(7,7), 0);
+    cv::GaussianBlur(lowerRedLeft,lowerRedLeft,Size(7,7), 0);
 
     cv::imwrite("/tmp/blur_noise_10.png", lowerRedRight);
 
@@ -770,12 +771,7 @@ Eigen::Matrix<double, 3, 4> SamplePlugin::ProjectionMatrix(std::string frameName
     Eigen::Matrix<double, 4, 4> He;
     He = H.e();
 
-    std::cout << std::endl << "H" << H.e() << std::endl;
-    std::cout << std::endl << "KA" << KA << std::endl;
-
     Eigen::Matrix<double, 3, 4> P = KA * He;
-
-    std::cout << std::endl << "P: " << P << std::endl;
 
     return P;
 }
