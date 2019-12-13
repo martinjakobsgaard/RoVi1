@@ -67,6 +67,13 @@
        </widget>
       </item>
       <item>
+       <widget class="QPushButton" name="_btn_pose_test">
+        <property name="text">
+         <string>Pose Estimation Test</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QLabel" name="_label">
         <property name="text">
          <string>Label</string>
