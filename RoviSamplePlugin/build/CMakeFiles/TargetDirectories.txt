@@ -1,3 +1,0 @@
-/home/student/RoVi1/RoviSamplePlugin/build/CMakeFiles/rebuild_cache.dir
-/home/student/RoVi1/RoviSamplePlugin/build/CMakeFiles/RoViPlugin.dir
-/home/student/RoVi1/RoviSamplePlugin/build/CMakeFiles/edit_cache.dir
