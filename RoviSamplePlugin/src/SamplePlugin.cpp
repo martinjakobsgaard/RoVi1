@@ -746,7 +746,7 @@ void SamplePlugin::sparseStereo()
     }
 }
 
-//  Mostly based on a triangulation exercise during computer vision at SDU Robotics.
+//  Based on a projection matrix from computer vision at SDU Robotics.
 Eigen::Matrix<double, 3, 4> SamplePlugin::ProjectionMatrix(std::string frameName)
 {
     Frame* cameraFrame = _wc->findFrame(frameName);
